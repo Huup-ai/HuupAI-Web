@@ -2,7 +2,7 @@ import React from "react";
 import { Header } from "../components";
 import { Button } from "../components";
 import { useStateContext } from '../contexts/ContextProvider';
-import { Divider } from "@mui/material";
+// import { Divider } from "@mui/material";
 
 const Profile = () => {
     const { currentColor} = useStateContext();
@@ -12,7 +12,7 @@ const Profile = () => {
       
 
       <form className="infoForm">
-        <h3>Your info</h3>
+        <h3>Your Info</h3>
 
         <div >
           <h6 className="mt-4 w-48">Company Name: </h6>
@@ -54,7 +54,8 @@ const Profile = () => {
         />
       </form>
 
-      <Divider className="py-5"></Divider>
+{/*       <Divider className="py-5"></Divider> */}
+        <div className="border-t-4"> </div>
 
       <form className="infoForm mt-12">
         <h3>Change Password</h3>
