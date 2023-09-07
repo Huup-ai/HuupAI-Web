@@ -5,18 +5,10 @@ import { useState } from "react";
 import Logo from "../../data/Logo.png";
 
 const Login = () => {
-  const [selectedAction, setSelectedAction] = useState(" ");
+ 
+  
   return (
-    <div>
-      <select
-        className="float-right mr-5 mt-5 text-black"
-        value={selectedAction} // ...force the select's value to match the state variable...
-        onChange={(e) => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
-      >
-        <option value="">Select Type:</option>
-        <option value="customer">Customer</option>
-        <option value="admin">Administer</option>
-      </select>
+      
       <div className="Alert">
         <div className="a-left">
           <img src={Logo} alt="" />
@@ -30,17 +22,33 @@ const Login = () => {
           </div>
         </div>
 
-        {/* <LogIn /> */}
-        <SignUp />
+        <LogIn />
+        {/* <SignUp /> */}
       </div>
-    </div>
   );
 };
 function LogIn() {
+  const [selectedAction, setSelectedAction] = useState(" ");
+  
   return (
     <div className="a-right">
+    
       <form className="infoForm authForm">
-        <h3>Log In</h3>
+        <div className="flex flex-row align-middle">
+      
+        <h3>Log In </h3>
+          <select
+       
+        value={selectedAction} // ...force the select's value to match the state variable...
+        onChange={(e) => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
+      >
+        <option value="">Select LogIn Type:</option>
+        <option value="customer">Customer</option>
+        <option value="admin">Administer</option>
+      </select>
+      </div>
+       
+        
 
         <div>
           <input
@@ -71,10 +79,23 @@ function LogIn() {
   );
 }
 function SignUp() {
+  const [selectedAction, setSelectedAction] = useState(" ");
   return (
     <div className="a-right">
       <form className="infoForm authForm">
-        <h3>Sign up</h3>
+      <div className="flex flex-row align-middle">
+      
+      <h3>Sign Up</h3>
+        <select
+     
+      value={selectedAction} // ...force the select's value to match the state variable...
+      onChange={(e) => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
+    >
+      <option value="">Select SignUp Type:</option>
+      <option value="customer">Customer</option>
+      <option value="admin">Administer</option>
+    </select>
+    </div>
 
         <div>
           <input
