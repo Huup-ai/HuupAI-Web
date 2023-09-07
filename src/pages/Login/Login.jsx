@@ -30,7 +30,7 @@ const Login = () => {
 };
 function LogIn() {
   const [selectedType, setSelectedType] = useState(" ");
-  const [selectedWay, setSelectedWay] = useState(" ");
+  // const [selectedWay, setSelectedWay] = useState(" ");
   
   return (
     <div className="a-right">
