@@ -1,59 +1,75 @@
 import React from "react";
 import "./Login.css";
+import { useState } from "react";
+
 import Logo from "../../data/Logo.png";
 
 const Login = () => {
+  const [selectedAction, setSelectedAction] = useState(" ");
   return (
-    <div className="Alert">
-      <div className="a-left">
-        <img src={Logo} alt="" />
-        <div className="Webname w-64">
-          <h1>Huup AI</h1>
-          <p className="text-xl">Explore your Market Cloud</p>
-          <p className="text-sm">Green AI - Infrastructure for AI
-Democratization, Efficiency and Privacy </p>
+    <div>
+      <select
+        className="float-right mr-5 mt-5 text-black"
+        value={selectedAction} // ...force the select's value to match the state variable...
+        onChange={(e) => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
+      >
+        <option value="">Select Type:</option>
+        <option value="customer">Customer</option>
+        <option value="admin">Administer</option>
+      </select>
+      <div className="Alert">
+        <div className="a-left">
+          <img src={Logo} alt="" />
+          <div className="Webname w-64">
+            <h1>Huup AI</h1>
+            <p className="text-xl">Explore your Market Cloud</p>
+            <p className="text-sm">
+              Green AI - Infrastructure for AI Democratization, Efficiency and
+              Privacy{" "}
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* <LogIn/> */}
-      <SignUp />
+        {/* <LogIn /> */}
+        <SignUp />
+      </div>
     </div>
   );
 };
 function LogIn() {
-    return (
-      <div className="a-right">
-        <form className="infoForm authForm">
-          <h3>Log In</h3>
-  
-          <div>
-            <input
-              type="email"
-              placeholder="Email"
-              className="infoInput"
-              name="username"
-            />
-          </div>
-  
-          <div>
-            <input
-              type="password"
-              className="infoInput"
-              placeholder="Password"
-              name="password"
-            />
-          </div>
-  
-          <div>
-              <span style={{ fontSize: "12px" }}>
-                If your are first time renter, Please signup
-              </span>
-            <button className="button infoButton">OK</button>
-          </div>
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div className="a-right">
+      <form className="infoForm authForm">
+        <h3>Log In</h3>
+
+        <div>
+          <input
+            type="email"
+            placeholder="Email"
+            className="infoInput"
+            name="username"
+          />
+        </div>
+
+        <div>
+          <input
+            type="password"
+            className="infoInput"
+            placeholder="Password"
+            name="password"
+          />
+        </div>
+
+        <div>
+          <span style={{ fontSize: "12px" }}>
+            If your are first time renter, Please signup
+          </span>
+          <button className="button infoButton">OK</button>
+        </div>
+      </form>
+    </div>
+  );
+}
 function SignUp() {
   return (
     <div className="a-right">
@@ -100,9 +116,13 @@ function SignUp() {
         </div>
 
         <div>
-            <span style={{fontSize: '12px'}}>Already have an account. Login!</span>
+          <span style={{ fontSize: "12px" }}>
+            Already have an account. Login!
+          </span>
         </div>
-        <button className="button infoButton" type="submit">Signup</button>
+        <button className="button infoButton" type="submit">
+          Signup
+        </button>
       </form>
     </div>
   );
