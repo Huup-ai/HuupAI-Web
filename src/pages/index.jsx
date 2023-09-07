@@ -5,3 +5,6 @@ export { default as CPU } from './CPU';
 export { default as Confirmation_GPU } from './Confirmation_GPU';
 export { default as Confirmation_CPU } from './Confirmation_CPU';
 export { default as Billing } from './Billing';
+export { default as Inventory } from './Inventory';
+export { default as Invoice } from './Invoice';
+// export { default as Earning } from './Earning';

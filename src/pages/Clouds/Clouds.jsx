@@ -4,7 +4,7 @@ import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 import { Navbar, Footer, Sidebar, ThemeSettings } from '../../components';
-import { CPU,GPU,Instances, Profile, Billing, Confirmation_CPU, Confirmation_GPU } from '../../pages';
+import { CPU,GPU,Instances, Profile, Billing, Confirmation_CPU, Confirmation_GPU, Inventory, Invoice } from '../../pages';
 import './Clouds.css';
 
 import { useStateContext } from '../../contexts/ContextProvider';
@@ -78,6 +78,10 @@ const Clouds = () => {
                 
                 <Route path="/confirmation GPU" element={<Confirmation_GPU />} />
                 <Route path="/confirmation CPU" element={<Confirmation_CPU />} />
+
+                {/* Provider */}
+                <Route path="/inventory" element={<Inventory />} />
+                <Route path="/invoice" element={<Invoice />} />
 
 
               </Routes>

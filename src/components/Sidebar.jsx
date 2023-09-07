@@ -4,7 +4,7 @@ import { SiShopware } from "react-icons/si";
 import { MdOutlineCancel } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
-import { links } from "../data/dummy";
+import { links, provider } from "../data/dummy";
 import { useStateContext } from '../contexts/ContextProvider';
 
 const Sidebar = () => {
@@ -41,6 +41,8 @@ const Sidebar = () => {
               </button>
             </TooltipComponent>
           </div>
+
+          {/* customer sidebar */}
           <div className="mt-20 ">
             {links.map((item)=>(
               <div key = {item.title}>
@@ -62,11 +64,44 @@ const Sidebar = () => {
                   <span className="capitalize text-m">{link.name}</span>
                 </NavLink>
                 ))}
+                
 
               </div>
             ))}
 
           </div>
+
+
+                  {/* provider sidebar */}
+          {/* <div className="mt-20 ">
+            {provider.map((item)=>(
+              <div key = {item.title}>
+                <p className="text-gray-400 dark:text-gray-400 m-3 mt-20 uppercase">
+
+                {item.title}
+                </p>
+                {item.links.map((link)=>(
+                  <NavLink
+                  to={`/${link.name}`}
+                  key={link.name}
+                  onClick={handleCloseSideBar}
+                  style={({ isActive }) => ({
+                    backgroundColor: isActive ? currentColor : '',
+                  })}
+                  className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                >
+                  {link.icon}
+                  <span className="capitalize text-m">{link.name}</span>
+                </NavLink>
+                ))}
+
+               
+                
+
+              </div>
+            ))}
+
+          </div> */}
         </>
       )}
     </div>
