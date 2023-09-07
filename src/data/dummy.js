@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "../components";
 import {
   AiOutlineCalendar,
   AiOutlineShoppingCart,
@@ -157,7 +158,14 @@ const gridEmployeeCountry = (props) => (
 
 const gridInvoice = () => (
   <div className="flex items-center justify-center gap-2">
-    <BsDownload />
+   <Button 
+    icon = {<BsDownload/>}
+    onClickCallback={()=>{
+        const link = document.createElement("a");
+        // link.href = downloadUrl;
+        // link.download = fileName;
+        link.click();
+    }}/>
   </div>
 );
 
