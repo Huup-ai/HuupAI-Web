@@ -2,6 +2,7 @@ import React from "react";
 import "./Login.css";
 import { useState } from "react";
 
+
 import Logo from "../../data/Logo.png";
 
 const Login = () => {
@@ -28,7 +29,8 @@ const Login = () => {
   );
 };
 function LogIn() {
-  const [selectedAction, setSelectedAction] = useState(" ");
+  const [selectedType, setSelectedType] = useState(" ");
+  const [selectedWay, setSelectedWay] = useState(" ");
   
   return (
     <div className="a-right">
@@ -39,12 +41,12 @@ function LogIn() {
         <h3>Log In </h3>
           <select
        
-        value={selectedAction} // ...force the select's value to match the state variable...
-        onChange={(e) => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
+        value={selectedType} // ...force the select's value to match the state variable...
+        onChange={(e) => setSelectedType(e.target.value)} // ... and update the state variable on any change!
       >
-        <option value="">Select LogIn Type:</option>
+        <option value="">Select Role:</option>
         <option value="customer">Customer</option>
-        <option value="admin">Administer</option>
+        <option value="admin">Provider</option>
       </select>
       </div>
        
@@ -72,21 +74,28 @@ function LogIn() {
           <span style={{ fontSize: "12px" }}>
             If your are first time renter, Please signup
           </span>
-          <button className="button infoButton">OK</button>
+                 
+
         </div>
+        <div>
+          <button className="button infoButton font-normal">Login with Email</button>
+          <button
+          onClick={""}
+          className="button infoButton">Login with Email & Crypto Wallet</button>
+          </div>
       </form>
     </div>
   );
 }
 function SignUp() {
-  const [selectedAction, setSelectedAction] = useState(" ");
+  // const [selectedAction, setSelectedAction] = useState(" ");
   return (
     <div className="a-right">
       <form className="infoForm authForm">
       <div className="flex flex-row align-middle">
       
       <h3>Sign Up</h3>
-        <select
+        {/* <select
      
       value={selectedAction} // ...force the select's value to match the state variable...
       onChange={(e) => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
@@ -94,7 +103,7 @@ function SignUp() {
       <option value="">Select SignUp Type:</option>
       <option value="customer">Customer</option>
       <option value="admin">Administer</option>
-    </select>
+    </select> */}
     </div>
 
         <div>
