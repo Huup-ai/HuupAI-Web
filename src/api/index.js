@@ -10,3 +10,19 @@ const FetchRequest = async (url, method, header = {}, data = {}) => {
 export async function callapi() {
   return FetchRequest("http://localhost:8000/users/logout/", "POST");
 }
+
+export async function loginUser(email, password) {
+  const requestBody = {
+    email: email,
+    password: password,
+  };
+
+  return FetchRequest(
+    "http://localhost:8000/users/login/",
+    "POST",
+    {
+      "Content-Type": "application/json",
+    },
+    requestBody
+  );
+}
