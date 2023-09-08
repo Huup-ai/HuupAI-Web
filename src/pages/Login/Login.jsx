@@ -116,6 +116,7 @@ function LogIn({
             If you are a first-time renter, please sign up
           </span>
         </div>
+<<<<<<< HEAD
         <div>
           <button
             className="button infoButton font-normal"
@@ -124,6 +125,16 @@ function LogIn({
             Login with Email
           </button>
           <button onClick={""} className="button infoButton">
+=======
+        <div >
+          <button className="button infoButton font-normal w-36">
+            Login with Email
+          </button>
+          <button
+            // onClick={""}
+            className="button infoButton font-normal w-72"
+          >
+>>>>>>> 9aa8749 (Login Button Update)
             Login with Email & Crypto Wallet
           </button>
         </div>
@@ -135,7 +146,7 @@ function LogIn({
 function SignUp() {
   // const [selectedAction, setSelectedAction] = useState(" ");
   return (
-    <div className="a-right">
+    <div>
       <form className="infoForm authForm">
         <div className="flex flex-row align-middle">
           <h3>Sign Up</h3>
@@ -194,7 +205,7 @@ function SignUp() {
             Already have an account. Login!
           </span>
         </div>
-        <button className="button infoButton" type="submit">
+        <button className="button infoButton w-24" type="submit">
           Signup
         </button>
       </form>
