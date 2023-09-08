@@ -97,13 +97,13 @@ function LogIn({ onSignupClick, onLogin }) {
             </span>
           </p>
         </div>
-        <div>
-          <button className="button infoButton font-normal">
+        <div >
+          <button className="button infoButton font-normal w-36">
             Login with Email
           </button>
           <button
             // onClick={""}
-            className="button infoButton"
+            className="button infoButton font-normal w-72"
           >
             Login with Email & Crypto Wallet
           </button>
@@ -115,7 +115,7 @@ function LogIn({ onSignupClick, onLogin }) {
 function SignUp({ onLoginClick, onSignup }) {
   // const [selectedAction, setSelectedAction] = useState(" ");
   return (
-    <div className="a-right">
+    <div>
       <form className="infoForm authForm">
         <div className="flex flex-row align-middle">
           <h3>Sign Up</h3>
@@ -172,7 +172,7 @@ function SignUp({ onLoginClick, onSignup }) {
             </span>
           </p>
         </div>
-        <button className="button infoButton" type="submit">
+        <button className="button infoButton w-24" type="submit">
           Signup
         </button>
       </form>
