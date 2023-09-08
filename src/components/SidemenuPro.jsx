@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {BillingComponents} from "./BillingComponents";
+import {InvoiceComponents} from "./BillingComponents";
 
-const Sidemenu = () => {
+const SidemenuPro = () => {
 
   
   
@@ -26,14 +26,14 @@ const Sidemenu = () => {
             onClick={() => handleBoxClick(index)}
             >
               <div />
-              <a href="#Current Usages">
+              <a href="#Current Earning">
                 {item}
               </a>
             </li>
           ))}
         </ul>
         <ul>
-        {BillingComponents.map(({ id },index) => (
+        {InvoiceComponents.map(({ id },index) => (
           <li key={id}
           className={`item h-10 ml-2 mr-2 py-2 px-8 rounded-lg hover:bg-gray-100 ${
             selectedBox === index ? "bg-blue-100" : ""
@@ -49,4 +49,4 @@ const Sidemenu = () => {
   );
 };
 
-export default Sidemenu;
+export default SidemenuPro;

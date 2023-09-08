@@ -67,6 +67,8 @@ const Navbar = () => {
         color={currentColor}
         icon={<AiOutlineMenu />}
       />
+
+      {/* for consumer */}
       <div className="flex ">
         <NavButton
           title="Market"
@@ -87,14 +89,35 @@ const Navbar = () => {
           customFunc={() => handleClick("userProfile")}
           color={currentColor}
           icon={<RiNotification3Line />}
-        />
-
-    
+        />  
         
         {isClicked.Market && <Market />}
         {isClicked.MyCloud && <MyCloud />}
         {isClicked.userProfile && <UserProfile />}
       </div>
+
+      {/* for provider */}
+      {/* <div className="flex ">
+        
+        <NavButton
+          title="MyCloud"
+          // dotColor="#03C9D7"
+          customFunc={() => handleClick("MyCloud")}
+          color={currentColor}
+          icon={<BsPerson />}
+        />
+        <NavButton
+          title="Alert"
+          // dotColor="rgb(254, 201, 15)"
+          customFunc={() => handleClick("userProfile")}
+          color={currentColor}
+          icon={<RiNotification3Line />}
+        />  
+        
+        {isClicked.MyCloud && <MyCloud />}
+        {isClicked.userProfile && <UserProfile />}
+      </div> */}
+
     </div>
   );
 };

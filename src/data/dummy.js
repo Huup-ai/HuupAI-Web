@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "../components";
 import {
   AiOutlineCalendar,
   AiOutlineShoppingCart,
@@ -97,6 +98,27 @@ export const links = [
   // },
 ];
 
+export const provider = [
+  {
+    title: "Provider",
+    links: [
+      {
+        name: "Profile",
+        icon: <FiShoppingBag />,
+      },
+      {
+        name: "Inventory",
+        icon: <FiShoppingBag />,
+      },
+      {
+        name: "Invoice",
+        icon: <FiShoppingBag />,
+      },
+    ],
+  },
+
+];
+
 const gridEmployeeProfile = (props) => (
   <div className="flex items-center justify-center">
     <p>{props.Name}</p>
@@ -119,6 +141,12 @@ const gridPriceCPU = (props) => (
 const gridCharge = (props) => (
   <div className="text-center">
     <p>$ {props.Charge}</p>
+  </div>
+);
+
+const gridEarn = (props) => (
+  <div className="text-center">
+    <p>$ {props.Earn}</p>
   </div>
 );
 
@@ -157,7 +185,14 @@ const gridEmployeeCountry = (props) => (
 
 const gridInvoice = () => (
   <div className="flex items-center justify-center gap-2">
-    <BsDownload />
+   <Button 
+    icon = {<BsDownload/>}
+    onClickCallback={()=>{
+        const link = document.createElement("a");
+        // link.href = downloadUrl;
+        // link.download = fileName;
+        link.click();
+    }}/>
   </div>
 );
 
@@ -257,6 +292,42 @@ export const employeesGrid = [
     textAlign: "Center",
   },
 ];
+export const InventoryGrid = [
+  {
+    field: "Name",
+    width: "100",
+    template: gridEmployeeProfile,
+    textAlign: "Center",
+  },
+  { field: "Type", headerText: "GPU", width: "100", textAlign: "Center" },
+  {
+    headerText: "Region",
+    width: "100",
+    textAlign: "Center",
+    template: gridEmployeeCountry,
+  },
+
+  {
+    field: "Configuration",
+    headerText: "Configuration",
+    width: "100",
+    textAlign: "Center",
+  },
+
+  {
+    field: "Privacy",
+    headerText: "Privacy",
+    width: "100",
+    textAlign: "Center",
+  },
+  {
+    field: "Price",
+    headerText: "Hourly Rate (USD)",
+    width: "100",
+    // template: gridPriceGPU,
+    textAlign: "Center",
+  },
+];
 
 export const CPUsGrid = [
   {
@@ -320,6 +391,33 @@ export const UsagesGrid = [
     headerText: "Charge",
     width: "100",
     template: gridCharge,
+    textAlign: "Center",
+  },
+];
+
+export const EarningGrid = [
+  {
+    field: "Name",
+    headerText: "Instance Name",
+    width: "100",
+    
+    textAlign: "Center",
+  },
+  { field: "GPU", headerText: "GPU", width: "100", textAlign: "Center" },
+  {
+    field: "Configuration",
+    headerText: "Configuration",
+    width: "100",
+    
+    textAlign: "Center",
+  },
+
+  { field: "Usage", headerText: "Usage", width: "100", textAlign: "Center" },
+  {
+    field: "Earn",
+    headerText: "Earning",
+    width: "100",
+    template: gridEarn,
     textAlign: "Center",
   },
 ];
@@ -389,6 +487,38 @@ export const UsagesData = [
     Name: "Total",
 
     Charge: 43,
+  },
+];
+
+export const EarningData = [
+  {
+    Name: "huupai_T4_1",
+    GPU: "8 * NvidiaT4(8G)",
+    Configuration:
+      "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
+    Usage: "2",
+  Earn: 1,
+  },
+  {
+    Name: "huupai_T4_2",
+    GPU: "8 * NvidiaT4(8G)",
+    Configuration:
+      "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
+    Usage: "1",
+    Earn: 2,
+  },
+  {
+    Name: "huupai_T4_3",
+    GPU: "8 * NvidiaT4(8G)",
+    Configuration:
+      "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
+    Usage: "10",
+    Earn: 40,
+  },
+  {
+    Name: "Total",
+
+    Earn: 43,
   },
 ];
 

@@ -15,6 +15,8 @@ const MyCloud = () => {
             borderRadius="50%"
           />
         </div>
+
+        {/* for consumer */}
         <ul className="py-2">
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
           <a href="./profile">Profile</a></li>
@@ -25,6 +27,18 @@ const MyCloud = () => {
             <a href="./instances">Instances</a>
           </li>
         </ul>
+
+         {/* for provider */}
+         {/* <ul className="py-2">
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+          <a href="./profile">Profile</a></li>
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <a href="./inventory">Inventory</a>
+          </li>
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <a href="./invoice">Invoice</a>
+          </li>
+        </ul> */}
     </div>
   );
 };

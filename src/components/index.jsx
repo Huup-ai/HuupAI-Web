@@ -16,4 +16,8 @@ export { default as Details } from './Details';
 export { default as Invoices } from './Invoices';
 export { default as Usage } from './Usage';
 export { default as Sidemenu } from './Sidemenu';
+export { default as SidemenuPro } from './SidemenuPro';
+// export { default as Crypto } from './Crypto';
+export { default as ProviderDetails } from './ProviderDetails';
+export { default as Earning } from './Earning';
 
