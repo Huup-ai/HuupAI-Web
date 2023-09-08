@@ -82,6 +82,7 @@ const Clouds = () => {
                 {/* Provider */}
                 <Route path="/inventory" element={<Inventory />} />
                 <Route path="/invoice" element={<Invoice />} />
+                <Route path="/profile" element={<Profile />} />
 
 
               </Routes>
