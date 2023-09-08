@@ -42,8 +42,57 @@ const Navbar = () => {
     currentColor,
   } = useStateContext();
 
-  const [cookies] = useCookies();
-  const [displayContent, setDisplayContent] = useState(null);
+  const [cookies] = useCookies(["selectedType"]);
+  const [displayContent, setDisplayContent] = useState(false);
+
+  const Consumer = [
+    <div className="flex ">
+      <NavButton
+        title="Market"
+        customFunc={() => handleClick("Market")}
+        color={currentColor}
+        icon={<AiOutlineHome />}
+      />
+      <NavButton
+        title="MyCloud"
+        // dotColor="#03C9D7"
+        customFunc={() => handleClick("MyCloud")}
+        color={currentColor}
+        icon={<BsPerson />}
+      />
+      <NavButton
+        title="Alert"
+        // dotColor="rgb(254, 201, 15)"
+        customFunc={() => handleClick("userProfile")}
+        color={currentColor}
+        icon={<RiNotification3Line />}
+      />
+      {isClicked.Market && <Market />}
+      {isClicked.MyCloud && <MyCloud />}
+      {isClicked.userProfile && <UserProfile />}
+    </div>,
+  ];
+
+  const Provider = [
+    <div className="flex ">
+      <NavButton
+        title="MyCloud"
+        // dotColor="#03C9D7"
+        customFunc={() => handleClick("MyCloud")}
+        color={currentColor}
+        icon={<BsPerson />}
+      />
+      <NavButton
+        title="Alert"
+        // dotColor="rgb(254, 201, 15)"
+        customFunc={() => handleClick("userProfile")}
+        color={currentColor}
+        icon={<RiNotification3Line />}
+      />
+      {isClicked.MyCloud && <MyCloud />}
+      {isClicked.userProfile && <UserProfile />}
+    </div>,
+  ];
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -64,70 +113,9 @@ const Navbar = () => {
   }, [screenSize]);
 
   useEffect(() => {
-    // Check the type
-    // consumer sidebar
-    if (cookies.selectedType === "customer") {
-      setDisplayContent(
-        <div className="flex ">
-          <NavButton
-            title="Market"
-            customFunc={() => handleClick("Market")}
-            color={currentColor}
-            icon={<AiOutlineHome />}
-          />
-          <NavButton
-            title="MyCloud"
-            // dotColor="#03C9D7"
-            customFunc={() => handleClick("MyCloud")}
-            color={currentColor}
-            icon={<BsPerson />}
-          />
-          <NavButton
-            title="Alert"
-            // dotColor="rgb(254, 201, 15)"
-            customFunc={() => handleClick("userProfile")}
-            color={currentColor}
-            icon={<RiNotification3Line />}
-          />
-
-          {isClicked.Market && <Market />}
-          {isClicked.MyCloud && <MyCloud />}
-          {isClicked.userProfile && <UserProfile />}
-        </div>
-      );
-    }
-    // provider sidebar
-    else if (cookies.selectedType === "provider") {
-      setDisplayContent(
-        <div className="flex ">
-          <NavButton
-            title="MyCloud"
-            // dotColor="#03C9D7"
-            customFunc={() => handleClick("MyCloud")}
-            color={currentColor}
-            icon={<BsPerson />}
-          />
-          <NavButton
-            title="Alert"
-            // dotColor="rgb(254, 201, 15)"
-            customFunc={() => handleClick("userProfile")}
-            color={currentColor}
-            icon={<RiNotification3Line />}
-          />
-
-          {/* {isClicked.MyCloud && <MyCloud />}
-        {isClicked.userProfile && <UserProfile />} */}
-        </div>
-      );
-    } else {
-      setDisplayContent(
-        <div>
-          <h3>Type not recognized</h3>
-          <p>Please set a LogIn Type.</p>
-        </div>
-      );
-    }
+    setDisplayContent(cookies.selectedType === "provider");
   }, [cookies.selectedType]);
+
 
   return (
     <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative ">
@@ -138,14 +126,7 @@ const Navbar = () => {
         icon={<AiOutlineMenu />}
       />
 
-      {displayContent}
-
-      {isClicked.Market && <Market />}
-      {isClicked.MyCloud && <MyCloud />}
-      {isClicked.userProfile && <UserProfile />}
-
-      {isClicked.MyCloud && <MyCloud />}
-      {isClicked.userProfile && <UserProfile />}
+      {displayContent ? <>{Provider}</> : <>{Consumer}</>}
     </div>
   );
 };

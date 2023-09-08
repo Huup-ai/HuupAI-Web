@@ -49,6 +49,7 @@ const MyCloud = () => {
       );
     }
   }, [cookies.selectedType]);
+  
   return (
     <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
         <div className="flex justify-between items-center">

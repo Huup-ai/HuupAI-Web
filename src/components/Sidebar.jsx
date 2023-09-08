@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { SiShopware } from "react-icons/si";
 import { MdOutlineCancel } from "react-icons/md";
@@ -7,6 +7,7 @@ import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { links, provider } from "../data/dummy";
 import { useCookies } from "react-cookie";
 import { useStateContext } from "../contexts/ContextProvider";
+import { fabClasses } from "@mui/material";
 
 const Sidebar = () => {
   const { activeMenu, setActiveMenu, screenSize, currentColor } =
@@ -22,85 +23,67 @@ const Sidebar = () => {
   const normalLink =
     "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2";
 
-  const [cookies] = useCookies();
-  const [displayContent, setDisplayContent] = useState(null);
-
+  const [cookies] = useCookies(['selectedType']);
+  const [displayContent, setDisplayContent] = useState(false);
   useEffect(() => {
-    // Check the type
-    // consumer sidebar
-    if (cookies.selectedType === "customer") {
-      setDisplayContent(
-        <div className="mt-20 ">
-            {links.map((item) => (
-              <div key={item.title}>
-                <p className="text-gray-400 dark:text-gray-400 m-3 mt-20 uppercase">
-                  {item.title}
-                </p>
-                {item.links.map((link) => (
-                  <NavLink
-                    to={`/${link.name}`}
-                    key={link.name}
-                    onClick={handleCloseSideBar}
-                    style={({ isActive }) => ({
-                      backgroundColor: isActive ? currentColor : "",
-                    })}
-                    className={({ isActive }) =>
-                      isActive ? activeLink : normalLink
-                    }
-                  >
-                    {link.icon}
-                    <span className="capitalize text-m">{link.name}</span>
-                  </NavLink>
-                ))}
-              </div>
-            ))}
-          </div>
-        
-      );
-
-    } 
-    // provider sidebar
-    else if (cookies.selectedType === "provider") {
-      setDisplayContent(
-        <div className="mt-20 ">
-            {provider.map((item)=>(
-              <div key = {item.title}>
-                <p className="text-gray-400 dark:text-gray-400 m-3 mt-20 uppercase">
-
-                {item.title}
-                </p>
-                {item.links.map((link)=>(
-                  <NavLink
-                  to={`/${link.name}`}
-                  key={link.name}
-                  onClick={handleCloseSideBar}
-                  style={({ isActive }) => ({
-                    backgroundColor: isActive ? currentColor : '',
-                  })}
-                  className={({ isActive }) => (isActive ? activeLink : normalLink)}
-                >
-                  {link.icon}
-                  <span className="capitalize text-m">{link.name}</span>
-                </NavLink>
-                ))}
-
-               
-                
-
-              </div>
-            ))}
-
-          </div>
-      );
-    } else {
-      setDisplayContent(
-        <div>
-          <h3>Type not recognized</h3>
-          <p>Please set a LogIn Type.</p>
-        </div>
-      );
-    }
+    setDisplayContent(cookies.selectedType === 'provider'); 
   }, [cookies.selectedType]);
+
+
+
+  const Consumer = [
+    <div className="mt-20 ">
+      {links.map((item) => (
+        <div key={item.title}>
+          <p className="text-gray-400 dark:text-gray-400 m-3 mt-20 uppercase">
+            {item.title}
+          </p>
+          {item.links.map((link) => (
+            <NavLink
+              to={`/${link.name}`}
+              key={link.name}
+              onClick={handleCloseSideBar}
+              style={({ isActive }) => ({
+                backgroundColor: isActive ? currentColor : "",
+              })}
+              className={({ isActive }) => (isActive ? activeLink : normalLink)}
+            >
+              {link.icon}
+              <span className="capitalize text-m">{link.name}</span>
+            </NavLink>
+          ))}
+        </div>
+      ))}
+    </div>,
+  ];
+
+  const Provider = [
+    <div className="mt-20 ">
+      {provider.map((item) => (
+        <div key={item.title}>
+          <p className="text-gray-400 dark:text-gray-400 m-3 mt-20 uppercase">
+            {item.title}
+          </p>
+          {item.links.map((link) => (
+            <NavLink
+              to={`/${link.name}`}
+              key={link.name}
+              onClick={handleCloseSideBar}
+              style={({ isActive }) => ({
+                backgroundColor: isActive ? currentColor : "",
+              })}
+              className={({ isActive }) => (isActive ? activeLink : normalLink)}
+            >
+              {link.icon}
+              <span className="capitalize text-m">{link.name}</span>
+            </NavLink>
+          ))}
+        </div>
+      ))}
+    </div>,
+  ];
+
+
 
   return (
     <div className="ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10">
@@ -128,10 +111,11 @@ const Sidebar = () => {
           </div>
         </>
       )}
-      
-      {/* <h2>Display Based on Cookie</h2> */}
-
-      {displayContent}
+      {displayContent ? (
+        <>{Provider}</>
+      ) : (
+        <>{Consumer}</>
+      )}
     </div>
   );
 };
