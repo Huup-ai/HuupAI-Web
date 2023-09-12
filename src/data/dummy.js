@@ -68,34 +68,6 @@ export const links = [
       },
     ],
   },
-  // {
-  //   title: 'ORDER',
-  //   links: [
-  //     {
-  //       name: 'confirmation GPU',
-  //       icon: <FiShoppingBag />,
-  //     },{
-  //       name: 'confirmation CPU',
-  //       icon: <FiShoppingBag />,
-  //     },
-  //     // {
-  //     //   name: 'calendar',
-  //     //   icon: <AiOutlineCalendar />,
-  //     // },
-  //     // {
-  //     //   name: 'kanban',
-  //     //   icon: <BsKanban />,
-  //     // },
-  //     // {
-  //     //   name: 'editor',
-  //     //   icon: <FiEdit />,
-  //     // },
-  //     // {
-  //     //   name: 'color-picker',
-  //     //   icon: <BiColorFill />,
-  //     // },
-  //   ],
-  // },
 ];
 
 export const provider = [

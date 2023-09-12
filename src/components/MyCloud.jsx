@@ -1,8 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 import { MdOutlineCancel } from 'react-icons/md';
 import { Button } from '.';
 
 const MyCloud = () => {
+  const [cookies] = useCookies();
+  const [displayContent, setDisplayContent] = useState(null);
+
+  useEffect(() => {
+    // Check the type
+    // consumer sidebar
+    if (cookies.selectedType === "customer") {
+      setDisplayContent(
+        <ul className="py-2">
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+          <a href="./profile">Profile</a></li>
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <a href="./billing">Billing</a>
+          </li>
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <a href="./instances">Instances</a>
+          </li>
+        </ul>
+        
+      );
+    }
+    // provider sidebar
+    else if (cookies.selectedType === "provider") {
+      setDisplayContent(
+        <ul className="py-2">
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+          <a href="./profile">Profile</a></li>
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <a href="./inventory">Inventory</a>
+          </li>
+          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+            <a href="./invoice">Invoice</a>
+          </li>
+        </ul>
+        
+      );
+    } else {
+      setDisplayContent(
+        <div>
+          <h3>Type not recognized</h3>
+          <p>Please set a LogIn Type.</p>
+        </div>
+      );
+    }
+  }, [cookies.selectedType]);
+  
   return (
     <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
         <div className="flex justify-between items-center">
@@ -16,29 +63,7 @@ const MyCloud = () => {
           />
         </div>
 
-        {/* for consumer */}
-        <ul className="py-2">
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-          <a href="./profile">Profile</a></li>
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./billing">Billing</a>
-          </li>
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./instances">Instances</a>
-          </li>
-        </ul>
-
-         {/* for provider */}
-         {/* <ul className="py-2">
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-          <a href="./profile">Profile</a></li>
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./inventory">Inventory</a>
-          </li>
-          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./invoice">Invoice</a>
-          </li>
-        </ul> */}
+        {displayContent}
     </div>
   );
 };

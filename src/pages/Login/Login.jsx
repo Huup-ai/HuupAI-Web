@@ -1,32 +1,12 @@
 import React from "react";
 import "./Login.css";
 import { useState } from "react";
-import { loginUser } from "../../api";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useCookies } from "react-cookie";
 
 import Logo from "../../data/Logo.png";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // password visibility
-
-  const handleLoginClick = async () => {
-    try {
-      const response = await loginUser(email, password);
-      console.log("Login successful", response);
-
-      setEmail("");
-      setPassword("");
-    } catch (error) {
-      console.error("Login error", error);
-    }
-  };
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const [isLogin, setIsLogin] = useState(true);
 
   return (
     <div className="Alert">
@@ -41,43 +21,48 @@ const Login = () => {
           </p>
         </div>
       </div>
+      <div>
+        {/* <h2>{isLogin ? "Login" : "Signup"}</h2> */}
+        {isLogin ? (
+          <LogIn
+            onSignupClick={() => setIsLogin(false)}
+            // onLogin={handleLogin}
+          />
+        ) : (
+          <SignUp
+            onLoginClick={() => setIsLogin(true)}
+            // onSignup={handleSignup}
+          />
+        )}
+      </div>
 
-      <LogIn
-        email={email}
-        setEmail={setEmail}
-        password={password}
-        setPassword={setPassword}
-        onLoginClick={handleLoginClick}
-        showPassword={showPassword}
-        toggleShowPassword={toggleShowPassword}
-      />
-      {/* <SignUp /> */}
+      {/* <LogIn />
+      <SignUp /> */}
     </div>
   );
 };
-function LogIn({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  onLoginClick,
-  showPassword,
-  toggleShowPassword,
-}) {
+function LogIn({ onSignupClick, onLogin }) {
   const [selectedType, setSelectedType] = useState(" ");
+  // const [selectedWay, setSelectedWay] = useState(" ");
+  const [cookies, setCookie] = useCookies(["selectedType"]);
+  const handleSelectChange = (event) => {
+    const newValue = event.target.value;
+    setSelectedType(newValue);
+    setCookie("selectedType", newValue, { path: "/" });
+  };
 
   return (
     <div className="a-right">
       <form className="infoForm authForm">
         <div className="flex flex-row align-middle">
-          <h3>Log In</h3>
+          <h3>Log In </h3>
           <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
+            value={selectedType} // ...force the select's value to match the state variable...
+            onChange={handleSelectChange} // ... and update the state variable on any change!
           >
             <option value="">Select Role:</option>
             <option value="customer">Customer</option>
-            <option value="admin">Provider</option>
+            <option value="provider">Provider</option>
           </select>
         </div>
 
@@ -87,46 +72,30 @@ function LogIn({
             placeholder="Email"
             className="infoInput"
             name="username"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
         <div>
           <input
-            type={showPassword ? "text" : "password"}
+            type="password"
             className="infoInput"
             placeholder="Password"
             name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
           />
-          {/* button for toggling password visibility */}
-          <button
-            type="button"
-            onClick={toggleShowPassword}
-            className="password-toggle-button"
-          >
-            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-          </button>
         </div>
 
         <div>
-          <span style={{ fontSize: "12px" }}>
-            If you are a first-time renter, please sign up
-          </span>
+          <p className="text-xs">
+            Don't have an account?{" "}
+            <span
+              onClick={onSignupClick}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
+              Signup
+            </span>
+          </p>
         </div>
-<<<<<<< HEAD
         <div>
-          <button
-            className="button infoButton font-normal"
-            onClick={onLoginClick}
-          >
-            Login with Email
-          </button>
-          <button onClick={""} className="button infoButton">
-=======
-        <div >
           <button className="button infoButton font-normal w-36">
             Login with Email
           </button>
@@ -134,7 +103,6 @@ function LogIn({
             // onClick={""}
             className="button infoButton font-normal w-72"
           >
->>>>>>> 9aa8749 (Login Button Update)
             Login with Email & Crypto Wallet
           </button>
         </div>
@@ -142,23 +110,13 @@ function LogIn({
     </div>
   );
 }
-
-function SignUp() {
+function SignUp({ onLoginClick, onSignup }) {
   // const [selectedAction, setSelectedAction] = useState(" ");
   return (
     <div>
       <form className="infoForm authForm">
         <div className="flex flex-row align-middle">
           <h3>Sign Up</h3>
-          {/* <select
-     
-      value={selectedAction} // ...force the select's value to match the state variable...
-      onChange={(e) => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
-    >
-      <option value="">Select SignUp Type:</option>
-      <option value="customer">Customer</option>
-      <option value="admin">Administer</option>
-    </select> */}
         </div>
 
         <div>
@@ -201,9 +159,15 @@ function SignUp() {
         </div>
 
         <div>
-          <span style={{ fontSize: "12px" }}>
-            Already have an account. Login!
-          </span>
+          <p className="text-xs">
+            Already have an account?{" "}
+            <span
+              onClick={onLoginClick}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
+              Login
+            </span>
+          </p>
         </div>
         <button className="button infoButton w-24" type="submit">
           Signup
