@@ -5,7 +5,7 @@ import { Button } from ".";
 // import { userProfileData } from '../data/dummy';
 import { useStateContext } from "../contexts/ContextProvider";
 import wenxuan from "../data/wenxuan.jpg";
-import { callapi } from "../api";
+import { logoutUser } from "../api";
 
 const UserProfile = () => {
   const { currentColor } = useStateContext();
@@ -40,7 +40,7 @@ const UserProfile = () => {
           </p>
         </div>
       </div>
-      
+
       <div className="mt-5">
         <Button
           color="white"
@@ -48,7 +48,7 @@ const UserProfile = () => {
           text="Logout"
           borderRadius="10px"
           width="full"
-          clickCallback={callapi}
+          clickCallback={logoutUser}
         />
       </div>
     </div>
