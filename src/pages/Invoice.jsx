@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-import { Header, SidemenuPro,Earning, ProviderDetails, Invoices } from "../components";
+import {
+  Header,
+  SidemenuPro,
+  Earning,
+  ProviderDetails,
+  Invoices,
+} from "../components";
 
 const Billing = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -37,8 +43,6 @@ const Billing = () => {
       <providerDetails />
       <Header category="Invoice" title="Invoice For Wenxuan" />
 
-
-
       <p className="text-lg text-gray-400">
         Current billing period runs from {formattedDate} to {laterMonth}{" "}
         {laterDay}
@@ -46,9 +50,7 @@ const Billing = () => {
 
       <div className="flex justify-between">
         <div className="sticky top-2 h-48">
-       
-            <SidemenuPro />
-   
+          <SidemenuPro />
         </div>
 
         <div className="flex flex-col w-2/3">
