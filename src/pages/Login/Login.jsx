@@ -5,6 +5,8 @@ import { useCookies } from "react-cookie";
 import { loginUser, registerUser, loginProvider } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../reducers/authSlicer";
 
 import Logo from "../../data/Logo.png";
 
@@ -14,6 +16,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); // password visibility
   const [selectedType, setSelectedType] = useState("");
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const handleLoginClick = async (e) => {
     e.preventDefault();
@@ -29,6 +33,7 @@ const Login = () => {
       console.log("Login successful", response);
       setEmail("");
       setPassword("");
+      dispatch(loginSuccess());
     } catch (error) {
       console.error("Login error", error);
     }
