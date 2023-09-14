@@ -1,15 +1,17 @@
 import React , { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import { Check, Header, OSDropdown } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
 
 const Confirmation_GPU = () => {
   const { currentColor, currentMode } = useStateContext();
+  const { id } = useParams();
 
   const handleConfirmOrder = async () => {
     console.log('Button clicked!');
     try {
-        const response = await fetch('http://127.0.0.1:8000/instances/c-m-889dmgrg/createvm/', {
+        const response = await fetch('http://127.0.0.1:8000/instances/${id}/createvm/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
