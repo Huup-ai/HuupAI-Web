@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../reducers/authSlicer";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
-import { ethers } from "ethers";
-import {faucetContract} from "../../ethereum/faucet";
+// import { ethers } from "ethers";
+// import {faucetContract} from "../../ethereum/faucet";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -42,11 +42,9 @@ const Login = () => {
     }
   };
 
-
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
 
   return (
     <div className="Alert">
