@@ -35,7 +35,7 @@ export async function registerUser(
   return response;
 }
 
-export async function logoutUser() {
+export async function logoutUser(navigate) {
   try {
     await FetchRequest("http://localhost:8000/users/logout/", "POST");
     navigate("/login");

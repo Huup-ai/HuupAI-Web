@@ -3,16 +3,16 @@ import "./App.css";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Clouds from "./pages/Clouds/Clouds";
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+//import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import GPU from './pages/GPU';
 import Confirmation_GPU from './pages/Confirmation_GPU';
 
 import Login from "./pages/Login/Login";
-import Clouds from "./pages/Clouds/Clouds";
+//import Clouds from "./pages/Clouds/Clouds";
 import Billing from "./pages/Billing";
 import Profile from "./pages/Profile";
 import Instances from "./pages/Instances";
-import GPU from "./pages/GPU";
+//import GPU from "./pages/GPU";
 import CPU from "./pages/CPU";
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/login" element={<Login />} />
       <Route path="/GPU" element={<GPU />} />
-      <Route path="/confirmation/:id" element={<ConfirmationGPU />} />
+      <Route path="/confirmation/:id" element={<Confirmation_GPU />} />
       <Route path="/" element={<Navigate to="/login" />} />
       <Route
         path="/login"
