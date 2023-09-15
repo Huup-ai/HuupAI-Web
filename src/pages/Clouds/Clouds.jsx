@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
-
 import { Navbar, Footer, Sidebar, ThemeSettings } from "../../components";
 import {
   CPU,
@@ -78,7 +77,7 @@ const Clouds = () => {
 
             <Routes>
               {/* Market  */}
-              <Route path="/" element={<GPU />} />
+              <Route path="/" element={<Instances />} />
               <Route path="/GPU" element={<GPU />} />
               <Route path="/CPU" element={<CPU />} />
 
