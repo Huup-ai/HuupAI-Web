@@ -2,6 +2,10 @@ import React from "react";
 import "./App.css";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Clouds from "./pages/Clouds/Clouds";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import GPU from './pages/GPU';
+import Confirmation_GPU from './pages/Confirmation_GPU';
 import Login from "./pages/Login/Login";
 import Clouds from "./pages/Clouds/Clouds";
 import Billing from "./pages/Billing";
@@ -11,9 +15,15 @@ import GPU from "./pages/GPU";
 import CPU from "./pages/CPU";
 
 function App() {
+
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return (
+     <div className="App">
+
+        <div className="blur" style={{top: '-18%', right: '0'}}></div>
+        <div className="blur" style={{top: '36%', left: '-8rem'}}></div>
+        
     <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
       <Route
@@ -44,7 +54,11 @@ function App() {
         path="/cpu"
         element={isAuthenticated ? <CPU /> : <Navigate to="/login" />}
       />
+       <Route path="/GPU" element={<GPU />} />
+       <Route path="/confirmation/:id" element={<Confirmation_GPU />} />
     </Routes>
+ </div>
+
   );
 }
 
