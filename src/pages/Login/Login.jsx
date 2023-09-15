@@ -2,15 +2,51 @@ import React from "react";
 import "./Login.css";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
+import { loginUser, registerUser, loginProvider } from "../../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../reducers/authSlicer";
+import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
 import { ethers } from "ethers";
 import {faucetContract} from "../../ethereum/faucet";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // password visibility
+  const [selectedType, setSelectedType] = useState("");
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const navigate = useNavigate();
 
-  
-  
+  const handleLoginClick = async (e) => {
+    e.preventDefault();
+    try {
+      let response;
+
+      if (selectedType === "provider") {
+        response = await loginProvider(email, password);
+      } else {
+        response = await loginUser(email, password);
+      }
+
+      console.log("Login successful", response);
+      setEmail("");
+      setPassword("");
+      dispatch(loginSuccess());
+    } catch (error) {
+      console.error("Login error", error);
+    }
+  };
+
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   return (
     <div className="Alert">
@@ -30,12 +66,21 @@ const Login = () => {
         {isLogin ? (
           <LogIn
             onSignupClick={() => setIsLogin(false)}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            onLoginClick={handleLoginClick}
+            showPassword={showPassword}
+            toggleShowPassword={toggleShowPassword}
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
             // onLogin={handleLogin}
           />
         ) : (
           <SignUp
             onLoginClick={() => setIsLogin(true)}
-            // onSignup={handleSignup}
+            navigate={navigate} // pass navigate function to SignUp component
           />
         )}
       </div>
@@ -45,8 +90,20 @@ const Login = () => {
     </div>
   );
 };
-function LogIn({ onSignupClick, onLogin }) {
-  const [selectedType, setSelectedType] = useState(" ");
+function LogIn({
+  onSignupClick,
+  // onLogin,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  onLoginClick,
+  showPassword,
+  toggleShowPassword,
+  selectedType,
+  setSelectedType,
+}) {
+  // const [selectedType, setSelectedType] = useState(" ");
   // const [selectedWay, setSelectedWay] = useState(" ");
   const [cookies, setCookie] = useCookies(["selectedType"]);
   const handleSelectChange = (event) => {
@@ -76,16 +133,28 @@ function LogIn({ onSignupClick, onLogin }) {
             placeholder="Email"
             className="infoInput"
             name="username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
         <div>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             className="infoInput"
             placeholder="Password"
             name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
+          {/* button for toggling password visibility */}
+          <button
+            type="button"
+            onClick={toggleShowPassword}
+            className="password-toggle-button"
+          >
+            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+          </button>
         </div>
 
         <div>
@@ -99,8 +168,11 @@ function LogIn({ onSignupClick, onLogin }) {
             </span>
           </p>
         </div>
-        <div >
-          <button className="button infoButton font-normal w-36">
+        <div>
+          <button
+            className="button infoButton font-normal w-36"
+            onClick={onLoginClick}
+          >
             Login with Email
           </button>
           <button
@@ -114,11 +186,64 @@ function LogIn({ onSignupClick, onLogin }) {
     </div>
   );
 }
-function SignUp({ onLoginClick, onSignup }) {
+function SignUp({ onLoginClick, navigate }) {
+  // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    confirmpass: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmpass) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    const dataToSend = {
+      firstname: formData.firstname,
+      lastname: formData.lastname,
+      email: formData.email,
+      password: formData.password,
+      is_provider: formData.is_provider,
+      company: formData.company,
+      payment_method: formData.payment_method,
+      card_number: formData.card_number,
+      card_exp: formData.card_exp,
+      card_name: formData.card_name,
+      tax: formData.tax,
+      role: formData.role,
+    };
+
+    const response = await registerUser(
+      formData.email,
+      formData.password,
+      dataToSend
+    );
+
+    if (response.status === "success") {
+      alert(response.message);
+      navigate("/login"); // navigate to login page
+    } else {
+      alert("Registration failed!");
+    }
+  };
+
   return (
     <div>
-      <form className="infoForm authForm">
+      <form className="infoForm authForm" onSubmit={handleSubmit}>
         <div className="flex flex-row align-middle">
           <h3>Sign Up</h3>
         </div>
@@ -129,12 +254,17 @@ function SignUp({ onLoginClick, onSignup }) {
             placeholder="First Name"
             className="infoInput"
             name="firstname"
+            value={formData.firstname}
+            onChange={handleChange}
           />
+
           <input
             type="text"
             placeholder="Last Name"
             className="infoInput"
             name="lastname"
+            value={formData.lastname}
+            onChange={handleChange}
           />
         </div>
 
@@ -144,27 +274,32 @@ function SignUp({ onLoginClick, onSignup }) {
             className="infoInput"
             name="email"
             placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
           />
         </div>
 
         <div>
           <input
-            type="text"
+            type="password"
             className="infoInput"
             name="password"
             placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
           />
           <input
-            type="text"
+            type="password"
             className="infoInput"
             name="confirmpass"
             placeholder="Confirm Password"
+            value={formData.confirmpass}
+            onChange={handleChange}
           />
         </div>
 
         <div>
           <p className="text-xs">
-
             Already have an account?{" "}
             <span
               onClick={onLoginClick}
