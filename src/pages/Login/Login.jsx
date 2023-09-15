@@ -2,12 +2,14 @@ import React from "react";
 import "./Login.css";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-
 import Logo from "../../data/Logo.png";
+import { ethers } from "ethers";
+import {faucetContract} from "../../ethereum/faucet";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
 
+  
   
 
   return (
