@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 const FetchRequest = async (url, method, header = {}, data = {}) => {
   const response = await fetch(url, {
     method: method,
@@ -7,14 +10,19 @@ const FetchRequest = async (url, method, header = {}, data = {}) => {
   return response.json();
 };
 
-export async function registerUser(email, password, additionalData = {}) {
+export async function registerUser(
+  email,
+  password,
+  additionalData = {},
+  navigate
+) {
   const requestBody = {
     email: email,
     password: password,
     ...additionalData,
   };
 
-  return FetchRequest(
+  const response = await FetchRequest(
     "http://localhost:8000/users/register/",
     "POST",
     {
@@ -22,6 +30,12 @@ export async function registerUser(email, password, additionalData = {}) {
     },
     requestBody
   );
+
+  if (response.status === "success") {
+    navigate("/login");
+  }
+
+  return response;
 }
 
 export async function logoutUser() {
@@ -94,4 +108,26 @@ export async function getInvoiceByUser() {
       "Content-Type": "application/json",
     }
   );
+}
+
+export async function generateInvoice() {
+  try {
+    const userInstances = await getUserInstances();
+    const userInvoice = await getInvoiceByUser();
+
+    const invoice = {
+      date: new Date().toLocaleDateString(),
+      instances: userInstances,
+      price: userInvoice.price,
+      usage: userInvoice.usage,
+      tax: userInvoice.tax,
+      total_price: userInvoice.total_price,
+      status: userInvoice.paid ? "Paid" : "Unpaid",
+    };
+
+    return invoice;
+  } catch (error) {
+    console.error("Failed to generate invoice:", error);
+    throw error;
+  }
 }

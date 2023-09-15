@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Header } from "../components";
 import { Sidemenu, Usage, Details, Invoices } from "../components";
-import { getVmStatus, getUserInstances } from "../api";
+import { getVmStatus } from "../api";
 
-const Billing = () => {
+const Billing = ({ userInstances }) => {
   const [isSticky, setIsSticky] = useState(false);
   const [vmStatus, setVmStatus] = useState([]);
-  const [userInstances, setUserInstances] = useState([]);
 
   const handleScroll = () => {
     if (window.scrollY > 400) {
@@ -31,15 +30,6 @@ const Billing = () => {
       })
       .catch((error) => {
         console.error("Failed to fetch VM status: ", error);
-      });
-
-    // call the API to get the user instances
-    getUserInstances("user@example.com")
-      .then((data) => {
-        setUserInstances(data);
-      })
-      .catch((error) => {
-        console.error("Failed to fetch user instances: ", error);
       });
   }, []);
 
@@ -71,6 +61,7 @@ const Billing = () => {
 
         <div className="flex flex-col w-2/3">
           <Usage vmStatus={vmStatus} />
+          {/* pass user Instances to invoice */}
           <Invoices userInstances={userInstances} />
           <Details />
         </div>

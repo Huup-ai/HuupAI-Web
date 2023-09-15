@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../reducers/authSlicer";
+import { useNavigate } from "react-router-dom";
 
 import Logo from "../../data/Logo.png";
 
@@ -19,6 +20,7 @@ const Login = () => {
   const [selectedType, setSelectedType] = useState("");
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const navigate = useNavigate();
 
   const handleLoginClick = async (e) => {
     e.preventDefault();
@@ -76,7 +78,7 @@ const Login = () => {
         ) : (
           <SignUp
             onLoginClick={() => setIsLogin(true)}
-            // onSignup={handleSignup}
+            navigate={navigate} // pass navigate function to SignUp component
           />
         )}
       </div>
@@ -182,7 +184,8 @@ function LogIn({
     </div>
   );
 }
-function SignUp({ onLoginClick, onSignup }) {
+function SignUp({ onLoginClick, navigate }) {
+  // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
   const [formData, setFormData] = useState({
     firstname: "",
@@ -230,7 +233,7 @@ function SignUp({ onLoginClick, onSignup }) {
 
     if (response.status === "success") {
       alert(response.message);
-      // onSignup(); // if want to direct to another page
+      navigate("/login"); // navigate to login page
     } else {
       alert("Registration failed!");
     }
