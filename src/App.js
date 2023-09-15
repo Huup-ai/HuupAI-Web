@@ -1,9 +1,8 @@
 import "./App.css";
 import Clouds from "./pages/Clouds/Clouds";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import GPU from './pages/GPU';
-import Confirmation_GPU from './pages/Confirmation_GPU';
-
+import ConfirmationGPU from './pages/Confirmation_GPU';
 import Login from "./pages/Login/Login";
 
 function App() {
@@ -19,8 +18,10 @@ function App() {
         <Clouds/>
         <Router>
           <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/GPU" element={<GPU />} />
-            <Route path="/confirmation/:id" element={<Confirmation_GPU />} />
+            <Route path="/confirmation/:id" element={<ConfirmationGPU />} />
         {/* ... other routes if you have any */}
           </Routes>
         </Router>
