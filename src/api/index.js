@@ -1,6 +1,3 @@
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-
 const FetchRequest = async (url, method, header = {}, data = {}) => {
   const response = await fetch(url, {
     method: method,
@@ -39,7 +36,12 @@ export async function registerUser(
 }
 
 export async function logoutUser() {
-  return FetchRequest("http://localhost:8000/users/logout/", "POST");
+  try {
+    await FetchRequest("http://localhost:8000/users/logout/", "POST");
+    navigate("/login");
+  } catch (error) {
+    console.error("logout failed", error);
+  }
 }
 
 export async function loginUser(email, password) {
