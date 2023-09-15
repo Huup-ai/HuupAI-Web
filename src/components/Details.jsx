@@ -70,9 +70,11 @@ const Details = () => {
             </div>
 
             <div>
-              <input type="text"
-              className='border-solid border-2 rounded-md border-grey w-40'
-              placeholder="Input Amount" />
+              <input
+                type="text"
+                className="border-solid border-2 rounded-md border-grey w-40"
+                placeholder="Input Amount"
+              />
               <span>USDT</span>
             </div>
             <div className="mt-2 mb-2">
@@ -87,7 +89,7 @@ const Details = () => {
         </div>
 
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
-        <div className="px-4">
+          <div className="px-4">
             <h3>Billing Information</h3>
             <div>
               <span className="inline-block w-40">NAME</span>
@@ -113,7 +115,6 @@ const Details = () => {
               />
             </div>
           </div>
-
         </div>
       </div>
     </div>

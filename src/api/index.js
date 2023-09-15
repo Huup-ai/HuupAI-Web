@@ -59,3 +59,39 @@ export async function loginProvider(email, password) {
     requestBody
   );
 }
+export async function getVmStatus(clusterId, namespace, vmName) {
+  const requestBody = {
+    clusterid: clusterId,
+    namespace: namespace,
+    vmName: vmName,
+  };
+
+  return FetchRequest(
+    `http://localhost:8000/instances/${clusterId}/getvmstatus/${namespace}/${vmName}`,
+    "POST",
+    {
+      "Content-Type": "application/json",
+    },
+    requestBody
+  );
+}
+
+export async function getUserInstances(email) {
+  return FetchRequest(
+    `http://localhost:8000/instances/${email}/get_instances/`,
+    "GET",
+    {
+      "Content-Type": "application/json",
+    }
+  );
+}
+
+export async function getInvoiceByUser() {
+  return FetchRequest(
+    "http://localhost:8000/invoices/get_user_invoices/",
+    "GET",
+    {
+      "Content-Type": "application/json",
+    }
+  );
+}
