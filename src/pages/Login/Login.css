@@ -79,14 +79,15 @@ h3 {
   .infoForm>div{
     display: flex;
     gap: 2rem;
-    height: 3rem;
+    /* height: 3rem; */
     width: 90%;
   }
   
   .infoButton{
-    width: 6rem;
+    /* width: 6rem; */
     height: 2rem;
     align-self: flex-end;
+    padding: 0.5rem;
   }
   
   

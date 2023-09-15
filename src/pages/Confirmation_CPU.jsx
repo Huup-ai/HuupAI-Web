@@ -44,16 +44,18 @@ const Confirmation_CPU = () => {
         <Check text="Generate SSH Certificate" />
       </div>
 
-      <div >
+      <div>
         <Button
           color="white"
           bgColor={currentColor}
           text="Confirm Order"
           borderRadius="10px"
-         
         />
 
-        <a href="./CPU" className="ml-10"> Back</a>
+        <a href="./CPU" className="ml-10">
+          {" "}
+          Back
+        </a>
       </div>
     </div>
   );

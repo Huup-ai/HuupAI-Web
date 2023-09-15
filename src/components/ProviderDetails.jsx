@@ -2,13 +2,13 @@ import React from "react";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const Details = () => {
+const ProviderDetails = () => {
   const { currentColor } = useStateContext();
   return (
-    <div id="Billing Details">
+    <div id="Payment Details">
       <div className=" mb-5 mt-10">
         <p className="text-2xl font-extrabold tracking-tight text-slate-900">
-          Billing Details
+          Payment Details
         </p>
         <p className="text-lg text-gray-400">
           Payment and billing information for this team account
@@ -20,20 +20,26 @@ const Details = () => {
           <div className="px-4">
             <h3>Payment Information</h3>
             <div>
-              <span className="inline-block w-40">PAYMENT METHOD</span>
+              <span className="inline-block w-60">PAYMENT METHOD</span>
               <span>:</span>
-              <span>VISA</span>
+              <span>Bank</span>
             </div>
             <div>
-              <span className="inline-block w-40">EXP DATE.</span>
+              <span className="inline-block w-60">Account Payable Window</span>
               <span>:</span>
-              <span>date</span>
+              <span>45 Days</span>
             </div>
             <div>
-              <span className="inline-block w-40">CARD NUMBER</span>
+              <span className="inline-block w-60">Bank Routing</span>
               <span>:</span>
               <span>XXXX-XXXX-XXXX-1234</span>
             </div>
+            <div>
+              <span className="inline-block w-60">Bank Account</span>
+              <span>:</span>
+              <span>XXXX-XXXX-XXXX-1234</span>
+            </div>
+
             <div className="mt-2 mb-2">
               <Button
                 color="white"
@@ -49,37 +55,26 @@ const Details = () => {
           <div className="px-4">
             <h3>Payment Information</h3>
             <div>
-              <span className="inline-block w-40">PAYMENT METHOD</span>
+              <span className="inline-block w-60">PAYMENT METHOD</span>
               <span>:</span>
               <span>Crypto</span>
             </div>
             <div>
-              <span className="inline-block w-40">Total Credit</span>
+              <span className="inline-block w-60">Account Payable Window</span>
               <span>:</span>
-              <span>1000USDT</span>
+              <span>30 Days</span>
             </div>
+           
             <div>
-              <span className="inline-block w-40">Total Balance</span>
-              <span>:</span>
-              <span>600USDT</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">Wallet Address</span>
+              <span className="inline-block w-60">Wallet Address</span>
               <span>:</span>
               <span>XXXXXXXXXXX1234</span>
-            </div>
-
-            <div>
-              <input type="text"
-              className='border-solid border-2 rounded-md border-grey w-40'
-              placeholder="Input Amount" />
-              <span>USDT</span>
             </div>
             <div className="mt-2 mb-2">
               <Button
                 color="white"
                 bgColor={currentColor}
-                text="Deposit"
+                text="Add Payment Method"
                 borderRadius="10px"
               />
             </div>
@@ -87,7 +82,7 @@ const Details = () => {
         </div>
 
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
-        <div className="px-4">
+          <div className="px-4">
             <h3>Billing Information</h3>
             <div>
               <span className="inline-block w-40">NAME</span>
@@ -113,11 +108,10 @@ const Details = () => {
               />
             </div>
           </div>
-
         </div>
       </div>
     </div>
   );
 };
 
-export default Details;
+export default ProviderDetails;
