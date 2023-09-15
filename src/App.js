@@ -20,42 +20,7 @@ function App() {
       <div className="blur" style={{ top: "-18%", right: "0" }}></div>
       <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
 
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/GPU" element={<GPU />} />
-        <Route path="/confirmation/:id" element={<Confirmation_GPU />} /> */}
-        <Route
-          path="/login"
-          element={isAuthenticated ? <Navigate to="/clouds" /> : <Login />}
-        />
-        <Route
-          path="/clouds"
-          element={isAuthenticated ? <Clouds /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/billing"
-          element={isAuthenticated ? <Billing /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/profile"
-          element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/instances"
-          element={isAuthenticated ? <Instances /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/gpu"
-          element={isAuthenticated ? <GPU /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/cpu"
-          element={isAuthenticated ? <CPU /> : <Navigate to="/login" />}
-        />
-        <Route path="/GPU" element={<GPU />} />
-        <Route path="/confirmation/:id" element={<Confirmation_GPU />} />
-      </Routes>
+     {isAuthenticated? <Clouds /> : <Login />}
     </div>
   );
 }
