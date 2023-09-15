@@ -11,7 +11,7 @@ function App() {
 
     
     <div className="App">
-<<<<<<< HEAD
+
         <div className="blur" style={{top: '-18%', right: '0'}}></div>
         <div className="blur" style={{top: '36%', left: '-8rem'}}></div>
         
@@ -24,13 +24,7 @@ function App() {
         {/* ... other routes if you have any */}
           </Routes>
         </Router>
-=======
-      <div className="blur" style={{ top: "-18%", right: "0" }}></div>
-      <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
-      <Login />
 
-      {/* <Clouds/> */}
->>>>>>> kathy
     </div>
   );
 }
