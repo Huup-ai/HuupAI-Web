@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { UsagesData, UsagesGrid } from "../data/dummy";
 import {
   GridComponent,
@@ -9,12 +9,26 @@ import {
   Page,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
+import { getUserInstances } from "../api";
 
 const Usage = () => {
   const toolbarOptions = ["Search"];
+  const [userInstances, setUserInstances] = useState([]);
 
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
+
+  useEffect(() => {
+    // call the API to get the user instances
+    getUserInstances("user@example.com")
+      .then((data) => {
+        setUserInstances(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch user instances: ", error);
+      });
+  }, []);
+
   return (
     <div id="Current Usages">
       <div className=" mb-5 mt-10">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { InvoicesData, InvoicesGrid } from "../data/dummy";
 import {
   GridComponent,
@@ -10,11 +10,25 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 
+import { generateInvoice } from "../api";
+
 const Invoices = () => {
   const toolbarOptions = ["Search"];
 
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
+  const [invoice, setInvoice] = useState(null);
+
+  useEffect(() => {
+    generateInvoice()
+      .then((generatedInvoice) => {
+        setInvoice(generatedInvoice);
+      })
+      .catch((error) => {
+        console.error("Failed to generate invoice:", error);
+      });
+  }, []);
+
   return (
     <div id="Invoices">
       <div className=" mb-5 mt-10">
@@ -51,6 +65,13 @@ const Invoices = () => {
           <Inject services={[Search, Page, Toolbar]} />
         </GridComponent>
       </div>
+
+      {invoice && (
+        <div>
+          <h2>Invoice</h2>
+          <p>Date: {invoice.date}</p>
+        </div>
+      )}
     </div>
   );
 };
