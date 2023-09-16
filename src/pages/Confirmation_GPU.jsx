@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Check, Header, OSDropdown } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
+import { Link, NavLink } from 'react-router-dom';
 
 const Confirmation_GPU = () => {
   const { currentColor, currentMode } = useStateContext();
@@ -67,10 +68,10 @@ const Confirmation_GPU = () => {
           class
         />
 
-        <a href="./GPU" className="ml-10">
+        <Link to={`/GPU`} className="ml-10">
           
           Back
-        </a>
+        </Link>
       </div>
     </div>
   );
