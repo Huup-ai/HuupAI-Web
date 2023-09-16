@@ -3,6 +3,7 @@ import { Check, Countbox, Header, OSDropdown } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
 import { BsPlusLg } from "react-icons/bs";
+import { Link, NavLink } from 'react-router-dom';
 
 const Confirmation_CPU = () => {
   const { currentColor, currentMode } = useStateContext();
@@ -52,10 +53,10 @@ const Confirmation_CPU = () => {
           borderRadius="10px"
         />
 
-        <a href="./CPU" className="ml-10">
+        <Link to={`/CPU`} className="ml-10">
           {" "}
           Back
-        </a>
+        </Link>
       </div>
     </div>
   );
