@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { MdOutlineCancel } from 'react-icons/md';
 import { Button } from '.';
+import { Link, NavLink } from 'react-router-dom';
 
 const MyCloud = () => {
   const [cookies] = useCookies();
@@ -14,12 +15,12 @@ const MyCloud = () => {
       setDisplayContent(
         <ul className="py-2">
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-          <a href="./profile">Profile</a></li>
+          <Link to="./profile">Profile</Link></li>
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./billing">Billing</a>
+            <Link to="./billing">Billing</Link>
           </li>
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./instances">Instances</a>
+            <Link to="./instances">Instances</Link>
           </li>
         </ul>
         
@@ -30,12 +31,12 @@ const MyCloud = () => {
       setDisplayContent(
         <ul className="py-2">
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-          <a href="./profile">Profile</a></li>
+          <Link to="./profile">Profile</Link></li>
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./inventory">Inventory</a>
+            <Link to="./inventory">Inventory</Link>
           </li>
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./invoice">Invoice</a>
+            <Link to="./invoice">Invoice</Link>
           </li>
         </ul>
         
