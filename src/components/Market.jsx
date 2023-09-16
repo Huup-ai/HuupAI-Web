@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 import { Button } from '.';
+import { Link, NavLink } from 'react-router-dom';
 
 const Market = () => {
   return (
@@ -17,10 +18,14 @@ const Market = () => {
         </div>
         <ul className="py-2">
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./CPU">CPU</a>
+           <Link
+           to="./CPU">CPU</Link>
+            {/* <a href="./CPU">CPU</a> */}
           </li>
           <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-            <a href="./GPU">GPU</a>
+          <Link
+           to="./GPU">GPU</Link>
+            {/* <a href="./GPU">GPU</a> */}
           </li>
         </ul>
     </div>
