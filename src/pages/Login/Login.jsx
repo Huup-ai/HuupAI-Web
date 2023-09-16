@@ -193,7 +193,10 @@ function SignUp({ onLoginClick, navigate }) {
     email: "",
     password: "",
     confirmpass: "",
-  });
+    is_provider: false
+});
+
+
 
   const handleChange = (e) => {
     setFormData({
@@ -215,29 +218,41 @@ function SignUp({ onLoginClick, navigate }) {
       lastname: formData.lastname,
       email: formData.email,
       password: formData.password,
-      is_provider: formData.is_provider,
-      company: formData.company,
-      payment_method: formData.payment_method,
-      card_number: formData.card_number,
-      card_exp: formData.card_exp,
-      card_name: formData.card_name,
-      tax: formData.tax,
-      role: formData.role,
+      // is_provider: formData.is_provider,
+      // company: formData.company,
+      // payment_method: formData.payment_method,
+      // card_number: formData.card_number,
+      // card_exp: formData.card_exp,
+      // card_name: formData.card_name,
+      // tax: formData.tax,
+      // role: formData.role,
     };
 
-    const response = await registerUser(
-      formData.email,
-      formData.password,
-      dataToSend
-    );
+    // const response = await registerUser(
+    //   formData.email,
+    //   formData.password,
+    //   dataToSend
+    // );
+    const response = await fetch("http://localhost:8000/users/register/", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(formData)
+});
 
-    if (response.status === "success") {
-      alert(response.message);
-      navigate("/login"); // navigate to login page
+const data = await response.json();
+  
+
+    if (response.ok) {
+      console.log("Trying to redirect to /login");
+      alert(data.message);
+      window.location.assign("/login");
     } else {
-      alert("Registration failed!");
+      alert(data.message || "Registration failed!");
     }
   };
+  
 
   return (
     <div>
@@ -295,6 +310,17 @@ function SignUp({ onLoginClick, navigate }) {
             onChange={handleChange}
           />
         </div>
+
+        <div className="checkbox-container">
+    <input
+        type="checkbox"
+        name="is_provider"
+        checked={formData.is_provider}
+        onChange={(e) => setFormData({ ...formData, is_provider: e.target.checked })}
+    />
+    <label htmlFor="is_provider">Register as a Provider</label>
+</div>
+
 
         <div>
           <p className="text-xs">
