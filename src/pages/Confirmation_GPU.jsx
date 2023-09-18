@@ -11,8 +11,10 @@ const Confirmation_GPU = () => {
 
   const handleConfirmOrder = async () => {
     console.log('Button clicked!');
+    console.log({ id } );
     try {
-        const response = await fetch('http://127.0.0.1:8000/instances/${id}/createvm/', {
+        const response = await fetch(`http://127.0.0.1:8000/instances/${id}/createvm/`, {
+
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -20,12 +22,123 @@ const Confirmation_GPU = () => {
             },
             body: JSON.stringify({
               
-              
+          
                 "metadata": {
-                    "name": "win2008-dv-01",
-                        "namespace": "default"
-              }
-              
+                  "name": "win2008-dv-01",
+                  "namespace": "default"
+                },
+                "spec": {
+                  "dataVolumeTemplates": [
+                    {
+                      "metadata": {
+                        "name": "mgt04-system-disk"
+                      },
+                      "spec": {
+                        "pvc": {
+                          "accessModes": [
+                            "ReadWriteOnce"
+                          ],
+                          "resources": {
+                            "requests": {
+                              "storage": "40Gi"
+                            }
+                          },
+                          "storageClassName": "longhorn"
+                        },
+                        "source": {
+                          "http": {
+                            "url": "http://192.168.49.15:9000/edge/test/ubuntu18.04/ecs-ubuntu18.04-x64-20220121.qcow2"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "metadata": {
+                        "name": "mgt04-data-disk"
+                      },
+                      "spec": {
+                        "pvc": {
+                          "accessModes": [
+                            "ReadWriteOnce"
+                          ],
+                          "resources": {
+                            "requests": {
+                              "storage": "60Gi"
+                            }
+                          },
+                          "storageClassName": "longhorn-ssd"
+                        },
+                        "source": {
+                          "blank": {}
+                        }
+                      }
+                    }
+                  ],
+                  "running": true,
+                  "template": {
+                    "spec": {
+                      "domain": {
+                        "devices": {
+                          "disks": [
+                            {
+                              "disk": {},
+                              "name": "root-volume"
+                            },
+                            {
+                              "disk": {
+                                "bus": "virtio"
+                              },
+                              "name": "data-volume"
+                            },
+                            {
+                              "disk": {
+                                "bus": "virtio"
+                              },
+                              "name": "cloudinitdisk"
+                            }
+                          ]
+                        },
+                        "machine": {
+                          "type": "q35"
+                        },
+                        "resources": {
+                          "limits": {
+                            "cpu": "16",
+                            "memory": "48Gi"
+                          },
+                          "requests": {
+                            "cpu": "1",
+                            "memory": "48Gi"
+                          }
+                        }
+                      },
+                      "nodeSelector": {
+                        "kubernetes.io/hostname": "master001"
+                      },
+                      "volumes": [
+                        {
+                          "dataVolume": {
+                            "name": "mgt04-system-disk"
+                          },
+                          "name": "root-volume"
+                        },
+                        {
+                          "dataVolume": {
+                            "name": "mgt04-data-disk"
+                          },
+                          "name": "data-volume"
+                        },
+                        {
+                          "cloudInitNoCloud": {
+                            "userData": "#ps1"
+                          },
+                          "name": "cloudinitdisk"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "status": {}
               
             })
         });
@@ -33,11 +146,14 @@ const Confirmation_GPU = () => {
         const data = await response.json();
 
         // Handle the response data as needed.
-        if(data.success) {
-            console.log("VM Created!");
-        } else {
-            console.log("There was an issue creating the vm.");
-        }
+        if (!response.ok) {
+          console.error("Server Response:", data);  // This will print any error detail from the server
+      } else if(data.success) {
+          console.log("VM Created!");
+      } else {
+          console.log("There was an issue creating the vm.");
+          console.log("Server Response:", data);   // Add this line to print server's detailed response
+      }
 
     } catch (error) {
         console.error("Error confirming order:", error);

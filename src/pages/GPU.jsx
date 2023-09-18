@@ -28,7 +28,7 @@ function GPU() {
         headerText: 'ID', 
         width: 120,
         template: (rowData) => {
-            return <Link to={`/confirmation%20GPU`}>{rowData.id}</Link>;
+          return <Link to={`/confirmation GPU/${rowData.id}`}>{rowData.id}</Link>;
         }
     },
 
