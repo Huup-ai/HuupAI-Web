@@ -20,4 +20,4 @@ const provider = (network) =>
 
 const signer = (network) => new ethers.Wallet(walletKey(), provider(network));
 
-module.exports = { address, availableNetworks, provider, signer };
+module.exports = { address, availableNetworks, provider, signer, walletKey};

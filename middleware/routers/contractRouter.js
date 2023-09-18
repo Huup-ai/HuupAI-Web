@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { ethers } = require('ethers');
 const { ABI, contractAddress } = require('../utils/contractConfig');
 const { privateKey } = require('../utils/WalletConfig.json').privateKey
+const { walletKey } = require('../utils/evm')
 // create provider
 // function createProvider(address provider, string memory user_id)
 router.post('/createprovider', async (req, res) => {
@@ -13,7 +14,8 @@ router.post('/createprovider', async (req, res) => {
         
         // call createProvider(address provider, string memory user_id) on contract
         const provider = new ethers.providers.JsonRpcProvider(`https://sepolia.infura.io/v3/${provider_address}`)
-        const wallet = new ethers.Wallet(privateKey)
+        const wallet = new ethers.Wallet(walletKey(), provider)
+
         const contract = new ethers.Contract(contractAddress, ABI, provider)
         const contractWithWalet = contract.connect(wallet)
 
@@ -36,7 +38,7 @@ router.post('/createrenter', async (req, res) => {
         
         // call createRenter(address renter, string memory user_id) on contract
         const provider = new ethers.providers.JsonRpcProvider(`https://sepolia.infura.io/v3/${provider_address}`)
-        const wallet = new ethers.Wallet(privateKey, provider)
+        const wallet = new ethers.Wallet(walletKey(), provider)
 
         const contract = new ethers.Contract(contractAddress, ABI, provider)
         const contractWithWalet = contract.connect(wallet)
@@ -60,7 +62,7 @@ router.post('/startrental', async (req, res) => {
         
         // call startRental(address renter, uint256 instance_id, address _provider, uint256 _rate) on contract
         const provider = new ethers.providers.JsonRpcProvider(`https://sepolia.infura.io/v3/${provider_address}`)
-        const wallet = new ethers.Wallet(privateKey, provider)
+        const wallet = new ethers.Wallet(walletKey(), provider)
 
         const contract = new ethers.Contract(contractAddress, ABI, provider)
         const contractWithWalet = contract.connect(wallet)
@@ -86,7 +88,7 @@ router.post('/stoprental', async (req, res) => {
         
         // call stopRental(address renter, uint256 instance_id, address _provider, uint256 _rate) on contract
         const provider = new ethers.providers.JsonRpcProvider(`https://sepolia.infura.io/v3/${provider_address}`)
-        const wallet = new ethers.Wallet(privateKey, provider)
+        const wallet = new ethers.Wallet(walletKey(), provider)
 
         const contract = new ethers.Contract(contractAddress, ABI, provider)
         const contractWithWalet = contract.connect(wallet)
