@@ -12,4 +12,13 @@ You may also see any lint errors in the console.
 
 ### wallet private key
 
-utils/WalletConfig.json is not contained in repo as it contains wallet private key, you need to add it before running.
+utils/WalletConfig.json is not contained in repo as it contains wallet private key, you need to add it before running. Follow the structure:
+```
+{
+  "curve": "",
+  "privateKey": "",
+  "publicKey": "fill here",
+  "compressedPublicKey": "",
+  "_isSigningKey": 
+}
+```
