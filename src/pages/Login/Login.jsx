@@ -9,6 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../reducers/authSlicer";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
+import { API_KEY, sponsorAddress } from "../../Address";
+
+// import { someFunction } from '@fun-xyz/core';
 // import { ethers } from "ethers";
 // import {faucetContract} from "../../ethereum/faucet";
 
@@ -18,9 +21,69 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); // password visibility
   const [selectedType, setSelectedType] = useState("");
+  
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
+
+  const [cookies, setCookie] = useCookies(['walletAddress']);
+  const walletAddress = cookies.walletAddress || null;
+
+  const updateWalletAddress = (address) => {
+    setCookie('walletAddress', address, { path: '/' });
+  };
+
+  const {
+    FunWallet,
+    Auth,
+    configureEnvironment,
+    generatePrivateKey,
+  } = require("@funkit/core");
+
+  // Generate a private key for the wallet
+  const PRIVATE_KEY = generatePrivateKey();
+
+  const options = {
+    chain: "goerli",
+    gasSponsor: {
+      sponsorAddress: sponsorAddress,
+    },
+    apiKey: API_KEY,
+  };
+
+  // Configure the environment with the specified options
+ configureEnvironment(options);
+
+ const createWallet = async (event) => {
+  event.preventDefault();
+  const auth = new Auth({ privateKey: PRIVATE_KEY });
+
+  try {
+    // Create a FunWallet instance for the user
+    const funWallet = new FunWallet({
+      users: [{ userId: await auth.getAddress() }],
+      uniqueId: await auth.getWalletUniqueId(),
+    });
+
+    // Create a user operation
+    const userOp = await funWallet.create(auth, await auth.getAddress());
+    // console.log("OP", userOp)
+
+    // deploy wallet
+    // await funWallet.executeOperation(auth, userOp);
+
+    // Extract the wallet address from userOp
+    const walletAddress = userOp.walletAddr;
+
+    // Store the wallet address in a cookie
+    updateWalletAddress(walletAddress);
+
+    console.log('Wallet Address:', walletAddress);
+  } catch (error) {
+    console.error('Error creating wallet:', error);
+  }
+};
+
 
   const handleLoginClick = async (e) => {
     e.preventDefault();
@@ -57,6 +120,7 @@ const Login = () => {
             Green AI - Infrastructure for AI Democratization, Efficiency and
             Privacy{" "}
           </p>
+          {/* console.log({FunWallet}) */}
         </div>
       </div>
       <div>
@@ -73,6 +137,7 @@ const Login = () => {
             toggleShowPassword={toggleShowPassword}
             selectedType={selectedType}
             setSelectedType={setSelectedType}
+            createWallet={createWallet}
             // onLogin={handleLogin}
           />
         ) : (
@@ -100,6 +165,7 @@ function LogIn({
   toggleShowPassword,
   selectedType,
   setSelectedType,
+  createWallet,
 }) {
   // const [selectedType, setSelectedType] = useState(" ");
   // const [selectedWay, setSelectedWay] = useState(" ");
@@ -175,6 +241,7 @@ function LogIn({
           </button>
           <button
             // onClick={""}
+            onClick={createWallet}
             className="button infoButton font-normal w-72"
           >
             Login with Email & Crypto Wallet
