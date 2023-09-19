@@ -1,5 +1,6 @@
 import React , { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux'; 
 import { Check, Header, OSDropdown } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
@@ -8,16 +9,24 @@ import { Link, NavLink } from 'react-router-dom';
 const Confirmation_GPU = () => {
   const { currentColor, currentMode } = useStateContext();
   const { id } = useParams();
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);  // This line should be directly inside the component, not inside any other function
+  console.log("Is Authenticated:", isAuthenticated);  // Log the value
+
+  
 
   const handleConfirmOrder = async () => {
     console.log('Button clicked!');
     console.log({ id } );
+    //console.log(user.id);
+    
     try {
         const response = await fetch(`http://127.0.0.1:8000/instances/${id}/createvm/`, {
 
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json', 
+                //'sessionid': 'n5licd0kz45jlpgehad8rgp59nwtarkv'
+
                 // Include any other headers you need
             },
             body: JSON.stringify({
@@ -138,6 +147,7 @@ const Confirmation_GPU = () => {
                     }
                   }
                 },
+                credentials: "include", 
                 "status": {}
               
             })
