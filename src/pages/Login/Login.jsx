@@ -33,15 +33,26 @@ const Login = () => {
       } else {
         response = await loginUser(email, password);
       }
+      console.log("outside");
+      console.log("Received response: ", response);
 
-      console.log("Login successful", response);
-      setEmail("");
-      setPassword("");
-      dispatch(loginSuccess());
-
-      navigate("/clouds");
+       // Check if the response is as expected. This is a placeholder.
+      // You need to replace this with an actual check based on your API's response.
+      if (response && response.message === 'User logged in successfully') {
+        console.log("Login successful", response);
+        setEmail("");
+        setPassword("");
+        dispatch(loginSuccess());
+        navigate("/clouds");
+    } else {
+        // Handle login failure, perhaps pop up an error message
+        console.error("Login failed: ", response.message);
+        alert("Login failed. Please check your credentials.");
+    }
+    
     } catch (error) {
       console.error("Login error", error);
+      alert("Login failed. Please check your credentials."); 
     }
   };
 
