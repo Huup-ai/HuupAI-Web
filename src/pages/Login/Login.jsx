@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../reducers/authSlicer";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
+
 // import { ethers } from "ethers";
 // import {faucetContract} from "../../ethereum/faucet";
 
@@ -37,6 +38,8 @@ const Login = () => {
       setEmail("");
       setPassword("");
       dispatch(loginSuccess());
+
+      navigate("/clouds");
     } catch (error) {
       console.error("Login error", error);
     }
@@ -193,10 +196,8 @@ function SignUp({ onLoginClick, navigate }) {
     email: "",
     password: "",
     confirmpass: "",
-    is_provider: false
-});
-
-
+    is_provider: false,
+  });
 
   const handleChange = (e) => {
     setFormData({
@@ -234,15 +235,14 @@ function SignUp({ onLoginClick, navigate }) {
     //   dataToSend
     // );
     const response = await fetch("http://localhost:8000/users/register/", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(formData)
-});
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
-const data = await response.json();
-  
+    const data = await response.json();
 
     if (response.ok) {
       console.log("Trying to redirect to /login");
@@ -252,7 +252,6 @@ const data = await response.json();
       alert(data.message || "Registration failed!");
     }
   };
-  
 
   return (
     <div>
@@ -312,15 +311,16 @@ const data = await response.json();
         </div>
 
         <div className="checkbox-container">
-    <input
-        type="checkbox"
-        name="is_provider"
-        checked={formData.is_provider}
-        onChange={(e) => setFormData({ ...formData, is_provider: e.target.checked })}
-    />
-    <label htmlFor="is_provider">Register as a Provider</label>
-</div>
-
+          <input
+            type="checkbox"
+            name="is_provider"
+            checked={formData.is_provider}
+            onChange={(e) =>
+              setFormData({ ...formData, is_provider: e.target.checked })
+            }
+          />
+          <label htmlFor="is_provider">Register as a Provider</label>
+        </div>
 
         <div>
           <p className="text-xs">

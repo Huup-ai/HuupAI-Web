@@ -35,12 +35,13 @@ export async function registerUser(
   return response;
 }
 
-export async function logoutUser(navigate) {
+export async function logoutUser() {
   try {
+    console.log("Attempting logout...");
     await FetchRequest("http://localhost:8000/users/logout/", "POST");
-    navigate("/login");
+    console.log("Logout successful");
   } catch (error) {
-    console.error("logout failed", error);
+    console.error("Logout failed", error);
   }
 }
 

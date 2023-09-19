@@ -89,7 +89,10 @@ const Clouds = () => {
 
               {/* Order  */}
 
-              <Route path="/confirmation GPU/:id" element={<Confirmation_GPU />} />
+              <Route
+                path="/confirmation GPU/:id"
+                element={<Confirmation_GPU />}
+              />
               <Route path="/confirmation CPU" element={<Confirmation_CPU />} />
 
               {/* Provider */}

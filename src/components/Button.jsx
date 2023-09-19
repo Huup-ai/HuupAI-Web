@@ -13,11 +13,12 @@ const Button = ({
   text,
   borderRadius,
   width,
-  onClickCallback, 
+  onClickCallback,
 }) => {
   const { setIsClicked, initialState } = useStateContext();
   const handleClick = () => {
     // Call the onClickCallback function if it is provided
+    console.log("Button clicked");
     if (onClickCallback) {
       onClickCallback();
     }
@@ -25,7 +26,6 @@ const Button = ({
     // You can also keep your existing logic here if needed
     setIsClicked(initialState);
   };
-
 
   return (
     <button
