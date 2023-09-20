@@ -11,10 +11,8 @@ import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
 import { API_KEY, sponsorAddress } from "../../Address";
 import { faucetContract } from "../../ethereum/faucet";
-import {contractAddress, customerToken} from "../../Address";
+import { contractAddress, customerToken } from "../../Address";
 import { ethers } from "ethers";
-
-
 // import { someFunction } from '@fun-xyz/core';
 // import { ethers } from "ethers";
 // import {faucetContract} from "../../ethereum/faucet";
@@ -28,7 +26,7 @@ const Login = () => {
   const [metaAddress, setMetaAddress] = useState("");
   const [signer, setSigner] = useState();
   const [fcContract, setFcContract] = useState();
-  const [Login, setLogin] = useCookies(["loggedIn"]);
+  // const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -51,7 +49,6 @@ const Login = () => {
   // Generate a private key for the wallet
   const PRIVATE_KEY = generatePrivateKey();
   // console.log("PRIVATE_KEY:", PRIVATE_KEY);
-  
 
   const options = {
     chain: "goerli",
@@ -65,7 +62,7 @@ const Login = () => {
   configureEnvironment(options);
 
   const createWallet = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     const auth = new Auth({ privateKey: PRIVATE_KEY });
 
     try {
@@ -74,7 +71,7 @@ const Login = () => {
         users: [{ userId: await auth.getAddress() }],
         uniqueId: await auth.getWalletUniqueId(),
       });
-      console.log("ID",auth.getWalletUniqueId())
+      console.log("ID", auth.getWalletUniqueId());
 
       // Create a user operation
       const userOp = await funWallet.create(auth, await auth.getAddress());
@@ -88,6 +85,8 @@ const Login = () => {
 
       // Store the wallet address in a cookie
       updateWalletAddress(walletAddress);
+
+      // Send Wallet Address to backend
 
       console.log("Wallet Address:", walletAddress);
     } catch (error) {
@@ -110,17 +109,6 @@ const Login = () => {
       setEmail("");
       setPassword("");
       dispatch(loginSuccess());
-      // Check if login was successful, then create a wallet
-      if (response.message === "User logged in successfully") {
-        // Set a cookie indicating the user is logged in
-        setCookie("loggedIn", "true", { path: "/" });
-        
-        await createWallet(e);
-      }
-      else{
-        setCookie("loggedIn", "false", { path: "/" });
-        alert("wrong email or password")
-      }
     } catch (error) {
       console.error("Login error", error);
     }
@@ -136,16 +124,19 @@ const Login = () => {
         /* set active wallet address */
         setMetaAddress(accounts[0]);
         /* get signer */
+        updateWalletAddress(metaAddress);
         setSigner(provider.getSigner());
         /* local contract instance */
         setFcContract(faucetContract(provider));
         console.log("connected", accounts[0]);
       } catch (err) {
-        console.error(err.message);
+        console.log("err", err.messgae);
+        alert(err.message);
       }
     } else {
       /* MetaMask is not installed */
       console.log("Please install MetaMask");
+      alert("Please install MetaMask");
     }
   };
 
@@ -166,19 +157,14 @@ const Login = () => {
       dispatch(loginSuccess());
       // Check if login was successful, then create a wallet
       if (response.message === "User logged in successfully") {
-        
         await connectWallet();
-        setCookie("loggedIn", "true", { path: "/" });
-        // navigate("/instances");
-      }
-      else{
-        setCookie("loggedIn", "false", { path: "/" });
-        alert("wrong email or password")
+      } else {
+        alert("wrong email or password");
       }
     } catch (error) {
       console.error("Login error", error);
     }
-  }
+  };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -218,11 +204,11 @@ const Login = () => {
         ) : (
           <SignUp
             onLoginClick={() => setIsLogin(true)}
+            createWallet={createWallet}
             navigate={navigate} // pass navigate function to SignUp component
           />
         )}
       </div>
-
       {/* <LogIn />
       <SignUp /> */}
     </div>
@@ -326,7 +312,7 @@ function LogIn({
     </div>
   );
 }
-function SignUp({ onLoginClick, navigate }) {
+function SignUp({ onLoginClick, navigate, createWallet }) {
   // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
   const [formData, setFormData] = useState({
@@ -335,6 +321,7 @@ function SignUp({ onLoginClick, navigate }) {
     email: "",
     password: "",
     confirmpass: "",
+    // walletAddress: "",
   });
 
   const handleChange = (e) => {
@@ -351,6 +338,7 @@ function SignUp({ onLoginClick, navigate }) {
       alert("Passwords do not match!");
       return;
     }
+    // console.log(formData);
 
     const dataToSend = {
       firstname: formData.firstname,
@@ -359,6 +347,7 @@ function SignUp({ onLoginClick, navigate }) {
       password: formData.password,
       is_provider: formData.is_provider,
       company: formData.company,
+      // walletAddress: formData.walletAddress,
       payment_method: formData.payment_method,
       card_number: formData.card_number,
       card_exp: formData.card_exp,
@@ -373,11 +362,15 @@ function SignUp({ onLoginClick, navigate }) {
       dataToSend
     );
 
-    if (response.status === "success") {
+    if (response.message === "User registered successfully") {
+      await createWallet();
+
       alert(response.message);
-      navigate("/login"); // navigate to login page
+
+      // navigate("/login"); // navigate to login page
     } else {
       alert("Registration failed!");
+      console.log(response);
     }
   };
 

@@ -46,7 +46,7 @@ const Navbar = () => {
   const [displayContent, setDisplayContent] = useState(false);
 
   const Consumer = [
-    <div className="flex ">
+    <div className="flex ml-20 relative">
       <NavButton
         title="Market"
         customFunc={() => handleClick("Market")}
@@ -74,7 +74,7 @@ const Navbar = () => {
   ];
 
   const Provider = [
-    <div className="flex ">
+    <div className="flex ml-20 relative">
       <NavButton
         title="MyCloud"
         // dotColor="#03C9D7"
@@ -118,7 +118,7 @@ const Navbar = () => {
 
 
   return (
-    <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative ">
+    <div className="flex justify-start p-2 md:ml-6 md:mr-6 relative ">
       <NavButton
         title="Menu"
         customFunc={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)}

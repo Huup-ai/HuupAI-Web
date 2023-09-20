@@ -40,7 +40,7 @@ const Sidebar = () => {
           </p>
           {item.links.map((link) => (
             <NavLink
-              to={`/${link.name}`}
+              to={`/clouds/${link.name}`}
               key={link.name}
               onClick={handleCloseSideBar}
               style={({ isActive }) => ({
@@ -66,7 +66,7 @@ const Sidebar = () => {
           </p>
           {item.links.map((link) => (
             <NavLink
-              to={`/${link.name}`}
+              to={`/clouds/${link.name}`}
               key={link.name}
         
               onClick={handleCloseSideBar}

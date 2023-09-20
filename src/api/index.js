@@ -10,12 +10,14 @@ const FetchRequest = async (url, method, header = {}, data = {}) => {
 export async function registerUser(
   email,
   password,
+  firstName,
   additionalData = {},
   navigate
 ) {
   const requestBody = {
     email: email,
     password: password,
+    firstName: firstName,
     ...additionalData,
   };
 
@@ -59,6 +61,28 @@ export async function loginUser(email, password) {
     requestBody
   );
 }
+
+// export async function loginUser(email, password, navigate) {
+//   const requestBody = {
+//     email: email,
+//     password: password,
+//   };
+
+//   try{
+//     await FetchRequest(
+//       "http://localhost:8000/users/login/",
+//       "POST",
+//       {
+//         "Content-Type": "application/json",
+//       },
+
+//       requestBody
+//     );
+//     navigate("/clouds");
+//   } catch (error) {
+//     console.error("login failed", error);
+//   }
+// }
 
 export async function loginProvider(email, password) {
   const requestBody = {

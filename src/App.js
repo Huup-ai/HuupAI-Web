@@ -17,32 +17,33 @@ import { useCookies } from "react-cookie";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  // console.log(isAuthenticated);
   
-  const [cookies] = useCookies(["loggedIn"]);
-  // const isLoggedIn = cookies.loggedIn === "true";
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  useEffect(() => {
-    setIsLoggedIn(cookies.loggedIn === "true");
-    // console.log(isAuthenticated, "1",isLoggedIn)
-    
-  }, [cookies.loggedIn]);
-
-
   
 
   return (
     <div className="App">
       <div className="blur" style={{ top: "-18%", right: "0" }}></div>
       <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
-      {/* <Routes>
-        <Route path="/" element={isAuthenticated ? <Clouds /> : <Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/clouds/*" element={<Clouds />} />
-      </Routes> */}
+      <Routes>
+      <Route path="/" element={<Navigate to="/login" />} />
+      {/* <Route path="/login" element={<Login />} /> */}
+      {/* <Route path="/clouds/*" element={<Clouds />} />  */}
+      <Route
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/clouds" /> : <Login />}
+      />
+      <Route
+        path="/clouds/*"
+        element={isAuthenticated ? <Clouds /> : <Navigate to="/login" />}
+      />
 
-      {isAuthenticated? <Clouds /> : <Login />}
-      {/* {isAuthenticated && isLoggedIn ? <Clouds /> : <Login />} */}
-      {/* {isLoggedIn? <Clouds /> : <Login />} */}
+
+        {/* <Route path="/" element={isAuthenticated ? <Clouds /> : <Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/clouds/*" element={<Clouds />} /> */}
+      </Routes>
+
     </div>
   );
 }
