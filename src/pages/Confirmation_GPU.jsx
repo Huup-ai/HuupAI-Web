@@ -23,6 +23,7 @@ const Confirmation_GPU = () => {
         const response = await fetch(`http://127.0.0.1:8000/instances/${id}/createvm/`, {
 
             method: 'POST',
+            credentials: "include", 
             headers: {
                 'Content-Type': 'application/json', 
                 //'sessionid': 'n5licd0kz45jlpgehad8rgp59nwtarkv'
@@ -147,7 +148,6 @@ const Confirmation_GPU = () => {
                     }
                   }
                 },
-                credentials: "include", 
                 "status": {}
               
             })

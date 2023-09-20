@@ -47,35 +47,58 @@ export async function logoutUser() {
 
 export async function loginUser(email, password) {
   const requestBody = {
-    email: email,
-    password: password,
+      email: email,
+      password: password,
   };
 
-  return FetchRequest(
-    "http://localhost:8000/users/login/",
-    "POST",
-    {
-      "Content-Type": "application/json",
-    },
-    requestBody
-  );
+  try {
+      const response = await fetch("http://localhost:8000/users/login/", {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+          credentials: 'include'
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      return await response.json();
+  } catch (error) {
+      console.error('Error:', error);
+      throw error;
+  }
 }
+
 
 export async function loginProvider(email, password) {
   const requestBody = {
-    email: email,
-    password: password,
+      email: email,
+      password: password,
   };
 
-  return FetchRequest(
-    "http://localhost:8000/provider/login/",
-    "POST",
-    {
-      "Content-Type": "application/json",
-    },
-    requestBody
-  );
+  try {
+      const response = await fetch("http://localhost:8000/provider/login/", {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      return await response.json();
+  } catch (error) {
+      console.error('Error:', error);
+      throw error;
+  }
 }
+
 export async function getVmStatus(clusterId, namespace, vmName) {
   const requestBody = {
     clusterid: clusterId,
