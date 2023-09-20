@@ -19,13 +19,13 @@ function App() {
     <div className="App">
       <div className="blur" style={{ top: "-18%", right: "0" }}></div>
       <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
-      // <Routes>
-      //   <Route path="/" element={isAuthenticated ? <Clouds /> : <Login />} />
-      //   <Route path="/login" element={<Login />} />
-      //   <Route path="/clouds/*" element={<Clouds />} />
-      // </Routes>
+      <Routes>
+        <Route path="/" element={isAuthenticated ? <Clouds /> : <Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/clouds/*" element={<Clouds />} />
+      </Routes>
 
-  {isAuthenticated? <Clouds /> : <Login />}
+  // {isAuthenticated? <Clouds /> : <Login />}
     </div>
   );
 }
