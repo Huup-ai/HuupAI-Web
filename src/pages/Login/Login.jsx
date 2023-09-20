@@ -31,14 +31,29 @@ const Login = () => {
       if (selectedType === "provider") {
         response = await loginProvider(email, password);
       } else {
-        response = await loginUser(email, password);
+        response = await fetch("http://localhost:8000/users/login/", {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+        }),
+          credentials: 'include'
+      });
       }
+
+      //JWT
+      //const token = response.data.token;
+      //localStorage.setItem('jwtToken', token); // storing token in localStorage
+
       console.log("outside");
       console.log("Received response: ", response);
 
        // Check if the response is as expected. This is a placeholder.
-      // You need to replace this with an actual check based on your API's response.
-      if (response && response.message === 'User logged in successfully') {
+      // You need to replace this with an acter logged in succeual check based on your API's response.
+      if (response && response.status === 200) {
         console.log("Login successful", response);
         setEmail("");
         setPassword("");

@@ -26,9 +26,10 @@ const Confirmation_GPU = () => {
             credentials: "include", 
             headers: {
                 'Content-Type': 'application/json', 
-                //'sessionid': 'n5licd0kz45jlpgehad8rgp59nwtarkv'
+                //'sessionid': 'gaexwj761o847pobrb38fv4p1ufoc1v1'
 
                 // Include any other headers you need
+                
             },
             body: JSON.stringify({
               
@@ -148,6 +149,7 @@ const Confirmation_GPU = () => {
                     }
                   }
                 },
+
                 "status": {}
               
             })
