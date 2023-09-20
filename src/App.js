@@ -6,6 +6,9 @@ import Clouds from "./pages/Clouds/Clouds";
 // import GPU from "./pages/GPU";
 // import Confirmation_GPU from "./pages/Confirmation_GPU";
 import Login from "./pages/Login/Login";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 // import Billing from "./pages/Billing";
 // import Profile from "./pages/Profile";
 // import Instances from "./pages/Instances";
@@ -14,49 +17,32 @@ import Login from "./pages/Login/Login";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  
+  const [cookies] = useCookies(["loggedIn"]);
+  // const isLoggedIn = cookies.loggedIn === "true";
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  useEffect(() => {
+    setIsLoggedIn(cookies.loggedIn === "true");
+    // console.log(isAuthenticated, "1",isLoggedIn)
+    
+  }, [cookies.loggedIn]);
+
+
+  
 
   return (
     <div className="App">
       <div className="blur" style={{ top: "-18%", right: "0" }}></div>
       <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
-      {/* <Clouds /> */}
-      {/* <Login /> */}
-
       {/* <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route
-          path="/login"
-          element={isAuthenticated ? <Navizgate to="/clouds" /> : <Login />}
-        />
-        <Route
-          path="/clouds"
-          element={isAuthenticated ? <Clouds /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/billing"
-          element={isAuthenticated ? <Billing /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/profile"
-          element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/instances"
-          element={isAuthenticated ? <Instances /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/gpu"
-          element={isAuthenticated ? <GPU /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/cpu"
-          element={isAuthenticated ? <CPU /> : <Navigate to="/login" />}
-        />
-        <Route path="/GPU" element={<GPU />} />
-        <Route path="/confirmation/:id" element={<Confirmation_GPU />} />
+        <Route path="/" element={isAuthenticated ? <Clouds /> : <Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/clouds/*" element={<Clouds />} />
       </Routes> */}
 
       {isAuthenticated? <Clouds /> : <Login />}
+      {/* {isAuthenticated && isLoggedIn ? <Clouds /> : <Login />} */}
+      {/* {isLoggedIn? <Clouds /> : <Login />} */}
     </div>
   );
 }

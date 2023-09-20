@@ -68,6 +68,7 @@ const Sidebar = () => {
             <NavLink
               to={`/${link.name}`}
               key={link.name}
+        
               onClick={handleCloseSideBar}
               style={({ isActive }) => ({
                 backgroundColor: isActive ? currentColor : "",

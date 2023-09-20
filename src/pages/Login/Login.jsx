@@ -10,6 +10,10 @@ import { loginSuccess } from "../../reducers/authSlicer";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
 import { API_KEY, sponsorAddress } from "../../Address";
+import { faucetContract } from "../../ethereum/faucet";
+import {contractAddress, customerToken} from "../../Address";
+import { ethers } from "ethers";
+
 
 // import { someFunction } from '@fun-xyz/core';
 // import { ethers } from "ethers";
@@ -21,16 +25,20 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); // password visibility
   const [selectedType, setSelectedType] = useState("");
-  
+  const [metaAddress, setMetaAddress] = useState("");
+  const [signer, setSigner] = useState();
+  const [fcContract, setFcContract] = useState();
+  const [Login, setLogin] = useCookies(["loggedIn"]);
+
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
 
-  const [cookies, setCookie] = useCookies(['walletAddress']);
+  const [cookies, setCookie] = useCookies(["walletAddress"]);
   const walletAddress = cookies.walletAddress || null;
 
   const updateWalletAddress = (address) => {
-    setCookie('walletAddress', address, { path: '/' });
+    setCookie("walletAddress", address, { path: "/" });
   };
 
   const {
@@ -42,6 +50,8 @@ const Login = () => {
 
   // Generate a private key for the wallet
   const PRIVATE_KEY = generatePrivateKey();
+  // console.log("PRIVATE_KEY:", PRIVATE_KEY);
+  
 
   const options = {
     chain: "goerli",
@@ -52,38 +62,38 @@ const Login = () => {
   };
 
   // Configure the environment with the specified options
- configureEnvironment(options);
+  configureEnvironment(options);
 
- const createWallet = async (event) => {
-  event.preventDefault();
-  const auth = new Auth({ privateKey: PRIVATE_KEY });
+  const createWallet = async (event) => {
+    event.preventDefault();
+    const auth = new Auth({ privateKey: PRIVATE_KEY });
 
-  try {
-    // Create a FunWallet instance for the user
-    const funWallet = new FunWallet({
-      users: [{ userId: await auth.getAddress() }],
-      uniqueId: await auth.getWalletUniqueId(),
-    });
+    try {
+      // Create a FunWallet instance for the user
+      const funWallet = new FunWallet({
+        users: [{ userId: await auth.getAddress() }],
+        uniqueId: await auth.getWalletUniqueId(),
+      });
+      console.log("ID",auth.getWalletUniqueId())
 
-    // Create a user operation
-    const userOp = await funWallet.create(auth, await auth.getAddress());
-    // console.log("OP", userOp)
+      // Create a user operation
+      const userOp = await funWallet.create(auth, await auth.getAddress());
+      // console.log("OP", userOp)
 
-    // deploy wallet
-    // await funWallet.executeOperation(auth, userOp);
+      // deploy wallet
+      // await funWallet.executeOperation(auth, userOp);
 
-    // Extract the wallet address from userOp
-    const walletAddress = userOp.walletAddr;
+      // Extract the wallet address from userOp
+      const walletAddress = userOp.walletAddr;
 
-    // Store the wallet address in a cookie
-    updateWalletAddress(walletAddress);
+      // Store the wallet address in a cookie
+      updateWalletAddress(walletAddress);
 
-    console.log('Wallet Address:', walletAddress);
-  } catch (error) {
-    console.error('Error creating wallet:', error);
-  }
-};
-
+      console.log("Wallet Address:", walletAddress);
+    } catch (error) {
+      console.error("Error creating wallet:", error);
+    }
+  };
 
   const handleLoginClick = async (e) => {
     e.preventDefault();
@@ -100,10 +110,75 @@ const Login = () => {
       setEmail("");
       setPassword("");
       dispatch(loginSuccess());
+      // Check if login was successful, then create a wallet
+      if (response.message === "User logged in successfully") {
+        // Set a cookie indicating the user is logged in
+        setCookie("loggedIn", "true", { path: "/" });
+        
+        await createWallet(e);
+      }
+      else{
+        setCookie("loggedIn", "false", { path: "/" });
+        alert("wrong email or password")
+      }
     } catch (error) {
       console.error("Login error", error);
     }
   };
+
+  const connectWallet = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      try {
+        /* get provider */
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        /* get accounts */
+        const accounts = await provider.send("eth_requestAccounts", []);
+        /* set active wallet address */
+        setMetaAddress(accounts[0]);
+        /* get signer */
+        setSigner(provider.getSigner());
+        /* local contract instance */
+        setFcContract(faucetContract(provider));
+        console.log("connected", accounts[0]);
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      /* MetaMask is not installed */
+      console.log("Please install MetaMask");
+    }
+  };
+
+  const handleWalletLogin = async (e) => {
+    e.preventDefault();
+    try {
+      let response;
+
+      if (selectedType === "provider") {
+        response = await loginProvider(email, password);
+      } else {
+        response = await loginUser(email, password);
+      }
+
+      console.log("Login successful", response);
+      setEmail("");
+      setPassword("");
+      dispatch(loginSuccess());
+      // Check if login was successful, then create a wallet
+      if (response.message === "User logged in successfully") {
+        
+        await connectWallet();
+        setCookie("loggedIn", "true", { path: "/" });
+        // navigate("/instances");
+      }
+      else{
+        setCookie("loggedIn", "false", { path: "/" });
+        alert("wrong email or password")
+      }
+    } catch (error) {
+      console.error("Login error", error);
+    }
+  }
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -137,7 +212,7 @@ const Login = () => {
             toggleShowPassword={toggleShowPassword}
             selectedType={selectedType}
             setSelectedType={setSelectedType}
-            createWallet={createWallet}
+            connectWallet={handleWalletLogin}
             // onLogin={handleLogin}
           />
         ) : (
@@ -165,7 +240,7 @@ function LogIn({
   toggleShowPassword,
   selectedType,
   setSelectedType,
-  createWallet,
+  connectWallet,
 }) {
   // const [selectedType, setSelectedType] = useState(" ");
   // const [selectedWay, setSelectedWay] = useState(" ");
@@ -241,7 +316,7 @@ function LogIn({
           </button>
           <button
             // onClick={""}
-            onClick={createWallet}
+            onClick={connectWallet}
             className="button infoButton font-normal w-72"
           >
             Login with Email & Crypto Wallet
