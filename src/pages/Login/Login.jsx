@@ -26,6 +26,7 @@ const Login = () => {
   const [metaAddress, setMetaAddress] = useState("");
   const [signer, setSigner] = useState();
   const [fcContract, setFcContract] = useState();
+  const [isChecked, setIsChecked] = useState(true);
   // const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [cookies, setCookie] = useCookies(["walletAddress"]);
+  
   const walletAddress = cookies.walletAddress || null;
 
   const updateWalletAddress = (address) => {
@@ -206,6 +208,8 @@ const Login = () => {
             onLoginClick={() => setIsLogin(true)}
             createWallet={createWallet}
             navigate={navigate} // pass navigate function to SignUp component
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
           />
         )}
       </div>
@@ -312,7 +316,13 @@ function LogIn({
     </div>
   );
 }
-function SignUp({ onLoginClick, navigate, createWallet }) {
+function SignUp({
+  onLoginClick,
+  navigate,
+  createWallet,
+  isChecked,
+  setIsChecked,
+}) {
   // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
   const [formData, setFormData] = useState({
@@ -363,15 +373,22 @@ function SignUp({ onLoginClick, navigate, createWallet }) {
     );
 
     if (response.message === "User registered successfully") {
+      if (isChecked){
       await createWallet();
+      }
 
       alert(response.message);
 
       // navigate("/login"); // navigate to login page
     } else {
-      alert("Registration failed!");
+      alert(response.message);
       console.log(response);
     }
+  };
+
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+    
   };
 
   return (
@@ -379,6 +396,16 @@ function SignUp({ onLoginClick, navigate, createWallet }) {
       <form className="infoForm authForm" onSubmit={handleSubmit}>
         <div className="flex flex-row align-middle">
           <h3>Sign Up</h3>
+
+          <div>
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          />
+          <span>Create a built-in wallet</span>
+
+          </div>
         </div>
 
         <div>
