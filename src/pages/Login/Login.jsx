@@ -54,22 +54,26 @@ const Login = () => {
        // Check if the response is as expected. This is a placeholder.
       // You need to replace this with an acter logged in succeual check based on your API's response.
       if (response && response.status === 200) {
+        const data = await response.json();
+        const token = data.access; // Assuming the token is directly on the response object
+        console.log(token);
+        localStorage.setItem('jwtToken', token); // storing token in localStorage
         console.log("Login successful", response);
         setEmail("");
         setPassword("");
         dispatch(loginSuccess());
         navigate("/clouds");
-    } else {
-        // Handle login failure, perhaps pop up an error message
-        console.error("Login failed: ", response.message);
-        alert("Login failed. Please check your credentials.");
-    }
-    
-    } catch (error) {
-      console.error("Login error", error);
-      alert("Login failed. Please check your credentials."); 
-    }
-  };
+      } else {
+          // Handle login failure, perhaps pop up an error message
+          console.error("Login failed: ", response.message);
+          alert("Login failed. Please check your credentials.");
+      }
+      
+      } catch (error) {
+        console.error("Login error", error);
+        alert("Login failed. Please check your credentials."); 
+      }
+    };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);

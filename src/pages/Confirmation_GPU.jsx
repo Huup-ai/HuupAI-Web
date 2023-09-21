@@ -18,6 +18,7 @@ const Confirmation_GPU = () => {
     console.log('Button clicked!');
     console.log({ id } );
     //console.log(user.id);
+    const token = localStorage.getItem('jwtToken');
     
     try {
         const response = await fetch(`http://127.0.0.1:8000/instances/${id}/createvm/`, {
@@ -26,14 +27,10 @@ const Confirmation_GPU = () => {
             credentials: "include", 
             headers: {
                 'Content-Type': 'application/json', 
-                //'sessionid': 'gaexwj761o847pobrb38fv4p1ufoc1v1'
-
-                // Include any other headers you need
-                
+                'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify({
               
-          
                 "metadata": {
                   "name": "win2008-dv-01",
                   "namespace": "default"
@@ -149,8 +146,8 @@ const Confirmation_GPU = () => {
                     }
                   }
                 },
-
                 "status": {}
+              
               
             })
         });
