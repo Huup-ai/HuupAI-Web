@@ -124,7 +124,7 @@ const Navbar = () => {
   const updateWalletAddress = (address) => {
   
     // Set the updated cookie value
-    setWalletCookie('walletAddress', address);
+    setWalletCookie('walletAddress', address, { path: '/' });
   };
 
   useEffect(() => {
@@ -139,7 +139,7 @@ const Navbar = () => {
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
 
-      if (walletCookie.walletAddress.length < 0 ){
+      if (walletCookie.walletAddress === "undefined" ){
         try {
           /* get provider */
           const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -150,9 +150,9 @@ const Navbar = () => {
           /* get signer */
   
           // update wallet address in cookie
-          updateWalletAddress(accounts[0]);
+          updateWalletAddress(metaAddress);
   
-          console.log("connected", walletCookie.walletAddress);
+          console.log("connected", metaAddress);
         } catch (err) {
           console.log("err", err.messgae);
           alert(err.message);
@@ -231,10 +231,10 @@ const Navbar = () => {
         >
 
         <span className="">
-          {walletCookie.walletAddress && walletCookie.walletAddress.length > 0
-            ? `Connected: ${walletCookie.walletAddress.substring(
-              )}`
+          {walletCookie.walletAddress !== "undefined"
+            ? `Wallet Connected: ${walletCookie.walletAddress}`
             : "Connect Wallet"}
+            {/* {walletCookie.walletAddress} */}
         </span>
 
         </button>
