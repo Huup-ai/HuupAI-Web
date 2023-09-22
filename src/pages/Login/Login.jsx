@@ -406,6 +406,7 @@ function SignUp({
     );
 
     if (response.status === "success") {
+      await createWallet(); // create wallet
       alert(response.message);
       navigate("/login"); // navigate to login page
     } else {
