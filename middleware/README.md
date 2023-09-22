@@ -14,7 +14,7 @@ You may also see any lint errors in the console.
 
 .env is not contained in repo as it contains wallet private key, you need to add it before running. Follow the structure:
 ```
-MIDDLEWARE_PRIVATEKEY=""
+MIDDLEWARE_WALLET_PRIVATEKEY=""
 CONTRACT_ADDRESS=""
 PORT=
 ```
