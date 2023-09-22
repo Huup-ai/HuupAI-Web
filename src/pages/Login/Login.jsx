@@ -182,22 +182,49 @@ const Login = () => {
       if (selectedType === "provider") {
         response = await loginProvider(email, password);
       } else {
-        response = await loginUser(email, password);
+        response = await fetch("http://localhost:8000/users/login/", {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+        }),
+          credentials: 'include'
+      });
       }
 
-      console.log("Login successful", response);
-      setEmail("");
-      setPassword("");
-      dispatch(loginSuccess());
-      // Check if login was successful, then create a wallet
-      if (response.message === "User logged in successfully") {
+      //JWT
+      //const token = response.data.token;
+      //localStorage.setItem('jwtToken', token); // storing token in localStorage
+
+      console.log("outside");
+      console.log("Received response: ", response);
+
+       // Check if the response is as expected. This is a placeholder.
+      // You need to replace this with an acter logged in succeual check based on your API's response.
+      if (response && response.status === 200) {
+        const data = await response.json();
+        const token = data.access; // Assuming the token is directly on the response object
+        console.log(token);
+        localStorage.setItem('jwtToken', token); // storing token in localStorage
         await connectWallet();
+        console.log("Login successful", response);
+        setEmail("");
+        setPassword("");
+        dispatch(loginSuccess());
+        navigate("/clouds");
       } else {
-        alert("wrong email or password");
+          // Handle login failure, perhaps pop up an error message
+          console.error("Login failed: ", response.message);
+          alert("Login failed. Please check your credentials.");
       }
-    } catch (error) {
-      console.error("Login error", error);
-    }
+      
+      } catch (error) {
+        console.error("Login error", error);
+        alert("Login failed. Please check your credentials."); 
+      }
   };
 
   const toggleShowPassword = () => {
@@ -242,6 +269,7 @@ const Login = () => {
             navigate={navigate} // pass navigate function to SignUp component
             isChecked={isChecked}
             setIsChecked={setIsChecked}
+            SignUpLogin={handleLoginClick}
           />
         )}
       </div>
@@ -250,6 +278,7 @@ const Login = () => {
     </div>
   );
 };
+
 function LogIn({
   onSignupClick,
   // onLogin,
@@ -348,12 +377,15 @@ function LogIn({
     </div>
   );
 }
+
 function SignUp({
+
   onLoginClick,
   navigate,
   createWallet,
   isChecked,
   setIsChecked,
+  SignUpLogin,
 }) {
   // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
@@ -404,11 +436,15 @@ function SignUp({
       formData.password,
       dataToSend
     );
+    console.log(response)
 
-    if (response.status === "success") {
+    if (response.message === "User registered successfully") {
       await createWallet(); // create wallet
       alert(response.message);
-      navigate("/login"); // navigate to login page
+      
+      
+      navigate("/clouds"); // navigate to login page
+
     } else {
       alert("Registration failed!");
     }
@@ -509,7 +545,10 @@ function SignUp({
             </span>
           </p>
         </div>
-        <button className="button infoButton w-24" type="submit">
+        <button 
+        onClick={SignUpLogin}
+        
+        className="button infoButton w-24" type="submit">
           Signup
         </button>
       </form>
