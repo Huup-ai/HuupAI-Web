@@ -6,6 +6,11 @@ import { BsPerson } from "react-icons/bs";
 import { RiNotification3Line } from "react-icons/ri";
 // import { MdKeyboardArrowDown } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import { Button } from "../components";
+
+import { faucetContract } from "../ethereum/faucet";
+import { contractAddress, customerToken } from "../Address";
+import { ethers } from "ethers";
 
 // import avatar from "../data/avatar.jpg";
 // import wenxuan from "../data/wenxuan.jpg";
@@ -46,7 +51,7 @@ const Navbar = () => {
   const [displayContent, setDisplayContent] = useState(false);
 
   const Consumer = [
-    <div className="flex ">
+    <div className="flex ml-20 relative">
       <NavButton
         title="Market"
         customFunc={() => handleClick("Market")}
@@ -74,7 +79,7 @@ const Navbar = () => {
   ];
 
   const Provider = [
-    <div className="flex ">
+    <div className="flex ml-20 relative">
       <NavButton
         title="MyCloud"
         // dotColor="#03C9D7"
@@ -112,21 +117,128 @@ const Navbar = () => {
     }
   }, [screenSize]);
 
+  // const [walletAddress, setWalletAddress] = useState("");
+  const [walletCookie, setWalletCookie] = useCookies(["walletAddress"]);
+  const [metaAddress, setMetaAddress] = useState("");
+
+  const updateWalletAddress = (address) => {
+  
+    // Set the updated cookie value
+    setWalletCookie('walletAddress', address, { path: '/' });
+  };
+
+  useEffect(() => {
+    getCurrentWalletConnected();
+    addWalletListener();
+  }, [metaAddress]);
+
   useEffect(() => {
     setDisplayContent(cookies.selectedType === "provider");
   }, [cookies.selectedType]);
 
+  const connectWallet = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+
+      if (walletCookie.walletAddress === "undefined" ){
+        try {
+          /* get provider */
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          /* get accounts */
+          const accounts = await provider.send("eth_requestAccounts", []);
+          /* set active wallet address */
+          setMetaAddress(accounts[0]);
+          /* get signer */
+  
+          // update wallet address in cookie
+          updateWalletAddress(metaAddress);
+  
+          console.log("connected", metaAddress);
+        } catch (err) {
+          console.log("err", err.messgae);
+          alert(err.message);
+        }
+
+      }else{
+        console.log("wallet already connected", walletCookie.walletAddress)
+        alert("wallet already connected");
+      }
+
+      
+    } else {
+      /* MetaMask is not installed */
+      console.log("Please install MetaMask");
+      alert("Please install MetaMask");
+    }
+  };
+
+  const getCurrentWalletConnected = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_accounts",
+        });
+        if (accounts.length > 0) {
+          setMetaAddress(accounts[0]);
+          // console.log(accounts[0]);
+          updateWalletAddress(accounts[0]);
+
+        } else {
+          console.log("Connect to MetaMask using the Connect button");
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      /* MetaMask is not installed */
+      console.log("Please install MetaMask");
+    }
+  };
+
+  const addWalletListener = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      window.ethereum.on("accountsChanged", (accounts) => {
+        setMetaAddress(accounts[0]);
+        updateWalletAddress(accounts[0]);
+
+        // console.log(accounts[0]);
+      });
+    } else {
+      /* MetaMask is not installed */
+      setMetaAddress("");
+      console.log("Please install MetaMask");
+    }
+  };
 
   return (
     <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative ">
-      <NavButton
-        title="Menu"
-        customFunc={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)}
-        color={currentColor}
-        icon={<AiOutlineMenu />}
-      />
+      <div className="flex justify-start ">
+        <NavButton
+          title="Menu"
+          customFunc={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)}
+          color={currentColor}
+          icon={<AiOutlineMenu />}
+        />
 
-      {displayContent ? <>{Provider}</> : <>{Consumer}</>}
+        {displayContent ? <>{Provider}</> : <>{Consumer}</>}
+      </div>
+
+      <div className="mt-2 mb-2">
+        <button
+          type="button"
+          className=" hover:bg-blue-700 text-white py-2 px-4 rounded-xl"
+          style={{ background: currentColor }}
+          onClick={connectWallet}
+        >
+
+        <span className="">
+          {walletCookie.walletAddress !== "undefined"
+            ? `Wallet Connected: ${walletCookie.walletAddress}`
+            : "Connect Wallet"}
+            {/* {walletCookie.walletAddress} */}
+        </span>
+
+        </button>
+      </div>
     </div>
   );
 };

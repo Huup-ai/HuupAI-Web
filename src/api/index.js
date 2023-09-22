@@ -10,12 +10,14 @@ const FetchRequest = async (url, method, header = {}, data = {}) => {
 export async function registerUser(
   email,
   password,
+  firstName,
   additionalData = {},
   navigate
 ) {
   const requestBody = {
     email: email,
     password: password,
+    firstName: firstName,
     ...additionalData,
   };
 
@@ -71,7 +73,6 @@ export async function loginUser(email, password) {
       throw error;
   }
 }
-
 
 export async function loginProvider(email, password) {
   const requestBody = {

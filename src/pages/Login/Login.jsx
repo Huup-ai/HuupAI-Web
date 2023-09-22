@@ -9,7 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../reducers/authSlicer";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
-
+import { API_KEY, sponsorAddress } from "../../Address";
+import { faucetContract } from "../../ethereum/faucet";
+import { contractAddress, customerToken } from "../../Address";
+import { ethers } from "ethers";
+// import { someFunction } from '@fun-xyz/core';
 // import { ethers } from "ethers";
 // import {faucetContract} from "../../ethereum/faucet";
 
@@ -19,9 +23,78 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); // password visibility
   const [selectedType, setSelectedType] = useState("");
+  const [metaAddress, setMetaAddress] = useState("");
+  const [signer, setSigner] = useState();
+  const [fcContract, setFcContract] = useState();
+  const [isChecked, setIsChecked] = useState(true);
+  // const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const navigate = useNavigate();
+
+  const [cookies, setCookie] = useCookies(["walletAddress"]);
+  
+  const walletAddress = cookies.walletAddress || null;
+
+  const updateWalletAddress = (address) => {
+    setCookie("walletAddress", address, { path: "/" });
+  };
+
+  const {
+    FunWallet,
+    Auth,
+    configureEnvironment,
+    generatePrivateKey,
+  } = require("@funkit/core");
+
+  // Generate a private key for the wallet
+  const PRIVATE_KEY = generatePrivateKey();
+  // console.log("PRIVATE_KEY:", PRIVATE_KEY);
+
+  const options = {
+    chain: "goerli",
+    gasSponsor: {
+      sponsorAddress: sponsorAddress,
+    },
+    apiKey: API_KEY,
+  };
+
+  // Configure the environment with the specified options
+  configureEnvironment(options);
+
+  const createWallet = async (event) => {
+    // event.preventDefault();
+    const auth = new Auth({ privateKey: PRIVATE_KEY });
+
+    try {
+      // Create a FunWallet instance for the user
+      const funWallet = new FunWallet({
+        users: [{ userId: await auth.getAddress() }],
+        uniqueId: await auth.getWalletUniqueId(),
+      });
+      console.log("ID", auth.getWalletUniqueId());
+
+      // Create a user operation
+      const userOp = await funWallet.create(auth, await auth.getAddress());
+      // console.log("OP", userOp)
+
+      // deploy wallet
+      // await funWallet.executeOperation(auth, userOp);
+
+      // Extract the wallet address from userOp
+      const walletAddress = userOp.walletAddr;
+
+      // Store the wallet address in a cookie
+      updateWalletAddress(walletAddress);
+
+      // Send Wallet Address to backend
+
+      console.log("Wallet Address:", walletAddress);
+    } catch (error) {
+      console.error("Error creating wallet:", error);
+    }
+  };
 
   const handleLoginClick = async (e) => {
     e.preventDefault();
@@ -75,6 +148,58 @@ const Login = () => {
       }
     };
 
+  const connectWallet = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      try {
+        /* get provider */
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        /* get accounts */
+        const accounts = await provider.send("eth_requestAccounts", []);
+        /* set active wallet address */
+        setMetaAddress(accounts[0]);
+        /* get signer */
+        updateWalletAddress(metaAddress);
+        setSigner(provider.getSigner());
+        /* local contract instance */
+        setFcContract(faucetContract(provider));
+        console.log("connected", accounts[0]);
+      } catch (err) {
+        console.log("err", err.messgae);
+        alert(err.message);
+      }
+    } else {
+      /* MetaMask is not installed */
+      console.log("Please install MetaMask");
+      alert("Please install MetaMask");
+    }
+  };
+
+  const handleWalletLogin = async (e) => {
+    e.preventDefault();
+    try {
+      let response;
+
+      if (selectedType === "provider") {
+        response = await loginProvider(email, password);
+      } else {
+        response = await loginUser(email, password);
+      }
+
+      console.log("Login successful", response);
+      setEmail("");
+      setPassword("");
+      dispatch(loginSuccess());
+      // Check if login was successful, then create a wallet
+      if (response.message === "User logged in successfully") {
+        await connectWallet();
+      } else {
+        alert("wrong email or password");
+      }
+    } catch (error) {
+      console.error("Login error", error);
+    }
+  };
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -90,6 +215,7 @@ const Login = () => {
             Green AI - Infrastructure for AI Democratization, Efficiency and
             Privacy{" "}
           </p>
+          {/* console.log({FunWallet}) */}
         </div>
       </div>
       <div>
@@ -106,16 +232,19 @@ const Login = () => {
             toggleShowPassword={toggleShowPassword}
             selectedType={selectedType}
             setSelectedType={setSelectedType}
+            connectWallet={handleWalletLogin}
             // onLogin={handleLogin}
           />
         ) : (
           <SignUp
             onLoginClick={() => setIsLogin(true)}
+            createWallet={createWallet}
             navigate={navigate} // pass navigate function to SignUp component
+            isChecked={isChecked}
+            setIsChecked={setIsChecked}
           />
         )}
       </div>
-
       {/* <LogIn />
       <SignUp /> */}
     </div>
@@ -133,6 +262,7 @@ function LogIn({
   toggleShowPassword,
   selectedType,
   setSelectedType,
+  connectWallet,
 }) {
   // const [selectedType, setSelectedType] = useState(" ");
   // const [selectedWay, setSelectedWay] = useState(" ");
@@ -208,6 +338,7 @@ function LogIn({
           </button>
           <button
             // onClick={""}
+            onClick={connectWallet}
             className="button infoButton font-normal w-72"
           >
             Login with Email & Crypto Wallet
@@ -217,7 +348,13 @@ function LogIn({
     </div>
   );
 }
-function SignUp({ onLoginClick, navigate }) {
+function SignUp({
+  onLoginClick,
+  navigate,
+  createWallet,
+  isChecked,
+  setIsChecked,
+}) {
   // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
   const [formData, setFormData] = useState({
@@ -226,6 +363,7 @@ function SignUp({ onLoginClick, navigate }) {
     email: "",
     password: "",
     confirmpass: "",
+    // walletAddress: "",
     is_provider: false,
   });
 
@@ -243,44 +381,41 @@ function SignUp({ onLoginClick, navigate }) {
       alert("Passwords do not match!");
       return;
     }
+    // console.log(formData);
 
     const dataToSend = {
       firstname: formData.firstname,
       lastname: formData.lastname,
       email: formData.email,
       password: formData.password,
-      // is_provider: formData.is_provider,
-      // company: formData.company,
-      // payment_method: formData.payment_method,
-      // card_number: formData.card_number,
-      // card_exp: formData.card_exp,
-      // card_name: formData.card_name,
-      // tax: formData.tax,
-      // role: formData.role,
+      is_provider: formData.is_provider,
+      company: formData.company,
+      // walletAddress: formData.walletAddress,
+      payment_method: formData.payment_method,
+      card_number: formData.card_number,
+      card_exp: formData.card_exp,
+      card_name: formData.card_name,
+      tax: formData.tax,
+      role: formData.role,
     };
 
-    // const response = await registerUser(
-    //   formData.email,
-    //   formData.password,
-    //   dataToSend
-    // );
-    const response = await fetch("http://localhost:8000/users/register/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await registerUser(
+      formData.email,
+      formData.password,
+      dataToSend
+    );
 
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log("Trying to redirect to /login");
-      alert(data.message);
-      window.location.assign("/login");
+    if (response.status === "success") {
+      alert(response.message);
+      navigate("/login"); // navigate to login page
     } else {
-      alert(data.message || "Registration failed!");
+      alert("Registration failed!");
     }
+  };
+
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+    
   };
 
   return (
@@ -288,6 +423,16 @@ function SignUp({ onLoginClick, navigate }) {
       <form className="infoForm authForm" onSubmit={handleSubmit}>
         <div className="flex flex-row align-middle">
           <h3>Sign Up</h3>
+
+          <div>
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          />
+          <span>Create a built-in wallet</span>
+
+          </div>
         </div>
 
         <div>

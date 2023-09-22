@@ -22,11 +22,13 @@ const Details = () => {
   const [withdrawSuccess, setWithdrawSuccess] = useState("");
   const [transactionData, setTransactionData] = useState("");
   const [balance, setBalance] = useState("Please connect wallet");
+  const [deposit, setDeposit] = useState("Please connect wallet");
 
   useEffect(() => {
     getCurrentWalletConnected();
     addWalletListener();
     getBalanceHandler();
+    getDepositHandler();
 
   }, [walletAddress]);
 
@@ -104,9 +106,21 @@ const Details = () => {
   const getBalanceHandler = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
     // test getBalance
+    // console.log("contract", fcContract)
     const value = await fcContract.getBalance(contractAddress); // Call the 'getBalance' function
 
     setBalance(ethers.utils.formatEther(value));
+    console.log("contract Address", contractAddress)
+    // console.log("wallet address", walletAddress);
+    }
+  };
+
+  const getDepositHandler = async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+    // test getBalance
+    const value = await fcContract.getDeposit(contractAddress); // Call the 'getBalance' function
+
+    setDeposit(ethers.utils.formatEther(value));
     console.log("contract Address", contractAddress)
     // console.log("wallet address", walletAddress);
     }
@@ -189,9 +203,9 @@ const Details = () => {
               <span>Crypto</span>
             </div>
             <div>
-              <span className="inline-block w-40">Total Credit</span>
+              <span className="inline-block w-40">Total Deposit</span>
               <span>:</span>
-              <span>1000USDT</span>
+              <span>{deposit} ETH USDT</span>
             </div>
             <div>
               <span className="inline-block w-40">Total Balance</span>
