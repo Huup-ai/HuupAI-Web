@@ -269,7 +269,7 @@ const Login = () => {
             navigate={navigate} // pass navigate function to SignUp component
             isChecked={isChecked}
             setIsChecked={setIsChecked}
-            SignUpLogin={handleLoginClick}
+{/*             SignUpLogin={handleLoginClick} */}
           />
         )}
       </div>
