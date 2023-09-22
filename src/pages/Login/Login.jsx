@@ -485,7 +485,7 @@ function SignUp({
           />
         </div>
 
-        <div className="checkbox-container">
+        {/* <div className="checkbox-container">
           <input
             type="checkbox"
             name="is_provider"
@@ -495,7 +495,7 @@ function SignUp({
             }
           />
           <label htmlFor="is_provider">Register as a Provider</label>
-        </div>
+        </div> */}
 
         <div>
           <p className="text-xs">

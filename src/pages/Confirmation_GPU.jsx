@@ -193,7 +193,7 @@ const Confirmation_GPU = () => {
           class
         />
 
-        <Link to={`/GPU`} className="ml-10">
+        <Link to={`/clouds/GPU`} className="ml-10">
           
           Back
         </Link>

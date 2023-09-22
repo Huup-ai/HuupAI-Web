@@ -53,7 +53,7 @@ const Confirmation_CPU = () => {
           borderRadius="10px"
         />
 
-        <Link to={`/CPU`} className="ml-10">
+        <Link to={`/clouds/CPU`} className="ml-10">
           {" "}
           Back
         </Link>
