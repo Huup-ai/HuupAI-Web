@@ -104,17 +104,7 @@ const Login = () => {
       if (selectedType === "provider") {
         response = await loginProvider(email, password);
       } else {
-        response = await fetch("http://localhost:8000/users/login/", {
-          method: 'POST',
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-        }),
-          credentials: 'include'
-      });
+        response = await loginUser(email, password);
       }
 
       //JWT
@@ -269,7 +259,7 @@ const Login = () => {
             navigate={navigate} // pass navigate function to SignUp component
             isChecked={isChecked}
             setIsChecked={setIsChecked}
-{/*             SignUpLogin={handleLoginClick} */}
+//{/*             SignUpLogin={handleLoginClick} */}
           />
         )}
       </div>
@@ -389,6 +379,7 @@ function SignUp({
 }) {
   // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -443,8 +434,21 @@ function SignUp({
       alert(response.message);
       
       
-      navigate("/clouds"); // navigate to login page
+      const loginResponse = await loginUser(formData.email, formData.password);
+      
+      if (loginResponse && loginResponse.status === 200) {
+        // Handle successful login, e.g., store token, dispatch actions, etc.
+        const data = await loginResponse.json();
+        const token = data.access;
+        localStorage.setItem('jwtToken', token);
+        dispatch(loginSuccess());
+        navigate("/clouds");
+      } else {
+        // Handle login failure after registration
+        console.error("Auto-login failed after registration.");
+      }
 
+      alert(response.message);
     } else {
       alert("Registration failed!");
     }
