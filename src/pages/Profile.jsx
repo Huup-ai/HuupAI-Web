@@ -1,24 +1,31 @@
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "../components";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
+import { useCookies } from "react-cookie";
 
 const Profile = () => {
   const { currentColor } = useStateContext();
 
+  const [cookies] = useCookies(["selectedType"]);
+
+  const [displayContent, setDisplayContent] = useState(false);
+
+  useEffect(() => {
+    setDisplayContent(cookies.selectedType === "provider");
+  }, [cookies.selectedType]);
+
   const [isToggled, setToggled] = useState(() => {
-    const storedValue = localStorage.getItem('crypto');
+    const storedValue = localStorage.getItem("crypto");
     return storedValue ? JSON.parse(storedValue) : false;
   });
-  
 
   const handleToggle = () => {
     const newValue = !isToggled;
     setToggled(newValue);
-    localStorage.setItem('crypto', JSON.stringify(newValue));
+    localStorage.setItem("crypto", JSON.stringify(newValue));
   };
-
 
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
@@ -50,7 +57,7 @@ const Profile = () => {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <h6 className="mt-4 w-48">Company Name: </h6>
 
           <input
@@ -65,32 +72,29 @@ const Profile = () => {
         <div>
           <h6 className="mt-4 w-48">Email: </h6>
           <input type="text" className="infoInput" name="email" />
-        </div>
+        </div> */}
 
-        <div>
-          <h6 className="mt-4 w-48">Telephone:</h6>
-          <input type="text" className="infoInput" name="telephone" />
-        </div>
-
-        <div>
-          <h6 className="mt-4 w-48">Billing Address: </h6>
-          <input type="text" className="infoInput" name="billingAddress" />
-        </div>
-
-        <div>
-          <h6 className="mt-4 w-48">EIN:</h6>
-          <input type="" className="infoInput" name="EIN" />
-        </div>
-
-        {isToggled ? (
+        {displayContent? <> {isToggled ? (
           <div>
-            <div>
-              <h6 className="mt-4 w-48">Crypto:</h6>
-            </div>
-            {/* <input type="" className="infoInput" name="EIN" /> */}
+        
           </div>
         ) : (
           <>
+            <div>
+              <h6 className="mt-4 w-48">Telephone:</h6>
+              <input type="text" className="infoInput" name="telephone" />
+            </div>
+
+            <div>
+              <h6 className="mt-4 w-48">Billing Address: </h6>
+              <input type="text" className="infoInput" name="billingAddress" />
+            </div>
+
+            <div>
+              <h6 className="mt-4 w-48">EIN:</h6>
+              <input type="" className="infoInput" name="EIN" />
+            </div>
+
             <div>
               <h6 className="mt-4 w-48">BANK ACCOUNT:</h6>
               <input type="" className="infoInput" name="bank" />
@@ -100,15 +104,84 @@ const Profile = () => {
               <h6 className="mt-4 w-48">ROUTING/SWIFT:</h6>
               <input type="" className="infoInput" name="routing" />
             </div>
-          </>
-        )}
 
-        <Button
+            <Button
           color="white"
           bgColor={currentColor}
           text="Submit"
           borderRadius="10px"
         />
+          </>
+        )}</> : <> {isToggled ? (
+          <div>
+            <div>
+              <input
+                type="text"
+                className="infoInput border-solid border-2 rounded-md border-grey w-40 h-10"
+                placeholder="Input Amount"
+                // value={walletMoney} // Set the input value from the state
+                // onChange={handleWalletChange} // Attach the event handler
+              />
+
+              <span>USDT</span>
+            </div>
+            <div >
+              <Button
+                color="white"
+                bgColor={currentColor}
+                text="Deposit"
+                // onClickCallback={handleDeposit}
+                borderRadius="10px"
+              />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div>
+              <h6 className="mt-4 w-48">Credit Card:</h6>
+              <input type="text" className="infoInput" name="card" />
+            </div>
+
+            <div>
+              <h6 className="mt-4 w-48"> Expiration: </h6>
+              <input type="date" className="infoInput" name="expire" />
+            </div>
+
+            <div>
+              <h6 className="mt-4 w-48">Name on the Card:</h6>
+              <input type="" className="infoInput" name="name" />
+            </div>
+
+            <div>
+              <h6 className="mt-4 w-48">Authorization Code:</h6>
+              <input type="" className="infoInput" name="code" />
+            </div>
+
+            <div>
+              <h6 className="mt-4 w-48">Telephone:</h6>
+              <input type="" className="infoInput" name="phone" />
+            </div>
+
+            <div>
+              <h6 className="mt-4 w-48">Billing Address:</h6>
+              <input type="" className="infoInput" name="address" />
+            </div>
+
+            <div>
+              <h6 className="mt-4 w-48">EIN:</h6>
+              <input type="" className="infoInput" name="ein" />
+            </div>
+
+            <Button
+          color="white"
+          bgColor={currentColor}
+          text="Submit"
+          borderRadius="10px"
+        />
+          </>
+        )} </>}
+
+        
       </form>
 
       {/* <Divider className="py-5">   </Divider> */}
