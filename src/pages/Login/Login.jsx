@@ -427,7 +427,7 @@ function SignUp({
       formData.password,
       dataToSend
     );
-    console.log(response)
+    //console.log(response)
 
     if (response.message === "User registered successfully") {
       await createWallet(); // create wallet

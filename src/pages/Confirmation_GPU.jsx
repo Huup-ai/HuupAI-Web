@@ -9,17 +9,55 @@ import { Link, NavLink } from 'react-router-dom';
 const Confirmation_GPU = () => {
   const { currentColor, currentMode } = useStateContext();
   const { id } = useParams();
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);  // This line should be directly inside the component, not inside any other function
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);  // check if user is logged in
   console.log("Is Authenticated:", isAuthenticated);  // Log the value
+  const hasPaymentMethod = useSelector(state => state.auth.hasPaymentMethod); // check if user has a payment method
 
-  
+  // Define a function to get the wallet
+const getWallet = async (token) => {
+  try {
+    // Make a GET request to the endpoint with headers
+    const response = await fetch('http://127.0.0.1:8000/wallets/get_wallets/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    // Parse the JSON data from the response
+    const data = await response.json();
+
+    // Here, you can use the data as needed
+    console.log(data); // For now, we'll just log it
+
+    // If you want to display the address in an alert
+    alert("Wallet Address: " + data.address);
+
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error.message);
+    alert("Failed to fetch wallet address: " + error.message);
+  }
+};
+
+
+
 
   const handleConfirmOrder = async () => {
     console.log('Button clicked!');
     console.log({ id } );
     //console.log(user.id);
     const token = localStorage.getItem('jwtToken');
-    
+
+    getWallet(token);
+
+    //if statement check if user has add a payment method. 
+    if(hasPaymentMethod){
     try {
         const response = await fetch(`http://127.0.0.1:8000/instances/${id}/createvm/`, {
 
@@ -32,7 +70,7 @@ const Confirmation_GPU = () => {
             body: JSON.stringify({
               
                 "metadata": {
-                  "name": "win2008-dv-01",
+                  "name": "win2019-dv-01",
                   "namespace": "default"
                 },
                 "spec": {
@@ -167,6 +205,10 @@ const Confirmation_GPU = () => {
     } catch (error) {
         console.error("Error confirming order:", error);
     }
+  }else{
+    console.log("Please add a payment method or charge your wallet")
+    alert("Please add a payment method or charge your wallet")
+  }
 };
 
 

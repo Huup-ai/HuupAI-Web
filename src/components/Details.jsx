@@ -9,6 +9,18 @@ import { ethers } from "ethers";
 const Details = () => {
   const { currentColor } = useStateContext();
   const [walletMoney, setWalletMoney] = useState(0);
+  const [cardType, setCardType] = useState("VISA");
+  const [expDate, setExpDate] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cvv, setCvv] = useState("");
+
+  const handleCardSubmit = (e) => {
+    e.preventDefault();
+    // Here, you can handle the card details, like sending them to your backend or processing them.
+    console.log("Card Type:", cardType);
+    console.log("Expiration Date:", expDate);
+    console.log("Card Number:", cardNumber);
+  };
 
   const handleWalletChange = (e) => {
     setWalletMoney(e.target.value);
@@ -165,34 +177,68 @@ const Details = () => {
       </div>
 
       <div>
-        <div className="border-2 rounded-lg w-full shadow-lg">
-          <div className="px-4">
-            <h3>Payment Information</h3>
-            <div>
-              <span className="inline-block w-40">PAYMENT METHOD</span>
-              <span>:</span>
-              <span>VISA</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">EXP DATE.</span>
-              <span>:</span>
-              <span>date</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">CARD NUMBER</span>
-              <span>:</span>
-              <span>XXXX-XXXX-XXXX-1234</span>
-            </div>
-            <div className="mt-2 mb-2">
-              <Button
-                color="white"
-                bgColor={currentColor}
-                text="Add Payment Method"
-                borderRadius="10px"
-              />
-            </div>
-          </div>
-        </div>
+      <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
+  <div className="px-4">
+    <h3>Payment Information</h3>
+    <form onSubmit={handleCardSubmit}>
+      <div>
+        <label className="inline-block w-40" htmlFor="paymentMethod">PAYMENT METHOD</label>
+        <select 
+          id="paymentMethod"
+          value={cardType}
+          onChange={(e) => setCardType(e.target.value)}
+        >
+          <option value="VISA">VISA</option>
+          <option value="MasterCard">MasterCard</option>
+          <option value="AMEX">AMEX</option>
+          {/* Add other card types if needed */}
+        </select>
+      </div>
+      <div>
+        <label className="inline-block w-40" htmlFor="expDate">EXP DATE.</label>
+        <input 
+          type="text" 
+          id="expDate"
+          placeholder="MM/YY" 
+          value={expDate} 
+          onChange={(e) => setExpDate(e.target.value)} 
+        />
+      </div>
+      <div>
+        <label className="inline-block w-40" htmlFor="cardNumber">CARD NUMBER</label>
+        <input 
+          type="text" 
+          id="cardNumber"
+          placeholder="XXXX-XXXX-XXXX-XXXX" 
+          value={cardNumber} 
+          onChange={(e) => setCardNumber(e.target.value)} 
+        />
+      </div>
+      <div>
+        <label className="inline-block w-40" htmlFor="cvv">CVV</label>
+        <input 
+          type="password" 
+          id="cvv"
+          maxLength="4"
+          placeholder="CVV" 
+          onChange={(e) => setCvv(e.target.value)} 
+        />
+      </div>
+      <div className="mt-2 mb-2">
+        <Button
+          type="submit"
+          color="white"
+          bgColor={currentColor}
+          text="Update Payment Method"
+          borderRadius="10px"
+        />
+      </div>
+    </form>
+  </div>
+</div>
+
+     
+
 
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
           <div className="px-4">
