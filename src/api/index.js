@@ -87,19 +87,49 @@ export async function loginProvider(email, password) {
           headers: {
               "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestBody)
+          body: JSON.stringify({
+            email: email,
+            password: password,
+        }),
+          credentials: 'include'
       });
 
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
-      }
-
-      return await response.json();
+      return await response;
   } catch (error) {
       console.error('Error:', error);
       throw error;
   }
 }
+
+export async function addWallet(walletAddress, is_provider, token) {
+
+  console.log(typeof token, typeof walletAddress, walletAddress, typeof is_provider)
+  try {
+    const response = await fetch("http://localhost:8000/wallet/add/", {
+      method: 'POST',
+      headers: {    
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: walletAddress,
+        is_provider: is_provider,
+      }),
+    });
+
+    // if (!response.ok) {
+    //   throw new Error('Network response was not ok');
+    // }
+
+    const data = await response.json();  // This line was added to extract JSON data
+    return data;  // Return the JSON data
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
+
 
 export async function getVmStatus(clusterId, namespace, vmName) {
   const requestBody = {

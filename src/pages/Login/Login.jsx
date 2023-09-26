@@ -2,7 +2,7 @@ import React from "react";
 import "./Login.css";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-import { loginUser, registerUser, loginProvider } from "../../api";
+import { loginUser, registerUser, loginProvider, addWallet } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +34,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [cookies, setCookie] = useCookies(["walletAddress"]);
-  
+
   const walletAddress = cookies.walletAddress || null;
 
   const updateWalletAddress = (address) => {
@@ -89,6 +89,11 @@ const Login = () => {
       updateWalletAddress(walletAddress);
 
       // Send Wallet Address to backend
+      const token = localStorage.getItem("jwtToken");
+
+      const walletres = addWallet(walletAddress, false, token);
+
+      console.log("wwres2", walletres);
 
       console.log("Wallet Address:", walletAddress);
     } catch (error) {
@@ -103,40 +108,42 @@ const Login = () => {
 
       if (selectedType === "provider") {
         response = await loginProvider(email, password);
+        
       } else {
         response = await loginUser(email, password);
       }
+
+      console.log("11",response)
 
       //JWT
       //const token = response.data.token;
       //localStorage.setItem('jwtToken', token); // storing token in localStorage
 
       console.log("outside");
-      console.log("Received response: ", response);
+      console.log("Received response: ", response.message);
 
-       // Check if the response is as expected. This is a placeholder.
+      // Check if the response is as expected. This is a placeholder.
       // You need to replace this with an acter logged in succeual check based on your API's response.
       if (response && response.status === 200) {
         const data = await response.json();
         const token = data.access; // Assuming the token is directly on the response object
         console.log(token);
-        localStorage.setItem('jwtToken', token); // storing token in localStorage
+        localStorage.setItem("jwtToken", token); // storing token in localStorage
         console.log("Login successful", response);
         setEmail("");
         setPassword("");
         dispatch(loginSuccess());
         navigate("/clouds");
       } else {
-          // Handle login failure, perhaps pop up an error message
-          console.error("Login failed: ", response.message);
-          alert("Login failed. Please check your credentials.");
+        // Handle login failure, perhaps pop up an error message
+        console.error("Login failed: ", response.message);
+        alert("Login failed. Please check your credentials.");
       }
-      
-      } catch (error) {
-        console.error("Login error", error);
-        alert("Login failed. Please check your credentials."); 
-      }
-    };
+    } catch (error) {
+      console.error("Login error", error);
+      alert("Login failed. Please check your credentials.");
+    }
+  };
 
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
@@ -173,16 +180,16 @@ const Login = () => {
         response = await loginProvider(email, password);
       } else {
         response = await fetch("http://localhost:8000/users/login/", {
-          method: 'POST',
+          method: "POST",
           headers: {
-              "Content-Type": "application/json",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             email: email,
             password: password,
-        }),
-          credentials: 'include'
-      });
+          }),
+          credentials: "include",
+        });
       }
 
       //JWT
@@ -192,13 +199,13 @@ const Login = () => {
       console.log("outside");
       console.log("Received response: ", response);
 
-       // Check if the response is as expected. This is a placeholder.
+      // Check if the response is as expected. This is a placeholder.
       // You need to replace this with an acter logged in succeual check based on your API's response.
       if (response && response.status === 200) {
         const data = await response.json();
         const token = data.access; // Assuming the token is directly on the response object
         console.log(token);
-        localStorage.setItem('jwtToken', token); // storing token in localStorage
+        localStorage.setItem("jwtToken", token); // storing token in localStorage
         await connectWallet();
         console.log("Login successful", response);
         setEmail("");
@@ -206,15 +213,14 @@ const Login = () => {
         dispatch(loginSuccess());
         navigate("/clouds");
       } else {
-          // Handle login failure, perhaps pop up an error message
-          console.error("Login failed: ", response.message);
-          alert("Login failed. Please check your credentials.");
+        // Handle login failure, perhaps pop up an error message
+        console.error("Login failed: ", response.message);
+        alert("Login failed. Please check your credentials.");
       }
-      
-      } catch (error) {
-        console.error("Login error", error);
-        alert("Login failed. Please check your credentials."); 
-      }
+    } catch (error) {
+      console.error("Login error", error);
+      alert("Login failed. Please check your credentials.");
+    }
   };
 
   const toggleShowPassword = () => {
@@ -259,7 +265,7 @@ const Login = () => {
             navigate={navigate} // pass navigate function to SignUp component
             isChecked={isChecked}
             setIsChecked={setIsChecked}
-//{/*             SignUpLogin={handleLoginClick} */}
+            //{/*             SignUpLogin={handleLoginClick} */}
           />
         )}
       </div>
@@ -348,6 +354,14 @@ function LogIn({
             </span>
           </p>
         </div>
+
+        <div>
+          <p className="text-xs">
+            {" "}
+            If you are provider, please contact@huupai.xyz to obtain login
+            access.
+          </p>
+        </div>
         <div>
           <button
             className="button infoButton font-normal w-36"
@@ -369,7 +383,6 @@ function LogIn({
 }
 
 function SignUp({
-
   onLoginClick,
   navigate,
   createWallet,
@@ -427,20 +440,19 @@ function SignUp({
       formData.password,
       dataToSend
     );
-    //console.log(response)
+    console.log(response);
 
     if (response.message === "User registered successfully") {
-      await createWallet(); // create wallet
       alert(response.message);
-      
-      
+
       const loginResponse = await loginUser(formData.email, formData.password);
-      
+
       if (loginResponse && loginResponse.status === 200) {
         // Handle successful login, e.g., store token, dispatch actions, etc.
         const data = await loginResponse.json();
         const token = data.access;
-        localStorage.setItem('jwtToken', token);
+        localStorage.setItem("jwtToken", token);
+        await createWallet(); // create wallet
         dispatch(loginSuccess());
         navigate("/clouds");
       } else {
@@ -456,7 +468,6 @@ function SignUp({
 
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
-    
   };
 
   return (
@@ -466,13 +477,12 @@ function SignUp({
           <h3>Sign Up</h3>
 
           <div>
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={handleCheckboxChange}
-          />
-          <span>Create a built-in wallet</span>
-
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+            />
+            <span>Create a built-in wallet</span>
           </div>
         </div>
 
@@ -549,10 +559,11 @@ function SignUp({
             </span>
           </p>
         </div>
-        <button 
-        onClick={SignUpLogin}
-        
-        className="button infoButton w-24" type="submit">
+        <button
+          onClick={SignUpLogin}
+          className="button infoButton w-24"
+          type="submit"
+        >
           Signup
         </button>
       </form>

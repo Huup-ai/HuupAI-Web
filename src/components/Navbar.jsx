@@ -6,6 +6,7 @@ import { BsPerson } from "react-icons/bs";
 import { RiNotification3Line } from "react-icons/ri";
 // import { MdKeyboardArrowDown } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import { addWallet } from "../api";
 import { Button } from "../components";
 
 import { faucetContract } from "../ethereum/faucet";
@@ -125,6 +126,13 @@ const Navbar = () => {
   
     // Set the updated cookie value
     setWalletCookie('walletAddress', address, { path: '/' });
+    if (address !== "undefined"){
+    const token = localStorage.getItem('jwtToken');
+      
+    const walletres = addWallet(address, cookies.selectedType==="provider", token )
+
+    console.log("wwres", walletres)
+    }
   };
 
   useEffect(() => {
