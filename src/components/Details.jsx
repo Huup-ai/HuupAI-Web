@@ -2,13 +2,20 @@ import { React, useState, useEffect } from "react";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { faucetContract } from "../ethereum/faucet";
-import {contractAddress, customerToken} from "../Address";
+import { contractAddress, customerToken } from "../Address";
+import { useCookies } from "react-cookie";
 
 import { ethers } from "ethers";
 
 const Details = () => {
   const { currentColor } = useStateContext();
   const [walletMoney, setWalletMoney] = useState(0);
+
+  const [isCrypto, setIsCrypto] = useState(() => {
+    const storedValue = localStorage.getItem("crypto");
+    return storedValue ? JSON.parse(storedValue) : false;
+  });
+
 
   const handleWalletChange = (e) => {
     setWalletMoney(e.target.value);
@@ -29,7 +36,6 @@ const Details = () => {
     addWalletListener();
     getBalanceHandler();
     getDepositHandler();
-
   }, [walletAddress]);
 
   const connectWallet = async () => {
@@ -78,7 +84,7 @@ const Details = () => {
 
   const addWalletListener = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-      console.log("wallet Address",walletAddress);
+      console.log("wallet Address", walletAddress);
       window.ethereum.on("accountsChanged", (accounts) => {
         setWalletAddress(accounts[0]);
       });
@@ -105,35 +111,34 @@ const Details = () => {
 
   const getBalanceHandler = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-    // test getBalance
-    // console.log("contract", fcContract)
-    const value = await fcContract.getBalance(contractAddress); // Call the 'getBalance' function
+      // test getBalance
+      // console.log("contract", fcContract)
+      const value = await fcContract.getBalance(contractAddress); // Call the 'getBalance' function
 
-    setBalance(ethers.utils.formatEther(value));
-    console.log("contract Address", contractAddress)
-    // console.log("wallet address", walletAddress);
+      setBalance(ethers.utils.formatEther(value));
+      console.log("contract Address", contractAddress);
+      // console.log("wallet address", walletAddress);
     }
   };
 
   const getDepositHandler = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-    // test getBalance
-    const value = await fcContract.getDeposit(contractAddress); // Call the 'getBalance' function
+      // test getBalance
+      const value = await fcContract.getDeposit(contractAddress); // Call the 'getBalance' function
 
-    setDeposit(ethers.utils.formatEther(value));
-    console.log("contract Address", contractAddress)
-    // console.log("wallet address", walletAddress);
+      setDeposit(ethers.utils.formatEther(value));
+      console.log("contract Address", contractAddress);
+      // console.log("wallet address", walletAddress);
     }
   };
 
-  
   async function depositEther(etherAmount) {
-    console.log("USDT",etherAmount);
+    console.log("USDT", etherAmount);
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       try {
         // Convert the ether amount to wei
         const weiAmount = ethers.utils.parseEther(etherAmount);
-        console.log("wei",weiAmount.toString());
+        console.log("wei", weiAmount.toString());
 
         // Call the 'setDeposit' function and send ether
         const tx = await fcContract
@@ -152,7 +157,7 @@ const Details = () => {
 
   const handleDeposit = () => {
     depositEther(walletMoney);
-  }
+  };
   return (
     <div id="Billing Details">
       <div className=" mb-5 mt-10">
@@ -165,36 +170,10 @@ const Details = () => {
       </div>
 
       <div>
-        <div className="border-2 rounded-lg w-full shadow-lg">
-          <div className="px-4">
-            <h3>Payment Information</h3>
-            <div>
-              <span className="inline-block w-40">PAYMENT METHOD</span>
-              <span>:</span>
-              <span>VISA</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">EXP DATE.</span>
-              <span>:</span>
-              <span>date</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">CARD NUMBER</span>
-              <span>:</span>
-              <span>XXXX-XXXX-XXXX-1234</span>
-            </div>
-            <div className="mt-2 mb-2">
-              <Button
-                color="white"
-                bgColor={currentColor}
-                text="Add Payment Method"
-                borderRadius="10px"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
+      {isCrypto ? (
+        // Content to display when isToggled is true
+        <div>
+          <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
           <div className="px-4">
             <h3>Payment Information</h3>
             <div>
@@ -231,7 +210,7 @@ const Details = () => {
               <span>USDT</span>
             </div>
             <div className="mt-2 mb-2">
-            <Button
+              <Button
                 color="white"
                 bgColor={currentColor}
                 text="Deposit"
@@ -251,6 +230,41 @@ const Details = () => {
             </div>
           </div>
         </div>
+          
+        </div>
+      ) : (
+        // Content to display when isToggled is false
+        <div>
+           <div className="border-2 rounded-lg w-full shadow-lg">
+          <div className="px-4">
+            <h3>Payment Information</h3>
+            <div>
+              <span className="inline-block w-40">PAYMENT METHOD</span>
+              <span>:</span>
+              <span>VISA</span>
+            </div>
+            <div>
+              <span className="inline-block w-40">EXP DATE.</span>
+              <span>:</span>
+              <span>date</span>
+            </div>
+            <div>
+              <span className="inline-block w-40">CARD NUMBER</span>
+              <span>:</span>
+              <span>XXXX-XXXX-XXXX-1234</span>
+            </div>
+            <div className="mt-2 mb-2">
+              <Button
+                color="white"
+                bgColor={currentColor}
+                text="Add Payment Method"
+                borderRadius="10px"
+              />
+            </div>
+          </div>
+        </div>
+        </div>
+      )}
 
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
           <div className="px-4">

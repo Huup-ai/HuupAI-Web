@@ -112,7 +112,7 @@ const Login = () => {
       //localStorage.setItem('jwtToken', token); // storing token in localStorage
 
       console.log("outside");
-      console.log("Received response: ", response);
+      console.log("Received response: ", response.message);
 
        // Check if the response is as expected. This is a placeholder.
       // You need to replace this with an acter logged in succeual check based on your API's response.
@@ -348,6 +348,10 @@ function LogIn({
             </span>
           </p>
         </div>
+
+        <div>
+          <p className="text-xs"> If you are provider, please contact@huupai.xyz to obtain login access.</p>
+        </div>
         <div>
           <button
             className="button infoButton font-normal w-36"
@@ -548,6 +552,7 @@ function SignUp({
               Login
             </span>
           </p>
+
         </div>
         <button 
         onClick={SignUpLogin}

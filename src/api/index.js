@@ -87,14 +87,14 @@ export async function loginProvider(email, password) {
           headers: {
               "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestBody)
+          body: JSON.stringify({
+            email: email,
+            password: password,
+        }),
+          credentials: 'include'
       });
 
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
-      }
-
-      return await response.json();
+      return await response;
   } catch (error) {
       console.error('Error:', error);
       throw error;
