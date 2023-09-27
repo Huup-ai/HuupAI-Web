@@ -113,7 +113,7 @@ const Details = () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       // test getBalance
       // console.log("contract", fcContract)
-      const value = await fcContract.getBalance(contractAddress); // Call the 'getBalance' function
+      const value = await fcContract.getBalance(walletAddress); // Call the 'getBalance' function
 
       setBalance(ethers.utils.formatEther(value));
       console.log("contract Address", contractAddress);
