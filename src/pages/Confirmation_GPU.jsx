@@ -231,7 +231,7 @@ const getWallet = async (token) => {
           bgColor={currentColor}
           text="Confirm Order"
           borderRadius="10px"
-          onClick={handleConfirmOrder}
+          onClickCallback={handleConfirmOrder}
           class
         />
 

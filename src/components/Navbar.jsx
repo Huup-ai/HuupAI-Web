@@ -124,6 +124,7 @@ const Navbar = () => {
 
   const updateWalletAddress = (address) => {
   
+    // console.log("enter")
     // Set the updated cookie value
     setWalletCookie('walletAddress', address, { path: '/' });
     if (address !== "undefined"){
