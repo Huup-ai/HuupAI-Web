@@ -132,7 +132,7 @@ const Navbar = () => {
       
     const walletres = addWallet(address, cookies.selectedType==="provider", token )
 
-    console.log("wwres", walletres)
+    console.log("wwresnav", walletres)
     }
   };
 

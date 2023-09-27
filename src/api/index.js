@@ -103,7 +103,7 @@ export async function loginProvider(email, password) {
 
 export async function addWallet(walletAddress, is_provider, token) {
 
-  console.log(typeof token, typeof walletAddress, walletAddress, typeof is_provider)
+  console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
   try {
     const response = await fetch("http://localhost:8000/wallet/add/", {
       method: 'POST',
@@ -128,6 +128,31 @@ export async function addWallet(walletAddress, is_provider, token) {
     console.error('Error:', error);
     throw error;
   }
+}
+
+export async function getWallet(token) {
+  try {
+    const response = await fetch("http://localhost:8000/wallets/get_wallets/", {
+      method: 'GET',
+      headers: {    
+        'Authorization': `Bearer ${token}`,
+        // 'Content-Type': 'application/json',
+      },
+      
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();  // This line was added to extract JSON data
+    return data;  // Return the JSON data
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+
 }
 
 

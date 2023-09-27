@@ -2,7 +2,7 @@ import React from "react";
 import "./Login.css";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-import { loginUser, registerUser, loginProvider, addWallet } from "../../api";
+import { loginUser, registerUser, loginProvider, addWallet, getWallet } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -113,27 +113,33 @@ const Login = () => {
         response = await loginUser(email, password);
       }
 
-      console.log("11",response)
+      // console.log("11",response)
 
       //JWT
       //const token = response.data.token;
       //localStorage.setItem('jwtToken', token); // storing token in localStorage
 
-      console.log("outside");
-      console.log("Received response: ", response.message);
+      // console.log("outside");
+      // console.log("Received response: ", response.message);
 
       // Check if the response is as expected. This is a placeholder.
       // You need to replace this with an acter logged in succeual check based on your API's response.
       if (response && response.status === 200) {
         const data = await response.json();
         const token = data.access; // Assuming the token is directly on the response object
-        console.log(token);
+        console.log("t",token);
+
+        // get stored wallet address(created when signup) from backend and store in cookie  
+        const singleWallet = await getWallet(token);
+        console.log("single address", singleWallet[0].address);
+        updateWalletAddress(singleWallet[0].address);
+        
         localStorage.setItem("jwtToken", token); // storing token in localStorage
         console.log("Login successful", response);
         setEmail("");
         setPassword("");
         dispatch(loginSuccess());
-        navigate("/clouds");
+        // navigate("/clouds");
       } else {
         // Handle login failure, perhaps pop up an error message
         console.error("Login failed: ", response.message);
@@ -393,6 +399,7 @@ function SignUp({
   // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
   const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -409,6 +416,10 @@ function SignUp({
       [e.target.name]: e.target.value,
     });
   };
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -452,7 +463,11 @@ function SignUp({
         const data = await loginResponse.json();
         const token = data.access;
         localStorage.setItem("jwtToken", token);
-        await createWallet(); // create wallet
+        if (isChecked){
+          await createWallet(); // create wallet
+
+        }
+        
         dispatch(loginSuccess());
         navigate("/clouds");
       } else {
@@ -466,10 +481,7 @@ function SignUp({
     }
   };
 
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
-  };
-
+  
   return (
     <div>
       <form className="infoForm authForm" onSubmit={handleSubmit}>
