@@ -19,13 +19,12 @@ const createProvider = async (req, res, next) => {
 
         // Create a wallet and connect it to the provider
         const wallet = new ethers.Wallet(walletPrivateKey(), provider);
-        const contractwithwallet = contract.connect(wallet)
+        const contractwithwallet = contract.connect(wallet);
 
         const tx = await contractwithwallet.createProvider(provider_address, user_id)
 
         // Wait for the transaction to be mined
         await tx.wait();
-        console.log(tx)
         // Return a response
         res.json({ success: true, transactionHash: tx.hash });
     } catch (error) {
@@ -44,13 +43,12 @@ const createRenter = async (req, res, next) => {
 
         // Create a wallet and connect it to the provider
         const wallet = new ethers.Wallet(walletPrivateKey(), provider);
-        const contractwithwallet = contract.connect(wallet)
+        const contractwithwallet = contract.connect(wallet);
 
         const tx = await contractwithwallet.createRenter(renter_address, user_id)
 
         // Wait for the transaction to be mined
         await tx.wait();
-        console.log(tx)
         // Return a response
         res.json({ success: true, transactionHash: tx.hash });
     } catch (error) {
@@ -67,15 +65,15 @@ const startRental = async (req, res, next) => {
             return res.status(400).json({ error: 'Invalid request body' });
         }
 
+        const rateFloat = rate * Math.pow(10, 18)
         // Create a wallet and connect it to the provider
         const wallet = new ethers.Wallet(walletPrivateKey(), provider);
-        const contractwithwallet = contract.connect(wallet)
+        const contractwithwallet = contract.connect(wallet);
 
-        const tx = await contractwithwallet.startRental(renter_address, instance_id, provider_address, rate)
+        const tx = await contractwithwallet.startRental(renter_address, instance_id, provider_address, rateFloat)
 
         // Wait for the transaction to be mined
         await tx.wait();
-        console.log(tx)
         // Return a response
         res.json({ success: true, transactionHash: tx.hash });
     } catch (error) {
@@ -94,13 +92,12 @@ const stopRental = async (req, res, next) => {
 
         // Create a wallet and connect it to the provider
         const wallet = new ethers.Wallet(walletPrivateKey(), provider);
-        const contractwithwallet = contract.connect(wallet)
+        const contractwithwallet = contract.connect(wallet);
 
-        const tx = await contractwithwallet.stopRental(instance_id)
+        const tx = await contractwithwallet.stopRental(instance_id);
 
         // Wait for the transaction to be mined
         await tx.wait();
-        console.log(tx)
         // Return a response
         res.json({ success: true, transactionHash: tx.hash });
     } catch (error) {
