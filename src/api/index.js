@@ -1,3 +1,6 @@
+import API_URL from './apiAddress';
+
+
 const FetchRequest = async (url, method, header = {}, data = {}) => {
   const response = await fetch(url, {
     method: method,
@@ -23,7 +26,7 @@ export async function registerUser(
   
 
   const response = await FetchRequest(
-    "http://localhost:8000/users/register/",
+    `${API_URL}/users/register/`,
     "POST",
     {
       "Content-Type": "application/json",
@@ -41,7 +44,7 @@ export async function registerUser(
 export async function logoutUser() {
   try {
     console.log("Attempting logout...");
-    await FetchRequest("http://localhost:8000/users/logout/", "POST");
+    await FetchRequest(`${API_URL}/users/logout/`, "POST");
     console.log("Logout successful");
   } catch (error) {
     console.error("Logout failed", error);
@@ -56,7 +59,7 @@ export async function loginUser(email, password) {
   };
 
   try {
-      const response = await fetch("http://localhost:8000/users/login/", {
+      const response = await fetch(`${API_URL}/users/login/`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -82,7 +85,7 @@ export async function loginProvider(email, password) {
   };
 
   try {
-      const response = await fetch("http://localhost:8000/provider/login/", {
+      const response = await fetch(`${API_URL}/provider/login/`, {
           method: 'POST',
           headers: {
               "Content-Type": "application/json",
@@ -105,7 +108,7 @@ export async function addWallet(walletAddress, is_provider, token) {
 
   console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
   try {
-    const response = await fetch("http://localhost:8000/wallet/add/", {
+    const response = await fetch(`${API_URL}/wallet/add/`, {
       method: 'POST',
       headers: {    
         'Authorization': `Bearer ${token}`,
@@ -132,7 +135,7 @@ export async function addWallet(walletAddress, is_provider, token) {
 
 export async function getWallet(token) {
   try {
-    const response = await fetch("http://localhost:8000/wallets/get_wallets/", {
+    const response = await fetch(`${API_URL}/wallets/get_wallets/`, {
       method: 'GET',
       headers: {    
         'Authorization': `Bearer ${token}`,
@@ -164,7 +167,7 @@ export async function getVmStatus(clusterId, namespace, vmName) {
   };
 
   return FetchRequest(
-    `http://localhost:8000/instances/${clusterId}/getvmstatus/${namespace}/${vmName}`,
+    `${API_URL}/instances/${clusterId}/getvmstatus/${namespace}/${vmName}`,
     "POST",
     {
       "Content-Type": "application/json",
@@ -175,7 +178,7 @@ export async function getVmStatus(clusterId, namespace, vmName) {
 
 export async function getUserInstances(email) {
   return FetchRequest(
-    `http://localhost:8000/instances/${email}/get_instances/`,
+    `${API_URL}/instances/${email}/get_instances/`,
     "GET",
     {
       "Content-Type": "application/json",
@@ -185,7 +188,7 @@ export async function getUserInstances(email) {
 
 export async function getInvoiceByUser() {
   return FetchRequest(
-    "http://localhost:8000/invoices/get_user_invoices/",
+    `${API_URL}/invoices/get_user_invoices/`,
     "GET",
     {
       "Content-Type": "application/json",

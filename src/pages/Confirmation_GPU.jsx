@@ -6,6 +6,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
 import { Link, NavLink } from 'react-router-dom';
 import { getWallet } from '../api';
+import API_URL from "../api/apiAddress";
 
 const Confirmation_GPU = () => {
   const { currentColor, currentMode } = useStateContext();
@@ -18,7 +19,7 @@ const Confirmation_GPU = () => {
 // const getWallet = async (token) => {
 //   try {
 //     // Make a GET request to the endpoint with headers
-//     const response = await fetch('http://127.0.0.1:8000/wallets/get_wallets/', {
+//     const response = await fetch(`${API_URL}/wallets/get_wallets/`, {
 //       method: 'GET',
 //       headers: {
 //         'Content-Type': 'application/json',
@@ -61,7 +62,7 @@ const Confirmation_GPU = () => {
     //if statement check if user has add a payment method. 
     if(hasPaymentMethod){
     try {
-        const response = await fetch(`http://127.0.0.1:8000/instances/${id}/createvm/`, {
+        const response = await fetch(`${API_URL}/instances/${id}/createvm/`, {
 
             method: 'POST',
             credentials: "include", 

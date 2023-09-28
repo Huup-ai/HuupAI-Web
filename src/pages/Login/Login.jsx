@@ -185,19 +185,8 @@ const Login = () => {
       if (selectedType === "provider") {
         response = await loginProvider(email, password);
       } else {
-        response = await fetch("http://localhost:8000/users/login/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-          credentials: "include",
-        });
+        response = await loginUser(email, password);
       }
-
       //JWT
       //const token = response.data.token;
       //localStorage.setItem('jwtToken', token); // storing token in localStorage
@@ -364,8 +353,7 @@ function LogIn({
         <div>
           <p className="text-xs">
             {" "}
-            If you are provider, please contact@huupai.xyz to obtain login
-            access.
+            If you are provider, please contact@huupai.xyz to obtain login access.
           </p>
         </div>
         <div>

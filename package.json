@@ -9,7 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@fun-xyz/core": "^0.4.8",
-    "@funkit/core": "^0.8.3",
+    "@funkit/core": "^0.8.5",
     "@mui/material": "^5.14.8",
     "@reduxjs/toolkit": "^1.9.5",
     "@syncfusion/ej2": "^19.4.48",
