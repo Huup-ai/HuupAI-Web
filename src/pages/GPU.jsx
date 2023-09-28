@@ -10,7 +10,7 @@ function GPU() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/clusters/')
+    fetch(`${API_URL}/clusters/`)
       .then(response => response.json())
       .then(responseData => {
         setData(responseData.data);  // Set the "data" key of the response to state
