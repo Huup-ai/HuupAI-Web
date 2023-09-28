@@ -9,7 +9,7 @@ const contractAddress = process.env.CONTRACT_ADDRESS;
 const provider = getProvider()
 const contract = getContract()
 
-const createProvider = async (req, res, next) => {
+const createProvider = async (req, res) => {
     try {
         // Check if the request body contains the necessary data
         const {provider_address, user_id} = req.body;
@@ -33,7 +33,7 @@ const createProvider = async (req, res, next) => {
     }
 };
 
-const createRenter = async (req, res, next) => {
+const createRenter = async (req, res) => {
     try {
         // Check if the request body contains the necessary data
         const {renter_address, user_id} = req.body;
@@ -57,7 +57,7 @@ const createRenter = async (req, res, next) => {
     }
 };
 
-const startRental = async (req, res, next) => {
+const startRental = async (req, res) => {
     try {
         // Check if the request body contains the necessary data
         const {renter_address, instance_id, provider_address, rate} = req.body;
@@ -82,7 +82,7 @@ const startRental = async (req, res, next) => {
     }
 };
 
-const stopRental = async (req, res, next) => {
+const stopRental = async (req, res) => {
     try {
         // Check if the request body contains the necessary data
         const {instance_id} = req.body;
@@ -105,4 +105,20 @@ const stopRental = async (req, res, next) => {
         res.status(500).json({ error: 'Smart contract interaction failed' });
     }
 };
-module.exports = { createProvider, createRenter, startRental, stopRental }
+
+const getRemainingCredit = async (req, res) => {
+    try {
+        const {wallet_address} = req.body;
+        if (!wallet_address) {
+            return res.status(400).json({ error: 'Invalid request body' });
+        }
+
+        const balance = await contract.getBalance(wallet_address)
+        const deposit = await contract.getDeposit(wallet_address)
+        res.json({ success: true, balance: deposit - balance });
+    } catch (error) {
+        console.error('Smart contract write error:', error);
+        res.status(500).json({ error: 'Smart contract interaction failed' });
+    }
+};
+module.exports = { createProvider, createRenter, startRental, stopRental, getRemainingCredit }
