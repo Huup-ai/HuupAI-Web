@@ -30,8 +30,8 @@ const Instances = () => {
   );
 
   return (
-    <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
-      <Header category="Instances" title="Welcome" />
+    <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
+      <Header category="My Cloud > Instances" title="Welcome" />
 
       <GridComponent
         rowHeight={70}

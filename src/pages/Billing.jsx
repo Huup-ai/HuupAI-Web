@@ -47,9 +47,9 @@ const Billing = ({ userInstances }) => {
   const laterDay = laterDate.getDate();
 
   return (
-    <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
+    <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       {/* title for consumer */}
-      <Header category="Billing" title="Billing For Wenxuan" />
+      <Header category="My Cloud > Billing" title="Billing For Wenxuan" />
 
       <p className="text-lg text-gray-400">
         Current billing period runs from {formattedDate} to {laterMonth}{" "}

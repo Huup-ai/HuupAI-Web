@@ -74,7 +74,7 @@ export const links = [
 
 export const provider = [
   {
-    title: "Provider",
+    title: "My Cloud",
     links: [
       {
         name: "Profile",

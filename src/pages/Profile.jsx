@@ -28,8 +28,8 @@ const Profile = () => {
   };
 
   return (
-    <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
-      <Header category="Profile" title="Welcome" />
+    <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
+      <Header category="My Cloud > Profile" title="Welcome" />
 
       <form className="infoForm">
         <h3>Your Info</h3>

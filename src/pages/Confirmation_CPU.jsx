@@ -8,9 +8,9 @@ import { Link, NavLink } from 'react-router-dom';
 const Confirmation_CPU = () => {
   const { currentColor, currentMode } = useStateContext();
   return (
-    <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
+    <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header
-        category="CPU Order Confirmation"
+        category="Market Cloud > CPU > Order Confirmation"
         title="Create Virtual Machine"
       />
       <div className="flex mb-10">

@@ -22,8 +22,8 @@ const Inventory = () => {
   const { currentColor } = useStateContext();
 
   return (
-    <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
-      <Header category="Inventory" title="Set your Inventory Price" />
+    <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
+      <Header category="My Cloud > Inventory" title="Set your Inventory Price" />
 
       <div className="text-left ml-4 mb-5f flex flex-col">
         <div className="flex mb-5">
