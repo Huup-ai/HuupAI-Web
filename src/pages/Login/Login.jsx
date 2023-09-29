@@ -6,7 +6,7 @@ import { loginUser, registerUser, loginProvider, addWallet, getWallet } from "..
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../reducers/authSlicer";
+import { loginSuccess,hasExternalWallet } from "../../reducers/authSlicer";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
 import { API_KEY, sponsorAddress } from "../../Address";
@@ -206,6 +206,7 @@ const Login = () => {
         setEmail("");
         setPassword("");
         dispatch(loginSuccess());
+        dispatch(hasExternalWallet());
         navigate("/clouds");
       } else {
         // Handle login failure, perhaps pop up an error message

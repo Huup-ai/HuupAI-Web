@@ -4,6 +4,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { faucetContract } from "../ethereum/faucet";
 import { contractAddress, customerToken } from "../Address";
 import { useCookies } from "react-cookie";
+import { useSelector } from "react-redux";
 
 import { ethers } from "ethers";
 
@@ -11,11 +12,13 @@ const Details = () => {
   const { currentColor } = useStateContext();
   const [walletMoney, setWalletMoney] = useState(0);
 
-  const [isCrypto, setIsCrypto] = useState(() => {
-    const storedValue = localStorage.getItem("crypto");
-    return storedValue ? JSON.parse(storedValue) : false;
-  });
+  // const [isCrypto, setIsCrypto] = useState(() => {
+  //   const storedValue = localStorage.getItem("crypto");
+  //   return storedValue ? JSON.parse(storedValue) : false;
+  // });
 
+  const payment = useSelector((state) => state.auth.selectedOption);
+  console.log("pay", payment);
 
   const handleWalletChange = (e) => {
     setWalletMoney(e.target.value);
@@ -95,20 +98,6 @@ const Details = () => {
     }
   };
 
-  // const getOCTHandler = async () => {
-  //   setWithdrawError("");
-  //   setWithdrawSuccess("");
-  //   try {
-  //     const fcContractWithSigner = fcContract.connect(signer);
-  //     const resp = await fcContractWithSigner.requestTokens();
-  //     console.log(resp)
-  //     setWithdrawSuccess("Operation succeeded - enjoy your tokens!");
-  //     setTransactionData(resp.hash);
-  //   } catch (err) {
-  //     setWithdrawError(err.message);
-  //   }
-  // };
-
   const getBalanceHandler = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       // test getBalance
@@ -170,101 +159,189 @@ const Details = () => {
       </div>
 
       <div>
-      {isCrypto ? (
-        // Content to display when isToggled is true
-        <div>
-          <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
-          <div className="px-4">
-            <h3>Payment Information</h3>
-            <div>
-              <span className="inline-block w-40">PAYMENT METHOD</span>
-              <span>:</span>
-              <span>Crypto</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">Total Deposit</span>
-              <span>:</span>
-              <span>{deposit} ETH USDT</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">Total Balance</span>
-              <span>:</span>
-              {/* {getBalanceHandler()} */}
-              <span>{balance} ETH USDT</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">Wallet Address</span>
-              <span>:</span>
-              <span>{walletAddress}</span>
-            </div>
+        {payment == "crypto" ? (
+          // Content to display when isToggled is true
+          <div>
+            <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
+              <div className="px-4">
+                <h3>Payment Information</h3>
+                <div>
+                  <span className="inline-block w-40">PAYMENT METHOD</span>
+                  <span>:</span>
+                  <span>Crypto</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">Total Deposit</span>
+                  <span>:</span>
+                  <span>{deposit} ETH USDT</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">Total Balance</span>
+                  <span>:</span>
+                  {/* {getBalanceHandler()} */}
+                  <span>{balance} ETH USDT</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">Wallet Address</span>
+                  <span>:</span>
+                  <span>{walletAddress}</span>
+                </div>
 
-            <div>
-              <input
-                type="text"
-                className="border-solid border-2 rounded-md border-grey w-40"
-                placeholder="Input Amount"
-                value={walletMoney} // Set the input value from the state
-                onChange={handleWalletChange} // Attach the event handler
-              />
+                <div>
+                  <input
+                    type="text"
+                    className="border-solid border-2 rounded-md border-grey w-40"
+                    placeholder="Input Amount"
+                    value={walletMoney} // Set the input value from the state
+                    onChange={handleWalletChange} // Attach the event handler
+                  />
 
-              <span>USDT</span>
-            </div>
-            <div className="mt-2 mb-2">
-              <Button
-                color="white"
-                bgColor={currentColor}
-                text="Deposit"
-                onClickCallback={handleDeposit}
-                borderRadius="10px"
-              />
-            </div>
+                  <span>USDT</span>
+                </div>
+                <div className="mt-2 mb-2">
+                  <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text="Deposit"
+                    onClickCallback={handleDeposit}
+                    borderRadius="10px"
+                  />
+                </div>
 
-            <div className="mt-2 mb-2">
-              <Button
-                color="white"
-                bgColor={currentColor}
-                text="Connect Wallet"
-                onClickCallback={connectWallet}
-                borderRadius="10px"
-              />
+                <div className="mt-2 mb-2">
+                  <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text="Connect Wallet"
+                    onClickCallback={connectWallet}
+                    borderRadius="10px"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-          
-        </div>
-      ) : (
-        // Content to display when isToggled is false
-        <div>
-           <div className="border-2 rounded-lg w-full shadow-lg">
-          <div className="px-4">
-            <h3>Payment Information</h3>
-            <div>
-              <span className="inline-block w-40">PAYMENT METHOD</span>
-              <span>:</span>
-              <span>VISA</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">EXP DATE.</span>
-              <span>:</span>
-              <span>date</span>
-            </div>
-            <div>
-              <span className="inline-block w-40">CARD NUMBER</span>
-              <span>:</span>
-              <span>XXXX-XXXX-XXXX-1234</span>
-            </div>
-            <div className="mt-2 mb-2">
-              <Button
-                color="white"
-                bgColor={currentColor}
-                text="Add Payment Method"
-                borderRadius="10px"
-              />
+        ) : payment == "creditCard" ? (
+          // Content to display when isToggled is false
+          <div>
+            <div className="border-2 rounded-lg w-full shadow-lg">
+              <div className="px-4">
+                <h3>Payment Information</h3>
+                <div>
+                  <span className="inline-block w-40">PAYMENT METHOD</span>
+                  <span>:</span>
+                  <span>VISA</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">EXP DATE.</span>
+                  <span>:</span>
+                  <span>date</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">CARD NUMBER</span>
+                  <span>:</span>
+                  <span>XXXX-XXXX-XXXX-1234</span>
+                </div>
+                <div className="mt-2 mb-2">
+                  <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text="Add Payment Method"
+                    borderRadius="10px"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        </div>
-      )}
+        ) : (
+          <>
+            <div className="border-2 rounded-lg w-full shadow-lg">
+              <div className="px-4">
+                <h3>Payment Information</h3>
+                <div>
+                  <span className="inline-block w-40">PAYMENT METHOD</span>
+                  <span>:</span>
+                  <span>VISA</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">EXP DATE.</span>
+                  <span>:</span>
+                  <span>date</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">CARD NUMBER</span>
+                  <span>:</span>
+                  <span>XXXX-XXXX-XXXX-1234</span>
+                </div>
+                <div className="mt-2 mb-2">
+                  <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text="Add Payment Method"
+                    borderRadius="10px"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
+              <div className="px-4">
+                <h3>Payment Information</h3>
+                <div>
+                  <span className="inline-block w-40">PAYMENT METHOD</span>
+                  <span>:</span>
+                  <span>Crypto</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">Total Deposit</span>
+                  <span>:</span>
+                  <span>{deposit} ETH USDT</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">Total Balance</span>
+                  <span>:</span>
+                  {/* {getBalanceHandler()} */}
+                  <span>{balance} ETH USDT</span>
+                </div>
+                <div>
+                  <span className="inline-block w-40">Wallet Address</span>
+                  <span>:</span>
+                  <span>{walletAddress}</span>
+                </div>
+
+                <div>
+                  <input
+                    type="text"
+                    className="border-solid border-2 rounded-md border-grey w-40"
+                    placeholder="Input Amount"
+                    value={walletMoney} // Set the input value from the state
+                    onChange={handleWalletChange} // Attach the event handler
+                  />
+
+                  <span>USDT</span>
+                </div>
+                <div className="mt-2 mb-2">
+                  <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text="Deposit"
+                    onClickCallback={handleDeposit}
+                    borderRadius="10px"
+                  />
+                </div>
+
+                <div className="mt-2 mb-2">
+                  <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text="Connect Wallet"
+                    onClickCallback={connectWallet}
+                    borderRadius="10px"
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
           <div className="px-4">

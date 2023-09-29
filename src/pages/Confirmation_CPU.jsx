@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, Countbox, Header, OSDropdown } from "../components";
+import { Check, Countbox, Header, OSDropdown, PayinComfirmation } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
 import { BsPlusLg } from "react-icons/bs";
@@ -11,9 +11,13 @@ const Confirmation_CPU = () => {
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header
         category="Market Cloud > CPU > Order Confirmation"
-        title="Create Virtual Machine"
+        title="Rental Order Form"
       />
-      <div className="flex mb-10">
+
+      <PayinComfirmation/>
+
+      
+      <div className="mt-12 flex mb-10">
         <p className="underline underline-offset-4 w-20">vCPU</p>
         <Countbox />
       </div>

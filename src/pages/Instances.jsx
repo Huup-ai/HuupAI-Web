@@ -13,6 +13,7 @@ import { InstancesData, InstancesGrid } from "../data/dummy";
 import { Header } from "../components";
 import { DropdownAction } from "../components/DropdownAction";
 import { BsPlusLg } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Instances = () => {
   const toolbarOptions = ["Search"];
@@ -26,6 +27,12 @@ const Instances = () => {
       <button>
         <BsPlusLg/>
       </button>
+    </div>
+  );
+
+  const Due = (props) => (
+    <div className="flex items-center justify-center gap-2">
+      <Link className="underline">{props.Due}</Link>
     </div>
   );
 
@@ -69,10 +76,11 @@ const Instances = () => {
           />
           <ColumnDirective
             clipMode="EllipsisWithTooltip"
-            field="Region"
-            headerText="Region"
+            field="Due"
+            headerText="Payment Due"
             width="100"
             textAlign="Center"
+            template={Due}
           />
 
           <ColumnDirective
