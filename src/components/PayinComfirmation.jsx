@@ -48,9 +48,8 @@ const PayinComfirmation = () => {
     <>
       <div className="mt-5 w-1/2 border-2 rounded-lg shadow-lg md:p-10">
         <div>
-          Step #1. Fund your wallet by using
+          Step #1. Fund your wallet by using{" "}
           <a herf="" className="underline underline-offset-1 italic">
-            {" "}
             MoonPay
           </a>
         </div>
@@ -64,20 +63,52 @@ const PayinComfirmation = () => {
           />
 
           <label htmlFor=""> USDT</label>
-          <Button
-            color="white"
-            bgColor={currentColor}
-            text="Deposit"
-            borderRadius="10px"
-            className="ml-10"
-            // onClickCallback={} // deposit to wallet
-          />
+          <span className="ml-5">
+            <Button
+              color="white"
+              bgColor={currentColor}
+              text="Deposit"
+              borderRadius="10px"
+
+              // onClickCallback={} // deposit to wallet
+            />
+          </span>
         </div>
       </div>
     </>,
   ];
 
-  const MetaMask = [<> MetaMask</>];
+  const MetaMask = [
+    <>
+      <div className="mt-5 w-1/2 border-2 rounded-lg shadow-lg md:p-10">
+        <div>
+        Step #1. Fund your wallet by depositing USDT to your wallet
+        
+        </div>
+        <div>Step #2 Deposit fund at least</div>
+        <div>
+          <input
+            className="border-2 mt-2"
+            type="text"
+            // onChange={handleInputChange}
+            placeholder="Minumum Deposit" //get from backend info
+          />
+
+          <label htmlFor=""> USDT</label>
+          <span className="ml-5">
+            <Button
+              color="white"
+              bgColor={currentColor}
+              text="Deposit"
+              borderRadius="10px"
+
+              // onClickCallback={} // deposit to wallet
+            />
+          </span>
+        </div>
+      </div>
+    </>,
+  ];
 
   const [creditCardNumber, setCreditCardNumber] = useState("");
 
@@ -176,17 +207,21 @@ const PayinComfirmation = () => {
     checkCreditAuth
   );
 
-  if (payment == "eitherWay") {
+  if (payment === "eitherWay") {
     choosepay = paymentMethod;
-    if (isCrypto == true && checkBalance == false && externalWallet == true) {
+    if (
+      isCrypto === true &&
+      checkBalance === false &&
+      externalWallet === true
+    ) {
       form = MetaMask;
     } else if (
-      isCrypto == true &&
-      checkBalance == false &&
-      externalWallet == false
+      isCrypto === true &&
+      checkBalance === false &&
+      externalWallet === false
     ) {
       form = MoonPay;
-    } else if (isCrypto == false && checkCreditAuth == false) {
+    } else if (isCrypto === false && checkCreditAuth === false) {
       form = creditCard;
     } else {
       form = [];
@@ -194,18 +229,18 @@ const PayinComfirmation = () => {
   } else {
     choosepay = [];
     if (
-      payment == "crypto" &&
-      checkBalance == false &&
-      externalWallet == true
+      payment === "crypto" &&
+      checkBalance === false &&
+      externalWallet === true
     ) {
       form = MetaMask;
     } else if (
-      payment == "crypto" &&
-      checkBalance == false &&
-      externalWallet == false
+      payment === "crypto" &&
+      checkBalance === false &&
+      externalWallet === false
     ) {
       form = MoonPay;
-    } else if (payment == "creditCard" && checkCreditAuth == false) {
+    } else if (payment === "creditCard" && checkCreditAuth === false) {
       form = creditCard;
     } else {
       form = [];
