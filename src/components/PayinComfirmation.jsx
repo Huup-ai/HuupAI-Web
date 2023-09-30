@@ -26,7 +26,7 @@ const PayinComfirmation = () => {
 
         <div
           className={`ml-2 relative h-8 inline-block w-14 align-middle select-none transition duration-200 ease-in ${
-            isCrypto ? "bg-blue-300" : "bg-gray-300"
+            isCrypto ? `bg-[${currentColor}]` : "bg-gray-300"
           } rounded-xl p-1`}
           onClick={handleToggle}
         >

@@ -1,7 +1,7 @@
 import React , { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux'; 
-import { Check, Header, OSDropdown } from "../components";
+import { Check, Header, OSDropdown,  PayinComfirmation} from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
 import { Link, NavLink } from 'react-router-dom';
@@ -218,7 +218,9 @@ const Confirmation_GPU = () => {
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header category="Market Could > GPU > Order Confirmation" title="Rent GPU Server" />
-      <div className="flex space-x-20 mb-10">
+
+      <PayinComfirmation/>
+      <div className="mt-12 flex space-x-20 mb-10">
         <p>OS</p>
         <OSDropdown />
       </div>
