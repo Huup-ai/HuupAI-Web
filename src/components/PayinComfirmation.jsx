@@ -6,6 +6,7 @@ import { Button } from "../components";
 
 const PayinComfirmation = () => {
   const { currentColor } = useStateContext();
+  console.log("currentColor", currentColor);
   let choosepay;
   let form;
 
@@ -194,18 +195,18 @@ const PayinComfirmation = () => {
     </>,
   ];
 
-  console.log(
-    "Crypto",
-    isCrypto,
-    "paymethod",
-    payment,
-    "balance",
-    checkBalance,
-    "exWallet",
-    externalWallet,
-    "creditAuth",
-    checkCreditAuth
-  );
+//   console.log(
+//     "Crypto",
+//     isCrypto,
+//     "paymethod",
+//     payment,
+//     "balance",
+//     checkBalance,
+//     "exWallet",
+//     externalWallet,
+//     "creditAuth",
+//     checkCreditAuth
+//   );
 
   if (payment === "eitherWay") {
     choosepay = paymentMethod;

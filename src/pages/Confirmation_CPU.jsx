@@ -11,7 +11,7 @@ const Confirmation_CPU = () => {
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header
         category="Market Cloud > CPU > Order Confirmation"
-        title="Rental Order Form"
+        title="CPU Rental Order Form"
       />
 
       <PayinComfirmation/>
