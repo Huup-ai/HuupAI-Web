@@ -121,4 +121,23 @@ const getRemainingCredit = async (req, res) => {
         res.status(500).json({ error: 'Smart contract interaction failed' });
     }
 };
-module.exports = { createProvider, createRenter, startRental, stopRental, getRemainingCredit }
+
+const getCryptoPayment = async (req, res) => {
+    try {
+        const {wallet_address} = req.body;
+        if (!wallet_address) {
+            return res.status(400).json({ error: 'Invalid request body' });
+        }
+
+        const balance = await contract.getBalance(wallet_address)
+        const deposit = await contract.getDeposit(wallet_address)
+        res.json({ success: true, data: {
+            balance: balance,
+            deposit: deposit
+        } });
+    } catch (error) {
+        console.error('Smart contract write error:', error);
+        res.status(500).json({ error: 'Smart contract interaction failed' });
+    }
+};
+module.exports = { createProvider, createRenter, startRental, stopRental, getRemainingCredit, getCryptoPayment }
