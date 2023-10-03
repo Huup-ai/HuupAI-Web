@@ -5,6 +5,7 @@ import API_URL from '../api/apiAddress';
 
 import { GPUsData, employeesGrid } from '../data/dummy';
 import { Header } from '../components';
+import API_URL from "../api/apiAddress";
 
 function GPU() {
   const [data, setData] = useState([]);
@@ -36,8 +37,8 @@ function GPU() {
 ];
 
   return (
-    <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
-      <Header category="Data" title="Display Data" />
+    <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
+      <Header category="Market Cloud > GPU" title="Display Data" />
       <GridComponent
         dataSource={data}
         // ... other props
