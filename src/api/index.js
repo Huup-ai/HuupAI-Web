@@ -215,7 +215,6 @@ export async function checkPaymentAuth(token) {
 
 
 
-
 export async function getVmStatus(clusterId, namespace, vmName) {
   const requestBody = {
     clusterid: clusterId,
