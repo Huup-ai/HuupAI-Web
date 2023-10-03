@@ -63,7 +63,7 @@ const UserProfile = () => {
           text="Logout"
           borderRadius="10px"
           width="full"
-          clickCallback={handleLogout}
+          onClickCallback={handleLogout}
         />
       </div>
     </div>
