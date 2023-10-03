@@ -106,7 +106,7 @@ export async function loginProvider(email, password) {
 
 export async function addWallet(walletAddress, is_provider, token) {
 
-  console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
+  // console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
   try {
     const response = await fetch(`${API_URL}/wallet/add/`, {
       method: 'POST',
@@ -157,6 +157,63 @@ export async function getWallet(token) {
   }
 
 }
+
+export async function addPaymentAuth(payToken, JWTtoken) {
+
+  // console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
+  try {
+    const response = await fetch(`${API_URL}/invoices/add_payment_auth/`, {
+      method: 'POST',
+      headers: {    
+        'Authorization': `Bearer ${JWTtoken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        stripe_payment:payToken
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();  // This line was added to extract JSON data
+    return data;  // Return the JSON data
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
+
+export async function checkPaymentAuth(token) {
+  try {
+    const response = await fetch(`${API_URL}/invoices/check_payment_auth/`, {
+      method: 'GET',
+      headers: {    
+        'Authorization': `Bearer ${token}`,
+      },
+      
+    });
+
+    if (response.status === 200) {
+      // Status is 200, return JSON data
+      const data = await response.json();
+      return true;
+    } else {
+      // Handle non-200 responses
+      const errorData = await response.json();
+      // throw new Error('Network response was not ok. Status: ' + response.status + ', Error: ' + JSON.stringify(errorData));
+      return false
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+
+}
+
+
 
 
 export async function getVmStatus(clusterId, namespace, vmName) {

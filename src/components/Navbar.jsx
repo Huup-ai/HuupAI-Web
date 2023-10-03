@@ -135,7 +135,7 @@ const Navbar = ({ currentPage }) => {
         token
       );
 
-      console.log("wwresnav", walletres);
+      // console.log("wwresnav", walletres);
     }
   };
 
