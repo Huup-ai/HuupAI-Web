@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GridComponent, Inject, ColumnsDirective, ColumnDirective, Search, Page, Toolbar } from '@syncfusion/ej2-react-grids';
 import { Link } from 'react-router-dom';
-import API_URL from '../api/apiAddress';
 
 import { GPUsData, employeesGrid } from '../data/dummy';
 import { Header } from '../components';
