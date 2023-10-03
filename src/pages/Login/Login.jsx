@@ -297,11 +297,12 @@ function LogIn({
       <form className="infoForm authForm">
         <div className="flex flex-row align-middle">
           <h3>Log In </h3>
+          <label htmlFor="roleSelector">Select Role:</label>
           <select
             value={selectedType} // ...force the select's value to match the state variable...
             onChange={handleSelectChange} // ... and update the state variable on any change!
           >
-            <option value="">Select Role:</option>
+            {/*<option value="default">Select Role:</option>*/}
             <option value="customer">Customer</option>
             <option value="provider">Provider</option>
           </select>
