@@ -13,7 +13,8 @@ const Button = ({
   text,
   borderRadius,
   width,
-  onClickCallback, 
+
+  onClickCallback,
 }) => {
   const { setIsClicked, initialState } = useStateContext();
   const handleClick = () => {
@@ -25,7 +26,6 @@ const Button = ({
     // You can also keep your existing logic here if needed
     setIsClicked(initialState);
   };
-
 
   return (
     <button

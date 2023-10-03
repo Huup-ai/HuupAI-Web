@@ -1,3 +1,6 @@
+import API_URL from './apiAddress';
+
+
 const FetchRequest = async (url, method, header = {}, data = {}) => {
   const response = await fetch(url, {
     method: method,
@@ -10,17 +13,20 @@ const FetchRequest = async (url, method, header = {}, data = {}) => {
 export async function registerUser(
   email,
   password,
+  firstName,
   additionalData = {},
   navigate
 ) {
   const requestBody = {
     email: email,
     password: password,
+    firstName: firstName,
     ...additionalData,
   };
+  
 
   const response = await FetchRequest(
-    "http://localhost:8000/users/register/",
+    `${API_URL}/users/register/`,
     "POST",
     {
       "Content-Type": "application/json",
@@ -28,53 +34,131 @@ export async function registerUser(
     requestBody
   );
 
-  if (response.status === "success") {
+  if (response.status === 200) {
     navigate("/login");
   }
 
   return response;
 }
 
-export async function logoutUser(navigate) {
+export async function logoutUser() {
   try {
-    await FetchRequest("http://localhost:8000/users/logout/", "POST");
-    navigate("/login");
+    console.log("Attempting logout...");
+    await FetchRequest(`${API_URL}/users/logout/`, "POST");
+    console.log("Logout successful");
   } catch (error) {
-    console.error("logout failed", error);
+    console.error("Logout failed", error);
   }
 }
 
+
 export async function loginUser(email, password) {
   const requestBody = {
-    email: email,
-    password: password,
+      email: email,
+      password: password,
   };
 
-  return FetchRequest(
-    "http://localhost:8000/users/login/",
-    "POST",
-    {
-      "Content-Type": "application/json",
-    },
-    requestBody
-  );
+  try {
+      const response = await fetch(`${API_URL}/users/login/`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+      }),
+        credentials: 'include'
+    });
+
+      return await response;
+  } catch (error) {
+      console.error('Error:', error);
+      throw error;
+  }
 }
 
 export async function loginProvider(email, password) {
   const requestBody = {
-    email: email,
-    password: password,
+      email: email,
+      password: password,
   };
 
-  return FetchRequest(
-    "http://localhost:8000/provider/login/",
-    "POST",
-    {
-      "Content-Type": "application/json",
-    },
-    requestBody
-  );
+  try {
+      const response = await fetch(`${API_URL}/provider/login/`, {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+        }),
+          credentials: 'include'
+      });
+
+      return await response;
+  } catch (error) {
+      console.error('Error:', error);
+      throw error;
+  }
 }
+
+export async function addWallet(walletAddress, is_provider, token) {
+
+  console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
+  try {
+    const response = await fetch(`${API_URL}/wallet/add/`, {
+      method: 'POST',
+      headers: {    
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: walletAddress,
+        is_provider: is_provider,
+      }),
+    });
+
+    // if (!response.ok) {
+    //   throw new Error('Network response was not ok');
+    // }
+
+    const data = await response.json();  // This line was added to extract JSON data
+    return data;  // Return the JSON data
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
+
+export async function getWallet(token) {
+  try {
+    const response = await fetch(`${API_URL}/wallets/get_wallets/`, {
+      method: 'GET',
+      headers: {    
+        'Authorization': `Bearer ${token}`,
+        // 'Content-Type': 'application/json',
+      },
+      
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();  // This line was added to extract JSON data
+    return data;  // Return the JSON data
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+
+}
+
+
 export async function getVmStatus(clusterId, namespace, vmName) {
   const requestBody = {
     clusterid: clusterId,
@@ -83,7 +167,7 @@ export async function getVmStatus(clusterId, namespace, vmName) {
   };
 
   return FetchRequest(
-    `http://localhost:8000/instances/${clusterId}/getvmstatus/${namespace}/${vmName}`,
+    `${API_URL}/instances/${clusterId}/getvmstatus/${namespace}/${vmName}`,
     "POST",
     {
       "Content-Type": "application/json",
@@ -94,7 +178,7 @@ export async function getVmStatus(clusterId, namespace, vmName) {
 
 export async function getUserInstances(email) {
   return FetchRequest(
-    `http://localhost:8000/instances/${email}/get_instances/`,
+    `${API_URL}/instances/${email}/get_instances/`,
     "GET",
     {
       "Content-Type": "application/json",
@@ -104,7 +188,7 @@ export async function getUserInstances(email) {
 
 export async function getInvoiceByUser() {
   return FetchRequest(
-    "http://localhost:8000/invoices/get_user_invoices/",
+    `${API_URL}/invoices/get_user_invoices/`,
     "GET",
     {
       "Content-Type": "application/json",

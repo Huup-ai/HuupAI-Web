@@ -1,9 +1,14 @@
-import React from "react";
+import {React, useState} from "react";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const ProviderDetails = () => {
   const { currentColor } = useStateContext();
+  const [isCrypto, setIsCrypto] = useState(() => {
+    const storedValue = localStorage.getItem("crypto");
+    return storedValue ? JSON.parse(storedValue) : false;
+  });
+
   return (
     <div id="Payment Details">
       <div className=" mb-5 mt-10">
@@ -16,6 +21,40 @@ const ProviderDetails = () => {
       </div>
 
       <div>
+
+      {isCrypto ? (
+        // Content to display when isToggled is true
+        <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
+        <div className="px-4">
+          <h3>Payment Information</h3>
+          <div>
+            <span className="inline-block w-60">PAYMENT METHOD</span>
+            <span>:</span>
+            <span>Crypto</span>
+          </div>
+          <div>
+            <span className="inline-block w-60">Account Payable Window</span>
+            <span>:</span>
+            <span>30 Days</span>
+          </div>
+         
+          <div>
+            <span className="inline-block w-60">Wallet Address</span>
+            <span>:</span>
+            <span>XXXXXXXXXXX1234</span>
+          </div>
+          {/* <div className="mt-2 mb-2">
+            <Button
+              color="white"
+              bgColor={currentColor}
+              text="Add Payment Method"
+              borderRadius="10px"
+            />
+          </div> */}
+        </div>
+      </div>
+      ) : (
+        // Content to display when isToggled is false
         <div className="border-2 rounded-lg w-full shadow-lg">
           <div className="px-4">
             <h3>Payment Information</h3>
@@ -50,36 +89,7 @@ const ProviderDetails = () => {
             </div>
           </div>
         </div>
-
-        <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
-          <div className="px-4">
-            <h3>Payment Information</h3>
-            <div>
-              <span className="inline-block w-60">PAYMENT METHOD</span>
-              <span>:</span>
-              <span>Crypto</span>
-            </div>
-            <div>
-              <span className="inline-block w-60">Account Payable Window</span>
-              <span>:</span>
-              <span>30 Days</span>
-            </div>
-           
-            <div>
-              <span className="inline-block w-60">Wallet Address</span>
-              <span>:</span>
-              <span>XXXXXXXXXXX1234</span>
-            </div>
-            <div className="mt-2 mb-2">
-              <Button
-                color="white"
-                bgColor={currentColor}
-                text="Add Payment Method"
-                borderRadius="10px"
-              />
-            </div>
-          </div>
-        </div>
+      )}
 
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
           <div className="px-4">

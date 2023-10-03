@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../components";
 import { Link, NavLink } from 'react-router-dom';
+
 import {
   AiOutlineCalendar,
   AiOutlineShoppingCart,
@@ -101,7 +102,7 @@ const gridEmployeeProfile = (props) => (
 const gridPriceCPU = (props) => (
   <div className="text-center">
     <Link
-      to={`/confirmation%20CPU`}
+      to={`/clouds/confirmation%20CPU`}
       className="italic text-purple-400 underline underline-offset-1"
     >
       {" "}
@@ -137,8 +138,8 @@ const gridEarn = (props) => (
 
 const gridPriceGPU = (props) => (
   <div className="text-center">
-    <Link
-      to={`/confirmation%20GPU`}
+   <Link
+      to={`/clouds/confirmation%20GPU`}
       className="italic text-purple-400 underline underline-offset-1"
     >
       {" "}

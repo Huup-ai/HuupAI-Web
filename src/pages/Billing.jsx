@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Header } from "../components";
 import { Sidemenu, Usage, Details, Invoices } from "../components";
 import { getVmStatus } from "../api";
+import { useDispatch, useSelector } from "react-redux";
 
 const Billing = ({ userInstances }) => {
   const [isSticky, setIsSticky] = useState(false);
   const [vmStatus, setVmStatus] = useState([]);
+  //store state for 
 
   const handleScroll = () => {
     if (window.scrollY > 400) {
