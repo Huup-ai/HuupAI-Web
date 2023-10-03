@@ -294,14 +294,32 @@ function LogIn({
       <form className="infoForm authForm">
         <div className="flex flex-row align-middle">
           <h3>Log In </h3>
-          <select
+          <label>
+            <input
+              type="radio"
+              value="customer"
+              checked={selectedType === "customer"}
+              onChange={handleSelectChange}
+            />
+            Customer
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="provider"
+              checked={selectedType === "provider"}
+              onChange={handleSelectChange}
+            />
+             Provider
+          </label>
+          {/* <select
             value={selectedType} // ...force the select's value to match the state variable...
             onChange={handleSelectChange} // ... and update the state variable on any change!
           >
             <option value="">Select Role:</option>
             <option value="customer">Customer</option>
             <option value="provider">Provider</option>
-          </select>
+          </select> */}
         </div>
 
         <div>
@@ -360,6 +378,7 @@ function LogIn({
           >
             Login with Email
           </button>
+        {selectedType === "customer" && (
           <button
             // onClick={""}
             onClick={connectWallet}
@@ -367,6 +386,7 @@ function LogIn({
           >
             Login with Email & Crypto Wallet
           </button>
+        )}
         </div>
       </form>
     </div>
