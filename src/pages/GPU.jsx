@@ -13,7 +13,7 @@ function GPU() {
     fetch('http://localhost:8000/clusters/')
       .then(response => response.json())
       .then(responseData => {
-        setData(responseData.data);  // Set the "data" key of the response to state
+        setData(responseData);  // Set the "data" key of the response to state
         setLoading(false);
       })
       .catch(error => {
@@ -24,13 +24,53 @@ function GPU() {
 
   const columns = [
     { 
-        field: 'id', 
-        headerText: 'ID', 
-        width: 120,
-        template: (rowData) => {
-          return <Link to={`/clouds/confirmation GPU/${rowData.id}`}>{rowData.id}</Link>;
-        }
+      field: 'id', 
+      headerText: 'ID', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.id}</div>;
+      }
     },
+    { 
+      field: 'region', 
+      headerText: 'Region', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.region}</div>;
+      }
+    },
+    { 
+      field: 'cpu', 
+      headerText: 'CPU', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.cpu}</div>;
+      }
+    },
+    { 
+      field: 'memory', 
+      headerText: 'Memory', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.memory}</div>;
+      }
+    },
+    { 
+      field: 'pods', 
+      headerText: 'Pods', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.pods}</div>;
+      }
+    },
+    { 
+      field: 'price', 
+      headerText: 'Price', 
+      width: 120,
+      template: (rowData) => {
+        return <Link to={`/clouds/confirmation GPU/${rowData.id}`}>{rowData.price}</Link>;
+      }
+    }
 
 ];
 
