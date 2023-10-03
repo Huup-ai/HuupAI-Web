@@ -5,9 +5,14 @@ import { Link } from 'react-router-dom';
 import { GPUsData, employeesGrid } from '../data/dummy';
 import { Header } from '../components';
 
+import { useDispatch } from "react-redux";
+import { setPrice } from "../reducers/priceSlicer";
+
 function GPU() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetch('http://localhost:8000/clusters/')
@@ -68,7 +73,11 @@ function GPU() {
       headerText: 'Price', 
       width: 120,
       template: (rowData) => {
-        return <Link to={`/clouds/confirmation GPU/${rowData.id}`}>{rowData.price}</Link>;
+        return <Link
+                  to={`/clouds/confirmation GPU/${rowData.id}`}
+                  onClick={() => {
+                    dispatch(setPrice(rowData.price))
+                  }}>{rowData.price}</Link>;
       }
     }
 
