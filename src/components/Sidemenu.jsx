@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import {BillingComponents} from "./BillingComponents";
 
 const Sidemenu = () => {
-
-  
-  
   
   const [selectedBox, setSelectedBox] = useState(null);
 

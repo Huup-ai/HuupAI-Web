@@ -3,11 +3,12 @@ import { Link, NavLink } from "react-router-dom";
 import { SiShopware } from "react-icons/si";
 import { MdOutlineCancel } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import { Navbar } from "../components";
 
 import { links, provider } from "../data/dummy";
 import { useCookies } from "react-cookie";
 import { useStateContext } from "../contexts/ContextProvider";
-import { fabClasses } from "@mui/material";
+// import { fabClasses } from "@mui/material";
 
 const Sidebar = () => {
   const { activeMenu, setActiveMenu, screenSize, currentColor } =
@@ -17,6 +18,7 @@ const Sidebar = () => {
       setActiveMenu(false);
     }
   };
+
 
   const activeLink =
     "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg  text-white  text-md m-2";
@@ -110,6 +112,7 @@ const Sidebar = () => {
               </button>
             </TooltipComponent>
           </div>
+         
         </>
       )}
       {displayContent ? (
