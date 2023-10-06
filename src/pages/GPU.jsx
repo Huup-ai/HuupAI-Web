@@ -6,15 +6,20 @@ import { GPUsData, employeesGrid } from '../data/dummy';
 import { Header } from '../components';
 import API_URL from "../api/apiAddress";
 
+import { useDispatch } from "react-redux";
+import { setPrice } from "../reducers/priceSlicer";
+
 function GPU() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetch(`${API_URL}/clusters/`)
       .then(response => response.json())
       .then(responseData => {
-        setData(responseData.data);  // Set the "data" key of the response to state
+        setData(responseData);  // Set the "data" key of the response to state
         setLoading(false);
       })
       .catch(error => {
@@ -25,13 +30,57 @@ function GPU() {
 
   const columns = [
     { 
-        field: 'id', 
-        headerText: 'ID', 
-        width: 120,
-        template: (rowData) => {
-          return <Link to={`/clouds/confirmation GPU/${rowData.id}`}>{rowData.id}</Link>;
-        }
+      field: 'id', 
+      headerText: 'ID', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.id}</div>;
+      }
     },
+    { 
+      field: 'region', 
+      headerText: 'Region', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.region}</div>;
+      }
+    },
+    { 
+      field: 'cpu', 
+      headerText: 'CPU', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.cpu}</div>;
+      }
+    },
+    { 
+      field: 'memory', 
+      headerText: 'Memory', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.memory}</div>;
+      }
+    },
+    { 
+      field: 'pods', 
+      headerText: 'Pods', 
+      width: 120,
+      template: (rowData) => {
+        return <div>{rowData.pods}</div>;
+      }
+    },
+    { 
+      field: 'price', 
+      headerText: 'Price', 
+      width: 120,
+      template: (rowData) => {
+        return <Link
+                  to={`/clouds/confirmation GPU/${rowData.id}`}
+                  onClick={() => {
+                    dispatch(setPrice(rowData.price))
+                  }}>{rowData.price}</Link>;
+      }
+    }
 
 ];
 

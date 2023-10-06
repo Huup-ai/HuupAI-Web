@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
   GridComponent,
   Inject,
@@ -13,13 +13,26 @@ import { InstancesData, InstancesGrid } from "../data/dummy";
 import { Header } from "../components";
 import { DropdownAction } from "../components/DropdownAction";
 import { BsPlusLg } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { authBackendGet } from "../api/apiUtil";
 
 const Instances = () => {
+
+  const [data, setData] = useState([]);
   const toolbarOptions = ["Search"];
 
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
+
+  useEffect(() => {
+    authBackendGet('/instances/get_instances/')
+      .then(response => response.json())
+      .then(responseData => {
+        setData(responseData);  // Set the "data" key of the response to state
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
 
   const SSHCert = (props) => (
     <div className="flex items-center justify-center gap-2">

@@ -7,48 +7,61 @@ import { Button } from "../components";
 import { Link, NavLink } from 'react-router-dom';
 import { getWallet } from '../api';
 import API_URL from "../api/apiAddress";
+import { middlewarePost, authBackendGet } from '../api/apiUtil';
+import { useNavigate } from "react-router-dom";
 
 const Confirmation_GPU = () => {
   const { currentColor, currentMode } = useStateContext();
   const { id } = useParams();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);  // check if user is logged in
   console.log("Is Authenticated:", isAuthenticated);  // Log the value
-  const hasPaymentMethod = useSelector(state => state.auth.hasPaymentMethod); // check if user has a payment method
+  let hasPaymentMethod = useSelector(state => state.auth.hasPaymentMethod); // check if user has a payment method
 
   // Define a function to get the wallet
-// const getWallet = async (token) => {
-//   try {
-//     // Make a GET request to the endpoint with headers
-//     const response = await fetch(`${API_URL}/wallets/get_wallets/`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer ' + token
+//   const getWallet = async (token) => {
+//     try {
+//       // Make a GET request to the endpoint with headers
+//       const response = await fetch(`${API_URL}/wallets/get_wallets/`, {
+//         method: 'GET',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': 'Bearer ' + token
+//         }
+//       });
+
+//       // Check if the response is successful
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok');
 //       }
-//     });
 
-//     // Check if the response is successful
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok');
+//       // Parse the JSON data from the response
+//       const data = await response.json();
+
+//       // Here, you can use the data as needed
+//       console.log(data); // For now, we'll just log it
+
+//       // If you want to display the address in an alert
+//       alert("Wallet Address: " + data.address);
+
+//     } catch (error) {
+//       console.error("There was a problem with the fetch operation:", error.message);
+//       alert("Failed to fetch wallet address: " + error.message);
 //     }
-
-//     // Parse the JSON data from the response
-//     const data = await response.json();
-
-//     // Here, you can use the data as needed
-//     console.log(data); // For now, we'll just log it
-
-//     // If you want to display the address in an alert
-//     alert("Wallet Address: " + data.address);
-
-//   } catch (error) {
-//     console.error("There was a problem with the fetch operation:", error.message);
-//     alert("Failed to fetch wallet address: " + error.message);
-//   }
-// };
+//   };
 
 
+  const navigate = useNavigate();
 
+  const hasEnoughCredit = async () => {
+    const wallet = (await authBackendGet('/wallets/get_wallets/')).data[0].address
+    const body = { wallet_address: wallet}
+    const res = await middlewarePost('/contract/getRemainingCredit/', body)
+    const remainingCredit = res.data.balance
+    const threshHoldHour = 3
+    const rate = 1
+    console.log(remainingCredit)
+    return threshHoldHour * rate < remainingCredit
+  }
 
 
   const handleConfirmOrder = async () => {
@@ -57,8 +70,10 @@ const Confirmation_GPU = () => {
     //console.log(user.id);
     const token = localStorage.getItem('jwtToken');
 
-    getWallet(token);
-
+    //getWallet(token);
+    if (!await hasEnoughCredit()) {
+      hasPaymentMethod = false
+    }
     //if statement check if user has add a payment method. 
     if(hasPaymentMethod){
     try {
@@ -211,6 +226,7 @@ const Confirmation_GPU = () => {
   }else{
     console.log("Please add a payment method or charge your wallet")
     alert("Please add a payment method or charge your wallet")
+    navigate('/clouds/profile')
   }
 };
 
