@@ -132,8 +132,8 @@ const getCryptoPayment = async (req, res) => {
         const balance = await contract.getBalance(wallet_address)
         const deposit = await contract.getDeposit(wallet_address)
         res.json({ success: true, data: {
-            balance: balance,
-            deposit: deposit
+            balance: Number(balance),
+            deposit: Number(deposit)
         } });
     } catch (error) {
         console.error('Smart contract write error:', error);
