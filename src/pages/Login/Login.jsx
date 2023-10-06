@@ -16,6 +16,7 @@ import { ethers } from "ethers";
 // import { someFunction } from '@fun-xyz/core';
 // import { ethers } from "ethers";
 // import {faucetContract} from "../../ethereum/faucet";
+ 
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -150,6 +151,8 @@ const Login = () => {
       alert("Login failed. Please check your credentials.");
     }
   };
+                // Modified to use provider login//
+ 
 
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {

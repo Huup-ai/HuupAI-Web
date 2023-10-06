@@ -96,13 +96,43 @@ export async function loginProvider(email, password) {
         }),
           credentials: 'include'
       });
+              //edited code for provider login with returning wallet address//
+      const responseData = await response.json();
 
-      return await response;
+      // Check if wallet address is null
+      if (responseData.walletAddress === null) {
+          // Call Fun.xyz to create built-in wallet
+          const newWalletAddress = Fun.xyz();
+
+          // Call ADD WALLET backend API
+          await addWallet(newWalletAddress, true);
+
+          // Set Wallet address && isProvider = true in cookie.
+          document.cookie = `walletAddress=${newWalletAddress}; path=/`;
+          document.cookie = `isProvider=true; path=/`;
+
+          // Set externalWallet=false in Redux
+          // Assuming you dispatch actions like this:
+          dispatch(setExternalWallet(false));
+      }
+
+      // Redirect to my cloud > Inventory page
+      navigate('/path-to-my-cloud/inventory');  // Replace with actual path
+
+      return responseData;
   } catch (error) {
       console.error('Error:', error);
       throw error;
   }
 }
+
+//       return await response;
+//   } catch (error) {
+//       console.error('Error:', error);
+//       throw error;
+//   }
+// }
+
 
 export async function addWallet(walletAddress, is_provider, token) {
 

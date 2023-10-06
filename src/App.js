@@ -14,6 +14,7 @@ import { useCookies } from "react-cookie";
 // import Instances from "./pages/Instances";
 //import GPU from "./pages/GPU";
 // import CPU from "./pages/CPU";
+import Inventory from "./pages/Inventory";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -37,8 +38,11 @@ function App() {
         path="/clouds/*"
         element={isAuthenticated ? <Clouds /> : <Navigate to="/login" />}
       />
-
-
+      <Route
+        path="/inventory"
+        element={isAuthenticated ? <Clouds /> : <Navigate to="/login" />}
+      />
+      
         {/* <Route path="/" element={isAuthenticated ? <Clouds /> : <Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/clouds/*" element={<Clouds />} /> */}
