@@ -36,7 +36,7 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   </TooltipComponent>
 );
 
-const Navbar = () => {
+const Navbar = ({ currentPage }) => {
   const {
     activeMenu,
     setActiveMenu,
@@ -123,16 +123,19 @@ const Navbar = () => {
   const [metaAddress, setMetaAddress] = useState("");
 
   const updateWalletAddress = (address) => {
-  
     // console.log("enter")
     // Set the updated cookie value
-    setWalletCookie('walletAddress', address, { path: '/' });
-    if (address !== "undefined"){
-    const token = localStorage.getItem('jwtToken');
-      
-    const walletres = addWallet(address, cookies.selectedType==="provider", token )
+    setWalletCookie("walletAddress", address, { path: "/" });
+    if (address !== "undefined") {
+      const token = localStorage.getItem("jwtToken");
 
-    console.log("wwres", walletres)
+      const walletres = addWallet(
+        address,
+        cookies.selectedType === "provider",
+        token
+      );
+
+      // console.log("wwresnav", walletres);
     }
   };
 
@@ -147,8 +150,7 @@ const Navbar = () => {
 
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-
-      if (walletCookie.walletAddress === "undefined" ){
+      if (walletCookie.walletAddress === "undefined") {
         try {
           /* get provider */
           const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -157,22 +159,19 @@ const Navbar = () => {
           /* set active wallet address */
           setMetaAddress(accounts[0]);
           /* get signer */
-  
+
           // update wallet address in cookie
           updateWalletAddress(metaAddress);
-  
+
           console.log("connected", metaAddress);
         } catch (err) {
           console.log("err", err.messgae);
           alert(err.message);
         }
-
-      }else{
-        console.log("wallet already connected", walletCookie.walletAddress)
+      } else {
+        console.log("wallet already connected", walletCookie.walletAddress);
         alert("wallet already connected");
       }
-
-      
     } else {
       /* MetaMask is not installed */
       console.log("Please install MetaMask");
@@ -190,7 +189,6 @@ const Navbar = () => {
           setMetaAddress(accounts[0]);
           // console.log(accounts[0]);
           updateWalletAddress(accounts[0]);
-
         } else {
           console.log("Connect to MetaMask using the Connect button");
         }
@@ -219,7 +217,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex justify-between p-2 md:ml-6 md:mr-6 relative ">
+    <div className="flex justify-between px-2 pt-2 md:ml-6 md:mr-6 relative ">
       <div className="flex justify-start ">
         <NavButton
           title="Menu"
@@ -231,21 +229,19 @@ const Navbar = () => {
         {displayContent ? <>{Provider}</> : <>{Consumer}</>}
       </div>
 
-      <div className="mt-2 mb-2">
+      <div className="mt-2">
         <button
           type="button"
           className=" hover:bg-blue-700 text-white py-2 px-4 rounded-xl"
           style={{ background: currentColor }}
           onClick={connectWallet}
         >
-
-        <span className="">
-          {walletCookie.walletAddress !== "undefined"
-            ? `Wallet Connected: ${walletCookie.walletAddress}`
-            : "Connect Wallet"}
+          <span>
+            {walletCookie.walletAddress !== "undefined"
+              ? `Wallet Connected: ${walletCookie.walletAddress}`
+              : "Connect Wallet"}
             {/* {walletCookie.walletAddress} */}
-        </span>
-
+          </span>
         </button>
       </div>
     </div>

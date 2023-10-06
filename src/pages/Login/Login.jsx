@@ -2,11 +2,11 @@ import React from "react";
 import "./Login.css";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-import { loginUser, registerUser, loginProvider, addWallet } from "../../api";
+import { loginUser, registerUser, loginProvider, addWallet, getWallet } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../reducers/authSlicer";
+import { loginSuccess,hasExternalWallet } from "../../reducers/authSlicer";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
 import { API_KEY, sponsorAddress } from "../../Address";
@@ -113,27 +113,33 @@ const Login = () => {
         response = await loginUser(email, password);
       }
 
-      console.log("11",response)
+      // console.log("11",response)
 
       //JWT
       //const token = response.data.token;
       //localStorage.setItem('jwtToken', token); // storing token in localStorage
 
-      console.log("outside");
-      console.log("Received response: ", response.message);
+      // console.log("outside");
+      // console.log("Received response: ", response.message);
 
       // Check if the response is as expected. This is a placeholder.
       // You need to replace this with an acter logged in succeual check based on your API's response.
       if (response && response.status === 200) {
         const data = await response.json();
         const token = data.access; // Assuming the token is directly on the response object
-        console.log(token);
+        console.log("t",token);
+
+        // get stored wallet address(created when signup) from backend and store in cookie  
+        const singleWallet = await getWallet(token);
+        console.log("single address", singleWallet[0].address);
+        updateWalletAddress(singleWallet[0].address);
+        
         localStorage.setItem("jwtToken", token); // storing token in localStorage
         console.log("Login successful", response);
         setEmail("");
         setPassword("");
         dispatch(loginSuccess());
-        navigate("/clouds");
+        // navigate("/clouds");
       } else {
         // Handle login failure, perhaps pop up an error message
         console.error("Login failed: ", response.message);
@@ -181,8 +187,6 @@ const Login = () => {
       } else {
         response = await loginUser(email, password);
       }
-
-
       //JWT
       //const token = response.data.token;
       //localStorage.setItem('jwtToken', token); // storing token in localStorage
@@ -202,6 +206,7 @@ const Login = () => {
         setEmail("");
         setPassword("");
         dispatch(loginSuccess());
+        dispatch(hasExternalWallet());
         navigate("/clouds");
       } else {
         // Handle login failure, perhaps pop up an error message
@@ -294,14 +299,32 @@ function LogIn({
       <form className="infoForm authForm">
         <div className="flex flex-row align-middle">
           <h3>Log In </h3>
-          <select
+          <label>
+            <input
+              type="radio"
+              value="customer"
+              checked={selectedType === "customer"}
+              onChange={handleSelectChange}
+            />
+            Customer
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="provider"
+              checked={selectedType === "provider"}
+              onChange={handleSelectChange}
+            />
+             Provider
+          </label>
+          {/* <select
             value={selectedType} // ...force the select's value to match the state variable...
             onChange={handleSelectChange} // ... and update the state variable on any change!
           >
             <option value="">Select Role:</option>
             <option value="customer">Customer</option>
             <option value="provider">Provider</option>
-          </select>
+          </select> */}
         </div>
 
         <div>
@@ -349,8 +372,7 @@ function LogIn({
         <div>
           <p className="text-xs">
             {" "}
-            If you are provider, please contact@huupai.xyz to obtain login
-            access.
+            If you are provider, please contact@huupai.xyz to obtain login access.
           </p>
         </div>
         <div>
@@ -360,6 +382,7 @@ function LogIn({
           >
             Login with Email
           </button>
+        {selectedType === "customer" && (
           <button
             // onClick={""}
             onClick={connectWallet}
@@ -367,6 +390,7 @@ function LogIn({
           >
             Login with Email & Crypto Wallet
           </button>
+        )}
         </div>
       </form>
     </div>
@@ -384,6 +408,7 @@ function SignUp({
   // receive navigate function as props
   // const [selectedAction, setSelectedAction] = useState(" ");
   const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -400,6 +425,10 @@ function SignUp({
       [e.target.name]: e.target.value,
     });
   };
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -443,7 +472,11 @@ function SignUp({
         const data = await loginResponse.json();
         const token = data.access;
         localStorage.setItem("jwtToken", token);
-        await createWallet(); // create wallet
+        if (isChecked){
+          await createWallet(); // create wallet
+
+        }
+        
         dispatch(loginSuccess());
         navigate("/clouds");
       } else {
@@ -457,10 +490,7 @@ function SignUp({
     }
   };
 
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
-  };
-
+  
   return (
     <div>
       <form className="infoForm authForm" onSubmit={handleSubmit}>

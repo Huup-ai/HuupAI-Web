@@ -4,6 +4,8 @@ import { Header } from "../components";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSelection, selectSelectedOption } from "../reducers/authSlicer";
 
 const Profile = () => {
   const { currentColor } = useStateContext();
@@ -12,29 +14,82 @@ const Profile = () => {
 
   const [displayContent, setDisplayContent] = useState(false);
 
+  
+  const payfromRedux = useSelector(state=>state.auth.selectedOption);
+  // console.log("pay",payfromRedux);
+  const [payment, setPayment] = useState(payfromRedux);
+
+  const dispatch = useDispatch();
+
+  const handleCheckboxChange = (event) => {
+  
+    const selectedValue = event.target.value;
+    const opt = dispatch(updateSelection(selectedValue));
+    setPayment(selectedValue);
+    
+    // store the selection in backend
+  };
+
   useEffect(() => {
     setDisplayContent(cookies.selectedType === "provider");
   }, [cookies.selectedType]);
 
-  const [isToggled, setToggled] = useState(() => {
-    const storedValue = localStorage.getItem("crypto");
-    return storedValue ? JSON.parse(storedValue) : false;
-  });
+  // const [isToggled, setToggled] = useState(() => {
+  //   const storedValue = localStorage.getItem("crypto");
+  //   return storedValue ? JSON.parse(storedValue) : false;
+  // });
 
-  const handleToggle = () => {
-    const newValue = !isToggled;
-    setToggled(newValue);
-    localStorage.setItem("crypto", JSON.stringify(newValue));
-  };
+  // const handleToggle = () => {
+  //   const newValue = !isToggled;
+  //   setToggled(newValue);
+  //   localStorage.setItem("crypto", JSON.stringify(newValue));
+  // };
 
   return (
-    <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
-      <Header category="Profile" title="Welcome" />
+    <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
+      <Header category="My Cloud > Profile" title="Welcome" />
 
       <form className="infoForm">
         <h3>Your Info</h3>
 
         <div className="flex flex-row items-center">
+          <h6 className="w-72">Setup default Payment Method: </h6>
+
+          <div>
+            <input
+              type="radio"
+              id="eitherWay"
+              value="eitherWay"
+              checked={payment === "eitherWay"}
+              onChange={handleCheckboxChange}
+            />
+            <label htmlFor="eitherWay">Either Way(default)</label>
+          </div>
+
+          <div>
+            <input
+              type="radio"
+              id="crypto"
+              value="crypto"
+              checked={payment === "crypto"}
+              onChange={handleCheckboxChange}
+            />
+            <label htmlFor="crypto">Crypto</label>
+          </div>
+
+          <div>
+            <input
+              type="radio"
+              id="creditCard"
+              value="creditCard"
+              checked={payment === "creditCard"}
+              onChange={handleCheckboxChange}
+            />
+            <label htmlFor="creditCard">Credit Card</label>
+          </div>
+        </div>
+
+        {/* <div className="flex flex-row items-center">
           <h6 className="mt-4 w-48">Payment Method: </h6>
           <span className="text-gray-700">$USD</span>
 
@@ -55,133 +110,195 @@ const Profile = () => {
             Note: based on the user selection above, we will either display the
             left or right
           </div>
-        </div>
-
-        {/* <div>
-          <h6 className="mt-4 w-48">Company Name: </h6>
-
-          <input
-            type="text"
-            className="infoInput"
-            name="companyName"
-            // onChange={handleChange}
-            // value={formData.companyname}
-          />
-        </div>
-
-        <div>
-          <h6 className="mt-4 w-48">Email: </h6>
-          <input type="text" className="infoInput" name="email" />
         </div> */}
 
-        {displayContent? <> {isToggled ? (
-          <div>
-        
-          </div>
+        {displayContent ? (
+          <>
+            {" "}
+            {payment=="crypto" ? (
+              <div></div>
+            ) : (
+              <>
+                <div>
+                  <h6 className="mt-4 w-48">Telephone:</h6>
+                  <input type="text" className="infoInput" name="telephone" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">Billing Address: </h6>
+                  <input
+                    type="text"
+                    className="infoInput"
+                    name="billingAddress"
+                  />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">EIN:</h6>
+                  <input type="" className="infoInput" name="EIN" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">BANK ACCOUNT:</h6>
+                  <input type="" className="infoInput" name="bank" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">ROUTING/SWIFT:</h6>
+                  <input type="" className="infoInput" name="routing" />
+                </div>
+
+                <Button
+                  color="white"
+                  bgColor={currentColor}
+                  text="Submit"
+                  borderRadius="10px"
+                />
+              </>
+            )}
+          </>
         ) : (
           <>
-            <div>
-              <h6 className="mt-4 w-48">Telephone:</h6>
-              <input type="text" className="infoInput" name="telephone" />
-            </div>
+            {" "}
+            {payment == "crypto" ? (
+              <div>
+                <div>
+                  <input
+                    type="text"
+                    className="infoInput border-solid border-2 rounded-md border-grey w-40 h-10"
+                    placeholder="Input Amount"
+                    // value={walletMoney} // Set the input value from the state
+                    // onChange={handleWalletChange} // Attach the event handler
+                  />
 
-            <div>
-              <h6 className="mt-4 w-48">Billing Address: </h6>
-              <input type="text" className="infoInput" name="billingAddress" />
-            </div>
+                  <span>USDT</span>
+                </div>
+                <div>
+                  <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text="Deposit"
+                    // onClickCallback={handleDeposit}
+                    borderRadius="10px"
+                  />
+                </div>
+              </div>
+            ) : payment == "creditCard"? (
+              <>
+                <div>
+                  <h6 className="mt-4 w-48">Credit Card:</h6>
+                  <input type="text" className="infoInput" name="card" />
+                </div>
 
-            <div>
-              <h6 className="mt-4 w-48">EIN:</h6>
-              <input type="" className="infoInput" name="EIN" />
-            </div>
+                <div>
+                  <h6 className="mt-4 w-48"> Expiration: </h6>
+                  <input type="date" className="infoInput" name="expire" />
+                </div>
 
-            <div>
-              <h6 className="mt-4 w-48">BANK ACCOUNT:</h6>
-              <input type="" className="infoInput" name="bank" />
-            </div>
+                <div>
+                  <h6 className="mt-4 w-48">Name on the Card:</h6>
+                  <input type="" className="infoInput" name="name" />
+                </div>
 
-            <div>
-              <h6 className="mt-4 w-48">ROUTING/SWIFT:</h6>
-              <input type="" className="infoInput" name="routing" />
-            </div>
+                <div>
+                  <h6 className="mt-4 w-48">Authorization Code:</h6>
+                  <input type="" className="infoInput" name="code" />
+                </div>
 
-            <Button
-          color="white"
-          bgColor={currentColor}
-          text="Submit"
-          borderRadius="10px"
-        />
+                <div>
+                  <h6 className="mt-4 w-48">Telephone:</h6>
+                  <input type="" className="infoInput" name="phone" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">Billing Address:</h6>
+                  <input type="" className="infoInput" name="address" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">EIN:</h6>
+                  <input type="" className="infoInput" name="ein" />
+                </div>
+
+                <Button
+                  color="white"
+                  bgColor={currentColor}
+                  text="Submit"
+                  borderRadius="10px"
+                />
+              </>
+            ) : (<>
+            <div>
+                <div>
+                  <input
+                    type="text"
+                    className="infoInput border-solid border-2 rounded-md border-grey w-40 h-10"
+                    placeholder="Input Amount"
+                    // value={walletMoney} // Set the input value from the state
+                    // onChange={handleWalletChange} // Attach the event handler
+                  />
+
+                  <span>USDT</span>
+                </div>
+                <div>
+                  <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text="Deposit"
+                    // onClickCallback={handleDeposit}
+                    borderRadius="10px"
+                  />
+                </div>
+              </div>
+
+              <>
+                <div>
+                  <h6 className="mt-4 w-48">Credit Card:</h6>
+                  <input type="text" className="infoInput" name="card" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48"> Expiration: </h6>
+                  <input type="date" className="infoInput" name="expire" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">Name on the Card:</h6>
+                  <input type="" className="infoInput" name="name" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">Authorization Code:</h6>
+                  <input type="" className="infoInput" name="code" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">Telephone:</h6>
+                  <input type="" className="infoInput" name="phone" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">Billing Address:</h6>
+                  <input type="" className="infoInput" name="address" />
+                </div>
+
+                <div>
+                  <h6 className="mt-4 w-48">EIN:</h6>
+                  <input type="" className="infoInput" name="ein" />
+                </div>
+
+                <Button
+                  color="white"
+                  bgColor={currentColor}
+                  text="Submit"
+                  borderRadius="10px"
+                />
+              </>
+
+            
+            </>)}{" "}
           </>
-        )}</> : <> {isToggled ? (
-          <div>
-            <div>
-              <input
-                type="text"
-                className="infoInput border-solid border-2 rounded-md border-grey w-40 h-10"
-                placeholder="Input Amount"
-                // value={walletMoney} // Set the input value from the state
-                // onChange={handleWalletChange} // Attach the event handler
-              />
-
-              <span>USDT</span>
-            </div>
-            <div >
-              <Button
-                color="white"
-                bgColor={currentColor}
-                text="Deposit"
-                // onClickCallback={handleDeposit}
-                borderRadius="10px"
-              />
-            </div>
-          </div>
-        ) : (
-          <>
-            <div>
-              <h6 className="mt-4 w-48">Credit Card:</h6>
-              <input type="text" className="infoInput" name="card" />
-            </div>
-
-            <div>
-              <h6 className="mt-4 w-48"> Expiration: </h6>
-              <input type="date" className="infoInput" name="expire" />
-            </div>
-
-            <div>
-              <h6 className="mt-4 w-48">Name on the Card:</h6>
-              <input type="" className="infoInput" name="name" />
-            </div>
-
-            <div>
-              <h6 className="mt-4 w-48">Authorization Code:</h6>
-              <input type="" className="infoInput" name="code" />
-            </div>
-
-            <div>
-              <h6 className="mt-4 w-48">Telephone:</h6>
-              <input type="" className="infoInput" name="phone" />
-            </div>
-
-            <div>
-              <h6 className="mt-4 w-48">Billing Address:</h6>
-              <input type="" className="infoInput" name="address" />
-            </div>
-
-            <div>
-              <h6 className="mt-4 w-48">EIN:</h6>
-              <input type="" className="infoInput" name="ein" />
-            </div>
-
-            <Button
-          color="white"
-          bgColor={currentColor}
-          text="Submit"
-          borderRadius="10px"
-        />
-          </>
-        )} </>}
-
-        
+        )}
       </form>
 
       {/* <Divider className="py-5">   </Divider> */}

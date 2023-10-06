@@ -74,7 +74,7 @@ export const links = [
 
 export const provider = [
   {
-    title: "Provider",
+    title: "My Cloud",
     links: [
       {
         name: "Profile",
@@ -208,7 +208,7 @@ export const CPUsData = [
     Configuration:
       "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
     Country: "US-NY",
-    Privacy: "Confidiental",
+    Audited: "true",
   },
   {
     Price: "$0.69",
@@ -217,7 +217,7 @@ export const CPUsData = [
     Configuration:
       "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
     Country: "US-NY",
-    Privacy: "Confidiental",
+    Audited: "false",
   },
   {
     Price: "$0.69",
@@ -226,7 +226,7 @@ export const CPUsData = [
     Configuration:
       "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
     Country: "US-NY",
-    Privacy: "Confidiental",
+    Audited: "true",
   },
 ];
 
@@ -327,8 +327,8 @@ export const CPUsGrid = [
   },
 
   {
-    field: "Privacy",
-    headerText: "Privacy",
+    field: "Audited",
+    headerText: "Audited",
     width: "100",
     textAlign: "Center",
   },
@@ -361,12 +361,13 @@ export const UsagesGrid = [
 
   { field: "Usage", headerText: "Usage", width: "100", textAlign: "Center" },
   {
-    field: "Charge",
+    field: "Usage",
     headerText: "Charge",
     width: "100",
     template: gridCharge,
     textAlign: "Center",
   },
+  { field: "Method", headerText: "Payment Method", width: "100", textAlign: "Center" },
 ];
 
 export const EarningGrid = [
@@ -422,8 +423,47 @@ export const InstancesData = [
     GPU: "8 * NvidiaT4(8G)",
     Configuration:
       "24 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
-    Region: "US-NY",
-    Privacy: "Confidiental",
+    Due: "Credit Card",
+    Privacy: "Non-Audited",
+    Hostname: "302932.youcolo.com",
+    IP: "12.26.1.0",
+    SSHCert: "webcert1 webcert2",
+    STATUS: "STARTED",
+    Action: "on",
+  },
+  {
+    "Inventory Name": "huupai_T4_1",
+    GPU: "8 * NvidiaT4(8G)",
+    Configuration:
+      "24 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
+    Due: "Warning",
+    Privacy: "Audited",
+    Hostname: "302932.youcolo.com",
+    IP: "12.26.1.0",
+    SSHCert: "webcert1 webcert2",
+    STATUS: "STARTED",
+    Action: "on",
+  },
+  {
+    "Inventory Name": "huupai_T4_1",
+    GPU: "8 * NvidiaT4(8G)",
+    Configuration:
+      "24 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
+    Due: "Critical",
+    Privacy: "Non-Audited",
+    Hostname: "302932.youcolo.com",
+    IP: "12.26.1.0",
+    SSHCert: "webcert1 webcert2",
+    STATUS: "STARTED",
+    Action: "on",
+  },
+  {
+    "Inventory Name": "huupai_T4_1",
+    GPU: "8 * NvidiaT4(8G)",
+    Configuration:
+      "24 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
+    Due: "Good",
+    Privacy: "Non-Audited",
     Hostname: "302932.youcolo.com",
     IP: "12.26.1.0",
     SSHCert: "webcert1 webcert2",
@@ -440,6 +480,7 @@ export const UsagesData = [
       "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
     Usage: "2",
     Charge: 1,
+    Method: "Credit Card",
   },
   {
     Name: "huupai_T4_2",
@@ -448,6 +489,7 @@ export const UsagesData = [
       "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
     Usage: "1",
     Charge: 2,
+    Method: "Credit Card",
   },
   {
     Name: "huupai_T4_3",
@@ -456,11 +498,13 @@ export const UsagesData = [
       "26 Core Intel i7 CPU, 128GB DDR4 Ram, 100G Bandwith, 10TB SSD",
     Usage: "10",
     Charge: 40,
+    Method: "Crypto",
   },
   {
     Name: "Total",
 
     Charge: 43,
+    Method: "Credit Card"
   },
 ];
 
@@ -493,6 +537,7 @@ export const EarningData = [
     Name: "Total",
 
     Earn: 43,
+
   },
 ];
 

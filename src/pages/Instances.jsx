@@ -13,6 +13,7 @@ import { InstancesData, InstancesGrid } from "../data/dummy";
 import { Header } from "../components";
 import { DropdownAction } from "../components/DropdownAction";
 import { BsPlusLg } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Instances = () => {
   const toolbarOptions = ["Search"];
@@ -29,9 +30,15 @@ const Instances = () => {
     </div>
   );
 
+  const Due = (props) => (
+    <div className="flex items-center justify-center gap-2">
+      <Link className="underline">{props.Due}</Link>
+    </div>
+  );
+
   return (
-    <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
-      <Header category="Instances" title="Welcome" />
+    <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
+      <Header category="My Cloud > Instances" title="Welcome" />
 
       <GridComponent
         rowHeight={70}
@@ -69,10 +76,11 @@ const Instances = () => {
           />
           <ColumnDirective
             clipMode="EllipsisWithTooltip"
-            field="Region"
-            headerText="Region"
+            field="Due"
+            headerText="Payment Due"
             width="100"
             textAlign="Center"
+            template={Due}
           />
 
           <ColumnDirective

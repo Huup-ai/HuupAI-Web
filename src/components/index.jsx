@@ -20,5 +20,6 @@ export { default as SidemenuPro } from './SidemenuPro';
 // export { default as Crypto } from './Crypto';
 export { default as ProviderDetails } from './ProviderDetails';
 export { default as Earning } from './Earning';
+export {default as PayinComfirmation} from './PayinComfirmation';
 // export {default as ErrorMessage} from './ErrorMessage';
 
