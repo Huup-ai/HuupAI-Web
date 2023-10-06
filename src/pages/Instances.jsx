@@ -56,7 +56,7 @@ const Instances = () => {
 
       <GridComponent
         rowHeight={70}
-        dataSource={InstancesData}
+        dataSource={data}
         width="auto"
         allowPaging
         allowSorting

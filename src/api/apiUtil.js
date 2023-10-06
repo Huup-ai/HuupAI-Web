@@ -1,7 +1,9 @@
 import Axios from 'axios'
+import API_URL from './apiAddress'
+import { MIDDLEWARE_URL } from './apiAddress'
 
-const middlewareURL = "http://localhost:8080"
-const backendURL = "http://localhost:8000"
+const middlewareURL = MIDDLEWARE_URL
+const backendURL = API_URL
 
 export const middlewareGet = async (route, config={}) => {
     const url = middlewareURL + route
