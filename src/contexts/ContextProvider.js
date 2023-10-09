@@ -7,6 +7,7 @@ const initialState = {
   cart: false,
   userProfile: false,
   notification: false,
+  externalWallet: true, //true means others have an external wallet
 };
 
 export const ContextProvider = ({ children }) => {
@@ -16,6 +17,8 @@ export const ContextProvider = ({ children }) => {
   const [themeSettings, setThemeSettings] = useState(false);
   const [activeMenu, setActiveMenu] = useState(true);
   const [isClicked, setIsClicked] = useState(initialState);
+  const [externalWallet, setExternalWallet] = useState(initialState.externalWallet);
+
 
   const setMode = (e) => {
     setCurrentMode(e.target.value);
@@ -50,6 +53,8 @@ export const ContextProvider = ({ children }) => {
         setColor,
         themeSettings,
         setThemeSettings,
+        externalWallet,
+        setExternalWallet,
       }}
     >
       {children}

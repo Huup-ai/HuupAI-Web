@@ -16,6 +16,7 @@ import { ethers } from "ethers";
 // import { someFunction } from '@fun-xyz/core';
 // import { ethers } from "ethers";
 // import {faucetContract} from "../../ethereum/faucet";
+
  
 
 const Login = () => {
@@ -101,7 +102,7 @@ const Login = () => {
       console.error("Error creating wallet:", error);
     }
   };
-
+  const [externalWallet, setExternalWallet] = useState(true);
   const handleLoginClick = async (e) => {
     e.preventDefault();
     try {
@@ -130,6 +131,23 @@ const Login = () => {
         const token = data.access; // Assuming the token is directly on the response object
         console.log("t",token);
 
+        if (selectedType === "provider" && data.walletAddress === null) {
+          await createWallet(); // Calling the createWallet function
+          // Handle the special flow for first-time provider login
+          // The logic for this should ideally be inside the `loginProvider` function
+          // So if you followed the edited `loginProvider` I provided, this check is redundant here
+        
+          localStorage.setItem("jwtToken", token); // storing token in localStorage after wallet creation
+
+          // Set isProvider and walletAddress in cookie. The function 'updateWalletAddress' seems to be handling this.
+          document.cookie = "isProvider=true";
+
+          // Set externalWallet to false in redux. You can make use of the `dispatch` function to do this.
+          dispatch(setExternalWallet(false)); // Assuming `setExternalWallet` is an action creator.
+
+          // Redirect to Inventory page
+          // navigate("/clouds/inventory"); // Modify this according to your routing setup.
+        } else {
         // get stored wallet address(created when signup) from backend and store in cookie  
         const singleWallet = await getWallet(token);
         console.log("single address", singleWallet[0].address);
@@ -141,6 +159,7 @@ const Login = () => {
         setPassword("");
         dispatch(loginSuccess());
         // navigate("/clouds");
+        }
       } else {
         // Handle login failure, perhaps pop up an error message
         console.error("Login failed: ", response.message);
@@ -152,6 +171,7 @@ const Login = () => {
     }
   };
                 // Modified to use provider login//
+  
  
 
   const connectWallet = async () => {

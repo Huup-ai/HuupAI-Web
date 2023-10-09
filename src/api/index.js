@@ -102,37 +102,41 @@ export async function loginProvider(email, password) {
         throw error;
   }
 }
-              //edited code for provider login with returning wallet address//
-//       const responseData = await response.json();
-
-//       // Check if wallet address is null
-//       if (responseData.walletAddress === null) {
-//           // Call Fun.xyz to create built-in wallet
-//           const newWalletAddress = Fun.xyz();
-
-//           // Call ADD WALLET backend API
-//           await addWallet(newWalletAddress, true);
-
-//           // Set Wallet address && isProvider = true in cookie.
-//           document.cookie = `walletAddress=${newWalletAddress}; path=/`;
-//           document.cookie = `isProvider=true; path=/`;
-
-//           // Set externalWallet=false in Redux
-//           // Assuming you dispatch actions like this:
-//           dispatch(setExternalWallet(false));
-//       }
-
-//       // Redirect to my cloud > Inventory page
-//       navigate('/path-to-my-cloud/inventory');  // Replace with actual path
-
-//       return responseData;
-//   } catch (error) {
-//       console.error('Error:', error);
-//       throw error;
-//   }
-// }
-
-
+  //             //edited code for provider login with returning wallet address//
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+  
+  //     const data = await response.json();
+  
+  //     // Check if the user is a provider and if it's their first-time login
+  //     if (data.walletAddress === null) {
+  //       // Create a built-in wallet. This is just a placeholder, 
+  //       // replace it with the actual function call to create a new wallet using Fun.xyz or a similar service
+  //       const newWalletAddress = await createWallet(); 
+  
+  //       // Call ADD WALLET API to update the backend with the new wallet
+  //       await addWallet(newWalletAddress, true, data.access);
+  
+  //       // Set cookies as required
+  //       document.cookie = `WalletAddress=${newWalletAddress}; path=/`;
+  //       document.cookie = "isProvider=true; path=/";
+  
+  //       // Here, you might want to also dispatch an action to set `externalWallet` to false in your Redux store. 
+  //       // Assuming you have an action creator function called `setExternalWalletStatus`:
+  //       // dispatch(setExternalWalletStatus(false));
+  
+  //       // Modify the response data to contain the new wallet address
+  //       data.walletAddress = newWalletAddress;
+  //     }
+  
+  //     return data;
+  
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     throw error;
+  //   }
+  // }
 
 export async function addWallet(walletAddress, is_provider, token) {
 
