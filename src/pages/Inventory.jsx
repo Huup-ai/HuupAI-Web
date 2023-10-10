@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import {
   GridComponent,
   Inject,
@@ -19,7 +19,56 @@ const Inventory = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
   const [selectedAction, setSelectedAction] = useState(" ");
-  const { currentColor } = useStateContext();
+  const { currentColor} = useStateContext();
+  const [clusterPrice, setClusterPrice] = useState(null);
+
+  const handleClusterChange = (e) => {
+    setSelectedAction(e.target.value);
+    if (e.target.value) {
+        getClusterById(e.target.value);  // Fetch the price when a cluster is selected.
+    }
+};
+
+// Fetching cluster data by ID
+const getClusterById = async (clusterId) => {
+  try {
+      const response = await fetch(`/api/cluster/${clusterId}`);
+      if (!response.ok) {
+          throw new Error('Failed to fetch cluster data');
+      }
+      const data = await response.json();
+      if (data && data.price !== null) {
+          setClusterPrice(data.price);
+      }
+  } catch (error) {
+      console.error('There was an error fetching the cluster data', error);
+  }
+};
+
+// Handler for setting the price
+const handleSetPrice = async () => {
+  if (clusterPrice) {
+      try {
+          const response = await fetch(`/api/setPrice`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  clusterId: selectedAction,
+                  price: clusterPrice,
+              }),
+          });
+          if (!response.ok) {
+              throw new Error('Failed to set price');
+          }
+          const data = await response.json();
+          // Handle the response as needed
+      } catch (error) {
+          console.error('There was an error setting the price', error);
+      }
+  }
+};
 
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
@@ -45,6 +94,13 @@ const Inventory = () => {
           <span className="w-60">Set Price per hour in USD</span>
           <Countbox />
         </div>
+        
+        {clusterPrice === null && ( //Display input if price is null
+            <div className="flex mb-5">
+                <span className="w-60">Set Price per hour in USD</span>
+                <Countbox value={clusterPrice} onChange={e => setClusterPrice(e.target.value)} />
+            </div>
+        )}
 
         <div className="mb-10">
           <Button
@@ -52,6 +108,7 @@ const Inventory = () => {
             bgColor={currentColor}
             text="Set"
             borderRadius="10px"
+            onClick={handleSetPrice}
           />
         </div>
       </div>

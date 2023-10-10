@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-// import { Route, Routes, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Clouds from "./pages/Clouds/Clouds";
 // import GPU from "./pages/GPU";
@@ -40,7 +39,7 @@ function App() {
       />
       <Route
         path="/inventory"
-        element={isAuthenticated ? <Clouds /> : <Navigate to="/login" />}
+        element={isAuthenticated ? <Inventory /> : <Navigate to="/login" />}
       />
       
         {/* <Route path="/" element={isAuthenticated ? <Clouds /> : <Login />} />

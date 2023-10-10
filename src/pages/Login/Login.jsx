@@ -103,6 +103,7 @@ const Login = () => {
     }
   };
   const [externalWallet, setExternalWallet] = useState(true);
+  
   const handleLoginClick = async (e) => {
     e.preventDefault();
     try {
@@ -171,7 +172,8 @@ const Login = () => {
     }
   };
                 // Modified to use provider login//
-  
+                
+              
  
 
   const connectWallet = async () => {

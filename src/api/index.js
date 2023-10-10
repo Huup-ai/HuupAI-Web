@@ -96,12 +96,15 @@ export async function loginProvider(email, password) {
         }),
           credentials: 'include'
       });
+
       return await response;
   } catch (error) {
         console.error('Error:', error);
         throw error;
   }
 }
+
+
   //             //edited code for provider login with returning wallet address//
   //     if (!response.ok) {
   //       throw new Error('Network response was not ok');
