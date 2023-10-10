@@ -236,19 +236,19 @@ const Details = () => {
                   <span>:</span>
                   <span>date</span>
                 </div>
-                <div>
+                <div className="mb-2">
                   <span className="inline-block w-40">CARD NUMBER</span>
                   <span>:</span>
                   <span>XXXX-XXXX-XXXX-1234</span>
                 </div>
-                <div className="mt-2 mb-2">
+                {/* <div className="mt-2 mb-2">
                   <Button
                     color="white"
                     bgColor={currentColor}
                     text="Add Payment Method"
                     borderRadius="10px"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -267,19 +267,19 @@ const Details = () => {
                   <span>:</span>
                   <span>date</span>
                 </div>
-                <div>
+                <div className="mb-2">
                   <span className="inline-block w-40">CARD NUMBER</span>
                   <span>:</span>
                   <span>XXXX-XXXX-XXXX-1234</span>
                 </div>
-                <div className="mt-2 mb-2">
+                {/* <div className="mt-2 mb-2">
                   <Button
                     color="white"
                     bgColor={currentColor}
                     text="Add Payment Method"
                     borderRadius="10px"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -356,19 +356,19 @@ const Details = () => {
               <span>:</span>
               <span>USER_NAME</span>
             </div>
-            <div>
+            <div className="mb-2">
               <span className="inline-block w-40">ADDRESS</span>
               <span>:</span>
               <span>XXXX</span>
             </div>
-            <div className="mt-2 mb-2">
+            {/* <div className="mt-2 mb-2">
               <Button
                 color="white"
                 bgColor={currentColor}
                 text="Edit Billing Information"
                 borderRadius="10px"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

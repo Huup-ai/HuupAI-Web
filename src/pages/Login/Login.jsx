@@ -2,11 +2,17 @@ import React from "react";
 import "./Login.css";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
-import { loginUser, registerUser, loginProvider, addWallet, getWallet } from "../../api";
+import {
+  loginUser,
+  registerUser,
+  loginProvider,
+  addWallet,
+  getWallet,
+} from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess,hasExternalWallet } from "../../reducers/authSlicer";
+import { loginSuccess, hasExternalWallet } from "../../reducers/authSlicer";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../data/Logo.png";
 import { API_KEY, sponsorAddress } from "../../Address";
@@ -108,7 +114,6 @@ const Login = () => {
 
       if (selectedType === "provider") {
         response = await loginProvider(email, password);
-        
       } else {
         response = await loginUser(email, password);
       }
@@ -127,13 +132,13 @@ const Login = () => {
       if (response && response.status === 200) {
         const data = await response.json();
         const token = data.access; // Assuming the token is directly on the response object
-        console.log("t",token);
+        console.log("t", token);
 
-        // get stored wallet address(created when signup) from backend and store in cookie  
+        // get stored wallet address(created when signup) from backend and store in cookie
         const singleWallet = await getWallet(token);
         console.log("single address", singleWallet[0].address);
         updateWalletAddress(singleWallet[0].address);
-        
+
         localStorage.setItem("jwtToken", token); // storing token in localStorage
         console.log("Login successful", response);
         setEmail("");
@@ -288,46 +293,41 @@ function LogIn({
   // const [selectedType, setSelectedType] = useState(" ");
   // const [selectedWay, setSelectedWay] = useState(" ");
   const [cookies, setCookie] = useCookies(["selectedType"]);
-  const handleSelectChange = (event) => {
-    const newValue = event.target.value;
+  const [type, setType] = useState("customer");
+  const handleSelectChange = (e) => {
+    e.preventDefault();
+    const newValue = e.target.value;
+    setType(newValue);
     setSelectedType(newValue);
     setCookie("selectedType", newValue, { path: "/" });
   };
 
   return (
-    <div className="a-right">
+    <div>
+      
       <form className="infoForm authForm">
-        <div className="flex flex-row align-middle">
-          <h3>Log In </h3>
-          <label>
-            <input
-              type="radio"
-              value="customer"
-              checked={selectedType === "customer"}
-              onChange={handleSelectChange}
-            />
-            Customer
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="provider"
-              checked={selectedType === "provider"}
-              onChange={handleSelectChange}
-            />
-             Provider
-          </label>
-          {/* <select
-            value={selectedType} // ...force the select's value to match the state variable...
-            onChange={handleSelectChange} // ... and update the state variable on any change!
+        <div className="typeSelect rounded-t-xl flex-initial" >
+          <button
+            onClick={handleSelectChange}
+            value="customer"
+            className={`px-6 py-3 mt-2 ${type === "customer" ? "bg-white rounded-t-xl py-4" : "bg-gray-200 rounded-t-lg" }`}
           >
-            <option value="">Select Role:</option>
-            <option value="customer">Customer</option>
-            <option value="provider">Provider</option>
-          </select> */}
+            Customer
+          </button>
+          <button
+            onClick={handleSelectChange}
+            value="provider"
+            className={`px-6 py-3 mt-2 ${type === "provider" ? "bg-white rounded-t-xl py-4" : "bg-gray-200 rounded-t-lg "}`}
+          >
+            Provider
+          </button>
         </div>
 
-        <div>
+        <div className="flex flex-row align-middle">
+          <h3>Log In </h3>
+        </div>
+
+        <div className="px-4">
           <input
             type="email"
             placeholder="Email"
@@ -338,7 +338,7 @@ function LogIn({
           />
         </div>
 
-        <div>
+        <div className="px-4">
           <input
             type={showPassword ? "text" : "password"}
             className="infoInput"
@@ -357,7 +357,7 @@ function LogIn({
           </button>
         </div>
 
-        <div>
+        <div className="px-4">
           <p className="text-xs">
             Don't have an account?{" "}
             <span
@@ -369,28 +369,29 @@ function LogIn({
           </p>
         </div>
 
-        <div>
+        <div className="px-4">
           <p className="text-xs">
             {" "}
-            If you are provider, please contact@huupai.xyz to obtain login access.
+            If you are provider, please contact@huupai.xyz to obtain login
+            access.
           </p>
         </div>
-        <div>
+        <div className="px-4">
           <button
             className="button infoButton font-normal w-36"
             onClick={onLoginClick}
           >
             Login with Email
           </button>
-        {selectedType === "customer" && (
-          <button
-            // onClick={""}
-            onClick={connectWallet}
-            className="button infoButton font-normal w-72"
-          >
-            Login with Email & Crypto Wallet
-          </button>
-        )}
+          {type === "customer" && (
+            <button
+              // onClick={""}
+              onClick={connectWallet}
+              className="button infoButton font-normal w-72"
+            >
+              Login with Email & Crypto Wallet
+            </button>
+          )}
         </div>
       </form>
     </div>
@@ -428,7 +429,6 @@ function SignUp({
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -472,11 +472,10 @@ function SignUp({
         const data = await loginResponse.json();
         const token = data.access;
         localStorage.setItem("jwtToken", token);
-        if (isChecked){
+        if (isChecked) {
           await createWallet(); // create wallet
-
         }
-        
+
         dispatch(loginSuccess());
         navigate("/clouds");
       } else {
@@ -490,7 +489,6 @@ function SignUp({
     }
   };
 
-  
   return (
     <div>
       <form className="infoForm authForm" onSubmit={handleSubmit}>

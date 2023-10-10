@@ -173,12 +173,12 @@ const PayinComfirmation = () => {
     });
 
     if (error) {
-      console.error("err", error);
+      alert("err", error);
     } else {
       console.log("Payment Token:", paymentMethod.paymentMethod.id);
       // Send the token to your backend for further processing
       const response = addPaymentAuth(paymentMethod.id, JWTtoken);
-      console.log("response", response);
+      alert("response", response);
     }
   };
 

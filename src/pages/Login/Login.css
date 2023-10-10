@@ -28,10 +28,9 @@
 h3 {
     display: block;
     font-size: 1.17em;
-    margin-top: 1em;
+    /* margin-top: 1em; */
     margin-bottom: 1em;
-    margin-left: 0;
-    margin-right: 0;
+
     font-weight: bold;
   }
 
@@ -62,7 +61,7 @@ h3 {
   .infoForm{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 2rem;
   }
@@ -92,13 +91,20 @@ h3 {
   
   
   .authForm{
-      background-color: var(--cardColor);
+      background-color: white;
       border-radius: 1rem;
-      padding: 1rem;
+      /* padding-left: 1rem;
+      padding-right: 1rem; */
+      padding-bottom: 1rem;
   }
   
   .authForm>div{
       width: 100%;
-      align-items: center;
+      align-items: end;
       justify-content: center;
+  }
+
+  .typeSelect{
+    background-image: var(--buttonBg);
+
   }
