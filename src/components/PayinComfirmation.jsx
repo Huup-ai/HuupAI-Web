@@ -35,7 +35,7 @@ const PayinComfirmation = () => {
     (payment === "eitherWay" && isCrypto === false)
   ) {
     const checkAuth = checkPaymentAuth(JWTtoken);
-    // console.log("checkAuth", checkAuth)
+    console.log("checkAuth", checkAuth)
     checkAuth
       .then((result) => {
         // console.log(result);
@@ -178,7 +178,7 @@ const PayinComfirmation = () => {
       console.log("Payment Token:", paymentMethod.paymentMethod.id);
       // Send the token to your backend for further processing
       const response = addPaymentAuth(paymentMethod.id, JWTtoken);
-      alert("response", response);
+      // alert("response", response);
     }
   };
 

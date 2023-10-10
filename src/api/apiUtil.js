@@ -41,7 +41,7 @@ export const authBackendGet = async (route, config={}) => {
         return res
     } catch (error) {
         console.error("There was a problem with the api operation:", error.message);
-        //alert("There was a problem with the api operation:", error.message);
+        alert("There was a problem with the api operation:", error.message);
     }
 }
 
