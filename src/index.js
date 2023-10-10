@@ -6,6 +6,7 @@ import { CookiesProvider } from "react-cookie";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "./reducers/authSlicer";
+import { priceReducer } from "./reducers/priceSlicer";
 import "./index.css";
 import App from "./App";
 import { ContextProvider } from "./contexts/ContextProvider";
@@ -14,6 +15,7 @@ import { BrowserRouter as Router } from "react-router-dom"; // make sure only on
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    price: priceReducer
   },
 });
 

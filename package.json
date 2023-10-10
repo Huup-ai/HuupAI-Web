@@ -25,7 +25,7 @@
     "@syncfusion/ej2-react-popups": "^19.4.52",
     "@syncfusion/ej2-react-richtexteditor": "^19.4.50",
     "@syncfusion/ej2-react-schedule": "^19.4.50",
-    "browserslist": "^4.22.1",
+    "axios": "^1.5.1",
     "ether": "^0.0.9",
     "ethers": "^5.7.2",
     "mui": "^0.0.1",
@@ -44,7 +44,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "devwithmdw": "concurrently \"npm run start\" \"npm run dev --prefix middleware\"",
+    "startwithmdw": "concurrently \"npm run start\" \"npm run start --prefix middleware\""
   },
   "eslintConfig": {
     "extends": [
@@ -54,9 +56,11 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
     ],
     "development": [
       "last 1 chrome version",
@@ -66,6 +70,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
+    "concurrently": "^8.2.1",
     "eslint": "^8.9.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.25.4",
