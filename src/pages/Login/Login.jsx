@@ -28,7 +28,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); // password visibility
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState("customer");
   const [metaAddress, setMetaAddress] = useState("");
   const [signer, setSigner] = useState();
   const [fcContract, setFcContract] = useState();
@@ -293,11 +293,11 @@ function LogIn({
   // const [selectedType, setSelectedType] = useState(" ");
   // const [selectedWay, setSelectedWay] = useState(" ");
   const [cookies, setCookie] = useCookies(["selectedType"]);
-  const [type, setType] = useState("customer");
+  
   const handleSelectChange = (e) => {
     e.preventDefault();
     const newValue = e.target.value;
-    setType(newValue);
+
     setSelectedType(newValue);
     setCookie("selectedType", newValue, { path: "/" });
   };
@@ -310,14 +310,14 @@ function LogIn({
           <button
             onClick={handleSelectChange}
             value="customer"
-            className={`px-6 py-3 mt-2 ${type === "customer" ? "bg-white rounded-t-xl py-4" : "bg-gray-200 rounded-t-lg" }`}
+            className={`px-6 py-3 mt-2 ${selectedType === "customer" ? "bg-white rounded-t-xl py-4" : "bg-gray-200 rounded-t-lg" }`}
           >
             Customer
           </button>
           <button
             onClick={handleSelectChange}
             value="provider"
-            className={`px-6 py-3 mt-2 ${type === "provider" ? "bg-white rounded-t-xl py-4" : "bg-gray-200 rounded-t-lg "}`}
+            className={`px-6 py-3 mt-2 ${selectedType === "provider" ? "bg-white rounded-t-xl py-4" : "bg-gray-200 rounded-t-lg "}`}
           >
             Provider
           </button>
@@ -383,7 +383,7 @@ function LogIn({
           >
             Login with Email
           </button>
-          {type === "customer" && (
+          {selectedType === "customer" && (
             <button
               // onClick={""}
               onClick={connectWallet}
