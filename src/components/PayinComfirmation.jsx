@@ -35,7 +35,7 @@ const PayinComfirmation = () => {
     (payment === "eitherWay" && isCrypto === false)
   ) {
     const checkAuth = checkPaymentAuth(JWTtoken);
-    // console.log("checkAuth", checkAuth)
+    console.log("checkAuth", checkAuth)
     checkAuth
       .then((result) => {
         // console.log(result);
@@ -173,12 +173,12 @@ const PayinComfirmation = () => {
     });
 
     if (error) {
-      console.error("err", error);
+      alert("err", error);
     } else {
       console.log("Payment Token:", paymentMethod.paymentMethod.id);
       // Send the token to your backend for further processing
       const response = addPaymentAuth(paymentMethod.id, JWTtoken);
-      console.log("response", response);
+      // alert("response", response);
     }
   };
 
@@ -209,11 +209,11 @@ const PayinComfirmation = () => {
             
           />
         </div> */}
-        <div className="flex md:m-10 justify-between">
+        {/* <div className="flex md:m-10 justify-between">
           <label className="p-2">Name on the card</label>
 
           <input className="border-2 p-2 rounded" type="text" />
-        </div>
+        </div> */}
         {/* <div className="flex md:m-10 justify-between">
           <label>Authorization Code</label>
 
@@ -223,11 +223,11 @@ const PayinComfirmation = () => {
             
           />
         </div> */}
-        <div className="flex md:m-10 justify-between">
+        {/* <div className="flex md:m-10 justify-between">
           <label className="p-2">Billing Address</label>
 
           <input className="border-2 p-2 rounded" type="text" />
-        </div>
+        </div> */}
 
         <div className="md:m-10 justify-between">
           <label className="p-2">Card Information:</label>

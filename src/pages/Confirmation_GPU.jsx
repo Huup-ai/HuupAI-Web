@@ -246,7 +246,7 @@ const Confirmation_GPU = () => {
       </div>
 
       <div>
-      <button onClick={handleConfirmOrder}>Test Native Button</button>
+      {/* <button onClick={handleConfirmOrder}>Test Native Button</button> */}
         <Button
           color="white"
           bgColor={currentColor}

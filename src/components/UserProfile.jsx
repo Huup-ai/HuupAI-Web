@@ -6,8 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 // import { userProfileData } from '../data/dummy';
 import { useStateContext } from "../contexts/ContextProvider";
 import wenxuan from "../data/wenxuan.jpg";
-import { logoutUser } from "../api";
-import { loginSuccess } from "../reducers/authSlicer";
+import { logout } from "../reducers/authSlicer";
 
 const UserProfile = () => {
   const { currentColor } = useStateContext();
@@ -17,12 +16,17 @@ const UserProfile = () => {
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    if (isAuthenticated) {
-      console.log("Attempting logout...");
-      await logoutUser();
-      dispatch(loginSuccess(false));
-      navigate("/login");
+    
+    localStorage.clear(); // Clears all data in localStorage
+    const cookies = document.cookie.split("; ");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookieParts = cookies[i].split("=");
+      const cookieName = cookieParts[0];
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     }
+
+    dispatch(logout());
+    navigate("/login");
   };
 
   return (

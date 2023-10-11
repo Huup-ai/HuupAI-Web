@@ -9,6 +9,7 @@ import Login from "./pages/Login/Login";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
+import Inventory from "./pages/Inventory";
 // import Billing from "./pages/Billing";
 // import Profile from "./pages/Profile";
 // import Instances from "./pages/Instances";
@@ -37,8 +38,11 @@ function App() {
         path="/clouds/*"
         element={isAuthenticated ? <Clouds /> : <Navigate to="/login" />}
       />
-
-
+      <Route
+        path="/inventory"
+        element={isAuthenticated ? <Inventory /> : <Navigate to="/login" />}
+      />
+      {/*  <Route path="/gpu" element={<GPU />} />
         {/* <Route path="/" element={isAuthenticated ? <Clouds /> : <Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/clouds/*" element={<Clouds />} /> */}

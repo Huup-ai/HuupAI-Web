@@ -12,6 +12,9 @@ const authSlice = createSlice({
     loginSuccess: (state) => {
       state.isAuthenticated = true;
     },
+    logout: (state) => {
+      state.isAuthenticated = false;
+    },
     addPaymentMethod: (state) => {  // New reducer
       state.hasPaymentMethod = true;
     },
@@ -25,6 +28,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginSuccess, addPaymentMethod, hasExternalWallet,updateSelection } = authSlice.actions;  // Export the new action
+export const { logout, loginSuccess, addPaymentMethod, hasExternalWallet,updateSelection } = authSlice.actions;  // Export the new action
 export const authReducer = authSlice.reducer;
 

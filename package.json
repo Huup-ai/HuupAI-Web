@@ -26,6 +26,7 @@
     "@syncfusion/ej2-react-richtexteditor": "^19.4.50",
     "@syncfusion/ej2-react-schedule": "^19.4.50",
     "axios": "^1.5.1",
+    "browserslist": "^4.22.1",
     "ether": "^0.0.9",
     "ethers": "^5.7.2",
     "mui": "^0.0.1",

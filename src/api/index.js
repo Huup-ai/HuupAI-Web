@@ -139,7 +139,7 @@ export async function getWallet(token) {
       method: 'GET',
       headers: {    
         'Authorization': `Bearer ${token}`,
-        // 'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       
     });
@@ -174,10 +174,13 @@ export async function addPaymentAuth(payToken, JWTtoken) {
     });
 
     if (!response.ok) {
+      alert("Payment Failed")
       throw new Error('Network response was not ok');
+      
     }
 
     const data = await response.json();  // This line was added to extract JSON data
+    alert("Payment Successful")
     return data;  // Return the JSON data
 
   } catch (error) {
