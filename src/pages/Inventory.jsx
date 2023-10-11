@@ -12,6 +12,7 @@ import {
 import { GPUsData, InventoryGrid} from "../data/dummy";
 import { Header, Button, Countbox } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
+import API_URL from "../api/apiAddress";
 
 const Inventory = () => {
   const toolbarOptions = ["Search"];
@@ -19,8 +20,27 @@ const Inventory = () => {
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
   const [selectedAction, setSelectedAction] = useState(" ");
-  const { currentColor} = useStateContext();
+  const {currentColor} = useStateContext();
   const [clusterPrice, setClusterPrice] = useState(null);
+  const [clusters, setClusters] = useState([]); //State to hold cluster data
+
+  useEffect(() => {
+    async function fetchClusters() {
+        try {
+            const response = await fetch(`${API_URL}/clusters/`); 
+            if (!response.ok) {
+              const text = await response.text();
+              throw new Error(`Failed to fetch clusters. Status: ${response.status}. Response: ${text}`);
+          }
+            const data = await response.json();
+            setClusters(data);
+        } catch (error) {
+            console.error('There was an error fetching the clusters', error);
+        }
+    }
+    
+    fetchClusters();
+    }, []); // Empty dependency array means this useEffect runs once when component mounts
 
   const handleClusterChange = (e) => {
     setSelectedAction(e.target.value);
@@ -32,7 +52,7 @@ const Inventory = () => {
 // Fetching cluster data by ID
 const getClusterById = async (clusterId) => {
   try {
-      const response = await fetch(`/api/cluster/${clusterId}`);
+      const response = await fetch(`${API_URL}/cluster/${clusterId}`);
       if (!response.ok) {
           throw new Error('Failed to fetch cluster data');
       }
@@ -47,22 +67,27 @@ const getClusterById = async (clusterId) => {
 
 // Handler for setting the price
 const handleSetPrice = async () => {
+  console.log("handleSetPrice function called");
   if (clusterPrice) {
       try {
-          const response = await fetch(`/api/setPrice`, {
+          const response = await fetch(`${API_URL}/clusters/set_price/`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                  clusterId: selectedAction,
+                  cluster_id: selectedAction,
                   price: clusterPrice,
               }),
           });
           if (!response.ok) {
-              throw new Error('Failed to set price');
+            throw new Error('Failed to set price');
           }
           const data = await response.json();
+          console.log("Response Data:", data);
+          // if (!response.ok) {
+          //     throw new Error('Failed to set price');
+          // }
           // Handle the response as needed
       } catch (error) {
           console.error('There was an error setting the price', error);
@@ -74,7 +99,7 @@ const handleSetPrice = async () => {
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header category="My Cloud > Inventory" title="Set your Inventory Price" />
 
-      <div className="text-left ml-4 mb-5f flex flex-col">
+      {/* <div className="text-left ml-4 mb-5f flex flex-col">
         <div className="flex mb-5">
           <span className="w-60"> Select Cluster</span>
           <select
@@ -88,19 +113,35 @@ const handleSetPrice = async () => {
             <option value="EU-Germany-A100-A1"> EU-Germany-A100-A1 </option>
             <option value="EU-Germany-A100-A1"> EU-Germany-A100-A1</option>
           </select>
-        </div>
+        </div> */}
+        <div className="text-left ml-4 mb-5f flex flex-col">
+            <div className="flex mb-5">
+                <span className="w-60"> Select Cluster</span>
+                <select
+                    className="border-solid border-2 rounded-md border-grey w-40"
+                    value={selectedAction}
+                    onChange={handleClusterChange}
+                >
+                    <option value=""> </option>
+                    {clusters.map(cluster => (
+                        <option key={cluster.id} value={cluster.id}>
+                            {cluster.region}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
         <div className="flex mb-5">
           <span className="w-60">Set Price per hour in USD</span>
           <Countbox />
         </div>
         
-        {clusterPrice === null && ( //Display input if price is null
+        {/* {clusterPrice === null && ( //Display input if price is null
             <div className="flex mb-5">
                 <span className="w-60">Set Price per hour in USD</span>
                 <Countbox value={clusterPrice} onChange={e => setClusterPrice(e.target.value)} />
             </div>
-        )}
+        )} */}
 
         <div className="mb-10">
           <Button
@@ -108,7 +149,7 @@ const handleSetPrice = async () => {
             bgColor={currentColor}
             text="Set"
             borderRadius="10px"
-            onClick={handleSetPrice}
+            onClickCallback={handleSetPrice}
           />
         </div>
       </div>

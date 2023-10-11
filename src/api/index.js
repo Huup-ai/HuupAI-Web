@@ -104,43 +104,6 @@ export async function loginProvider(email, password) {
   }
 }
 
-
-  //             //edited code for provider login with returning wallet address//
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-  
-  //     const data = await response.json();
-  
-  //     // Check if the user is a provider and if it's their first-time login
-  //     if (data.walletAddress === null) {
-  //       // Create a built-in wallet. This is just a placeholder, 
-  //       // replace it with the actual function call to create a new wallet using Fun.xyz or a similar service
-  //       const newWalletAddress = await createWallet(); 
-  
-  //       // Call ADD WALLET API to update the backend with the new wallet
-  //       await addWallet(newWalletAddress, true, data.access);
-  
-  //       // Set cookies as required
-  //       document.cookie = `WalletAddress=${newWalletAddress}; path=/`;
-  //       document.cookie = "isProvider=true; path=/";
-  
-  //       // Here, you might want to also dispatch an action to set `externalWallet` to false in your Redux store. 
-  //       // Assuming you have an action creator function called `setExternalWalletStatus`:
-  //       // dispatch(setExternalWalletStatus(false));
-  
-  //       // Modify the response data to contain the new wallet address
-  //       data.walletAddress = newWalletAddress;
-  //     }
-  
-  //     return data;
-  
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     throw error;
-  //   }
-  // }
-
 export async function addWallet(walletAddress, is_provider, token) {
 
   // console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
@@ -176,7 +139,7 @@ export async function getWallet(token) {
       method: 'GET',
       headers: {    
         'Authorization': `Bearer ${token}`,
-        // 'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
       },
       
     });
@@ -249,8 +212,6 @@ export async function checkPaymentAuth(token) {
   }
 
 }
-
-
 
 export async function getVmStatus(clusterId, namespace, vmName) {
   const requestBody = {

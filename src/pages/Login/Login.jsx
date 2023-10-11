@@ -151,9 +151,14 @@ const Login = () => {
         } else {
         // get stored wallet address(created when signup) from backend and store in cookie  
         const singleWallet = await getWallet(token);
-        console.log("single address", singleWallet[0].address);
-        updateWalletAddress(singleWallet[0].address);
-        
+        // console.log("single address", singleWallet[0].address);
+        console.log("Wallet data:", singleWallet);
+        // updateWalletAddress(singleWallet[0].address);
+        if (singleWallet && singleWallet.length > 0 && singleWallet[0].address) {
+          updateWalletAddress(singleWallet[0].address);
+      } else {
+          console.error("No wallet data found for the user.");
+      }
         localStorage.setItem("jwtToken", token); // storing token in localStorage
         console.log("Login successful", response);
         setEmail("");
@@ -172,9 +177,6 @@ const Login = () => {
     }
   };
                 // Modified to use provider login//
-                
-              
- 
 
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
