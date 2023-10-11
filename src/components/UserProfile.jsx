@@ -19,15 +19,11 @@ const UserProfile = () => {
     
     localStorage.clear(); // Clears all data in localStorage
     const cookies = document.cookie.split("; ");
-    console.log(cookies)
-
     for (let i = 0; i < cookies.length; i++) {
       const cookieParts = cookies[i].split("=");
       const cookieName = cookieParts[0];
       document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     }
-
-    console.log(cookies)
 
     dispatch(logout());
     navigate("/login");
