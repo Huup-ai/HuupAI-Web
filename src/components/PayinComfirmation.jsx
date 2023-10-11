@@ -209,11 +209,11 @@ const PayinComfirmation = () => {
             
           />
         </div> */}
-        <div className="flex md:m-10 justify-between">
+        {/* <div className="flex md:m-10 justify-between">
           <label className="p-2">Name on the card</label>
 
           <input className="border-2 p-2 rounded" type="text" />
-        </div>
+        </div> */}
         {/* <div className="flex md:m-10 justify-between">
           <label>Authorization Code</label>
 
@@ -223,11 +223,11 @@ const PayinComfirmation = () => {
             
           />
         </div> */}
-        <div className="flex md:m-10 justify-between">
+        {/* <div className="flex md:m-10 justify-between">
           <label className="p-2">Billing Address</label>
 
           <input className="border-2 p-2 rounded" type="text" />
-        </div>
+        </div> */}
 
         <div className="md:m-10 justify-between">
           <label className="p-2">Card Information:</label>
