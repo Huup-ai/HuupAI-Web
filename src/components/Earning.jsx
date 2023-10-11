@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { EarningData, EarningGrid} from '../data/dummy';
 import { GridComponent, Inject, ColumnsDirective, ColumnDirective, Search, Page, Toolbar } from '@syncfusion/ej2-react-grids';
+import API_URL from "../api/apiAddress";
 
 const Earning = () => {
-    const toolbarOptions = ['Search'];
-
+  const [earningData, setEarningData] = useState([]);
+  const toolbarOptions = ['Search'];
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
+  const token = localStorage.getItem("jwtToken")
+
+  useEffect(() => {
+    fetch(`${API_URL}/invoices/get_user_invoices/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.text().then(text => {
+          throw new Error(text);
+      });
+    }
+    })
+    .then(data => {
+      const processedData = data.map(invoice => ({
+        ...invoice,
+        earning: invoice.price * invoice.usage // Assuming each invoice has price and usage attributes
+      }));
+      setEarningData(processedData);
+    })
+    .catch(error => console.error('Error fetching invoice data:', error));
+  }, []);
+  
   return (
     <div id = "Current Earning">
       <div className=" mb-5 mt-10">
@@ -22,7 +52,7 @@ const Earning = () => {
 
       <GridComponent
         rowHeight={100}
-        dataSource={EarningData}
+        dataSource={earningData}
         width="auto"
         allowPaging
         allowSorting
