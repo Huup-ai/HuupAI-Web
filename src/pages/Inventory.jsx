@@ -24,56 +24,106 @@ const Inventory = () => {
   const [clusterPrice, setClusterPrice] = useState(null);
   const [clusters, setClusters] = useState([]); //State to hold cluster data
 
-  useEffect(() => {
-    async function fetchClusters() {
-        try {
-            const response = await fetch(`${API_URL}/clusters/`); 
-            if (!response.ok) {
-              const text = await response.text();
-              throw new Error(`Failed to fetch clusters. Status: ${response.status}. Response: ${text}`);
-          }
-            const data = await response.json();
-            setClusters(data);
-        } catch (error) {
-            console.error('There was an error fetching the clusters', error);
-        }
-    }
-    
-    fetchClusters();
-    }, []); // Empty dependency array means this useEffect runs once when component mounts
 
-  const handleClusterChange = (e) => {
-    setSelectedAction(e.target.value);
-    if (e.target.value) {
-        getClusterById(e.target.value);  // Fetch the price when a cluster is selected.
+  const getClusterById = async (clusterId) => {
+    try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await fetch(`${API_URL}/clusters/cluster_name/${clusterId}/`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error('Failed to fetch cluster data');
+        }
+
+        const data = await response.json();
+        if (data && data.price !== null) {
+            setClusterPrice(data.price);
+        }
+    } catch (error) {
+        console.error('There was an error fetching the cluster data', error);
     }
 };
 
-// Fetching cluster data by ID
-const getClusterById = async (clusterId) => {
+  // Fetching cluster details by its ID when selected
+//   const fetchClusterDetails = async (clusterId) => {
+//     try {
+//         const response = await fetch(`${API_URL}/clusters/cluster_name/${clusterId}/`);
+//         if (!response.ok) {
+//             const text = await response.text();
+//             throw new Error(`Failed to fetch cluster details. Status: ${response.status}. Response: ${text}`);
+//         }
+//         const data = await response.json();
+//         // e.g., setClusterDetails(data);
+
+//     } catch (error) {
+//         console.error('There was an error fetching the cluster details', error);
+//     }
+// };
+
+// Fetching provider's clusters
+// useEffect(() => {
+//     async function fetchClusters() {
+//         try {
+//             const token = localStorage.getItem("jwtToken");
+//             const response = await fetch(`${API_URL}/clusters/my_clusters/`); 
+//             if (!response.ok) {
+//               const text = await response.text();
+//               throw new Error(`Failed to fetch clusters. Status: ${response.status}. Response: ${text}`);
+//           }
+//             const data = await response.json();
+//             setClusters(data);
+//         } catch (error) {
+//             console.error('There was an error fetching the clusters', error);
+//         }
+//     }
+    
+//     fetchClusters();
+// }, []);
+
+const fetchClusters = async () => {
   try {
-      const response = await fetch(`${API_URL}/cluster/${clusterId}`);
+      const token = localStorage.getItem("jwtToken");
+      const response = await fetch(`${API_URL}/clusters/my_clusters/`, {
+          headers: {
+              'Authorization': `Bearer ${token}`,
+          },
+      }); 
+      
       if (!response.ok) {
-          throw new Error('Failed to fetch cluster data');
+          const text = await response.text();
+          throw new Error(`Failed to fetch clusters. Status: ${response.status}. Response: ${text}`);
       }
+
       const data = await response.json();
-      if (data && data.price !== null) {
-          setClusterPrice(data.price);
-      }
+      setClusters(data);
   } catch (error) {
-      console.error('There was an error fetching the cluster data', error);
+      console.error('There was an error fetching the clusters', error);
   }
+}
+
+const handleClusterChange = (e) => {
+    setSelectedAction(e.target.value);
+    if (e.target.value) {
+      getClusterById(e.target.value); // Get the cluster by ID
+      fetchClusters(); // Fetch provider’s clusters  
+    }
 };
 
 // Handler for setting the price
 const handleSetPrice = async () => {
   console.log("handleSetPrice function called");
+  const token = localStorage.getItem("jwtToken");
   if (clusterPrice) {
       try {
           const response = await fetch(`${API_URL}/clusters/set_price/`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
               },
               body: JSON.stringify({
                   cluster_id: selectedAction,
@@ -81,39 +131,20 @@ const handleSetPrice = async () => {
               }),
           });
           if (!response.ok) {
+            const text = await response.text();
             throw new Error('Failed to set price');
           }
           const data = await response.json();
           console.log("Response Data:", data);
-          // if (!response.ok) {
-          //     throw new Error('Failed to set price');
-          // }
-          // Handle the response as needed
       } catch (error) {
           console.error('There was an error setting the price', error);
       }
   }
 };
 
-  return (
+return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header category="My Cloud > Inventory" title="Set your Inventory Price" />
-
-      {/* <div className="text-left ml-4 mb-5f flex flex-col">
-        <div className="flex mb-5">
-          <span className="w-60"> Select Cluster</span>
-          <select
-            className="border-solid border-2 rounded-md border-grey w-40"
-            value={selectedAction} // ...force the select's value to match the state variable...
-            onChange={(e) => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
-          >
-            <option value=""> </option>
-            <option value="US-NY-T4-C1">US-NY-T4-C1</option>
-            <option value="US-CA-V100-A1">US-CA-V100-A1</option>
-            <option value="EU-Germany-A100-A1"> EU-Germany-A100-A1 </option>
-            <option value="EU-Germany-A100-A1"> EU-Germany-A100-A1</option>
-          </select>
-        </div> */}
         <div className="text-left ml-4 mb-5f flex flex-col">
             <div className="flex mb-5">
                 <span className="w-60"> Select Cluster</span>
@@ -125,23 +156,18 @@ const handleSetPrice = async () => {
                     <option value=""> </option>
                     {clusters.map(cluster => (
                         <option key={cluster.id} value={cluster.id}>
-                            {cluster.region}
+                            {cluster.name}
                         </option>
                     ))}
                 </select>
             </div>
-
-        <div className="flex mb-5">
-          <span className="w-60">Set Price per hour in USD</span>
-          <Countbox />
-        </div>
         
-        {/* {clusterPrice === null && ( //Display input if price is null
-            <div className="flex mb-5">
-                <span className="w-60">Set Price per hour in USD</span>
-                <Countbox value={clusterPrice} onChange={e => setClusterPrice(e.target.value)} />
-            </div>
-        )} */}
+  {clusterPrice === null && (
+      <div className="flex mb-5">
+        <span className="w-60">Set Price per hour in USD</span>
+        <Countbox value={clusterPrice} onChange={e => setClusterPrice(e.target.value)} />
+      </div>
+  )}
 
         <div className="mb-10">
           <Button
@@ -158,7 +184,7 @@ const handleSetPrice = async () => {
         <h3> My Inventory List</h3>
         <GridComponent
           rowHeight={70}
-          dataSource={GPUsData}
+          dataSource={clusters}
           width="auto"
           allowPaging
           allowSorting

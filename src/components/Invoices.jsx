@@ -117,30 +117,30 @@ const Invoices = () => {
 
   // Set up web3 and the contract
   const web3 = new Web3(Web3.givenProvider); // uses MetaMask's provider
-  const contractAbi = ...;  // ABI from your contract
+  // const contractAbi = ...;  // ABI from your contract
   const contractAddress = '0xYourContractAddress';
-  const contract = new web3.eth.Contract(contractAbi, contractAddress);
+  // const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
-  const withdrawEarnings = async () => {
-    try {
-      // Note: You might want to first ensure the user is connected to a wallet provider, e.g., MetaMask
-      const accounts = await web3.eth.getAccounts(); 
-      if (accounts.length === 0) {
-        alert("Please connect to MetaMask.");
-        return;
-      }
+  // const withdrawEarnings = async () => {
+  //   try {
+  //     // Note: You might want to first ensure the user is connected to a wallet provider, e.g., MetaMask
+  //     const accounts = await web3.eth.getAccounts(); 
+  //     if (accounts.length === 0) {
+  //       alert("Please connect to MetaMask.");
+  //       return;
+  //     }
 
-      const invoice = await generateInvoice();
-      const earning = invoice.total_price;  // assuming total_price is the earning
+  //     const invoice = await generateInvoice();
+  //     const earning = invoice.total_price;  // assuming total_price is the earning
       
-      await contract.methods.withdrawEarning(earning).send({ from: accounts[0] });
-      alert('Earnings withdrawn successfully!');
+  //     await contract.methods.withdrawEarning(earning).send({ from: accounts[0] });
+  //     alert('Earnings withdrawn successfully!');
 
-    } catch (error) {
-      console.error("Error withdrawing earnings:", error);
-      alert("Error withdrawing earnings. Check console for details.");
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error withdrawing earnings:", error);
+  //     alert("Error withdrawing earnings. Check console for details.");
+  //   }
+  // };
 
   return (
     <div id="Invoices">
@@ -176,11 +176,11 @@ const Invoices = () => {
               isPrimaryKey={item.isPrimaryKey}
             />
             ))}
-            <ColumnDirective
+            {/* <ColumnDirective
               headerText="Actions"
               template={record => record.status === "Unpaid" ? 
               <button onClick={withdrawEarnings}>Unpaid</button> : null}
-            />
+            /> */}
           </ColumnsDirective>
           <Inject services={[Search, Page, Toolbar]} />
         </GridComponent>
