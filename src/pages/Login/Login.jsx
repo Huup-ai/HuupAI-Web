@@ -143,6 +143,11 @@ const Login = () => {
          }
         // console.log("single address", singleWallet[0].address);
         // updateWalletAddress(singleWallet[0].address);
+
+        if (selectedType === "provider"&&singleWallet.length===0){
+          console.log("provider login")
+          await createWallet();
+         }
         
         localStorage.setItem("jwtToken", token); // storing token in localStorage
         console.log("Login successful", response);
