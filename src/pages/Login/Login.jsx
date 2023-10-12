@@ -143,7 +143,7 @@ const Login = () => {
 };
 
 
-const [externalWallet, setExternalWallet] = useState(true);
+// const [externalWallet, setExternalWallet] = useState(true);
 
 const handleLoginClick = async (e) => {
   e.preventDefault();
@@ -185,7 +185,7 @@ const handleLoginClick = async (e) => {
       if (selectedType === "provider"&&singleWallet.length===0){
         await createWallet();
        }
-       console.log("create wallet working", createWallet)
+    
       
       localStorage.setItem("jwtToken", token); // storing token in localStorage
       console.log("Login successful", response);

@@ -14,7 +14,7 @@ import Inventory from "./pages/Inventory";
 // import Instances from "./pages/Instances";
 //import GPU from "./pages/GPU";
 // import CPU from "./pages/CPU";
-import Inventory from "./pages/Inventory";
+
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
