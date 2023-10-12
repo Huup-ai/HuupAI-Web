@@ -37,6 +37,8 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const externalWallet = useSelector((state) => state.auth.externalWallet);
+  console.log("ex", externalWallet)
   const navigate = useNavigate();
 
   const [cookies, setCookie] = useCookies(["walletAddress"]);
@@ -211,6 +213,7 @@ const Login = () => {
         setEmail("");
         setPassword("");
         dispatch(loginSuccess());
+
         dispatch(hasExternalWallet());
         navigate("/clouds");
       } else {
