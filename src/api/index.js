@@ -2,11 +2,15 @@ import API_URL from './apiAddress';
 
 
 const FetchRequest = async (url, method, header = {}, data = {}) => {
-  const response = await fetch(url, {
+  let requestParam = {
     method: method,
     headers: header,
     body: JSON.stringify(data),
-  });
+  }
+  if (method == 'GET') {
+    delete requestParam['body']
+  }
+  const response = await fetch(url, requestParam);
   return response.json();
 };
 
@@ -237,10 +241,22 @@ export async function getVmStatus(clusterId, namespace, vmName) {
 
 export async function getUserInstances(email) {
   return FetchRequest(
-    `${API_URL}/instances/${email}/get_instances/`,
+    `${API_URL}/instances/get_instances/`,
     "GET",
     {
-      "Content-Type": "application/json",
+      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json"
+    }
+  );
+}
+
+export async function getUserUsage(token) {
+  return FetchRequest(
+    `${API_URL}/instances/get_usage/`,
+    "GET",
+    {    
+      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
+      'Content-Type': 'application/json'
     }
   );
 }
@@ -250,7 +266,8 @@ export async function getInvoiceByUser() {
     `${API_URL}/invoices/get_user_invoices/`,
     "GET",
     {
-      "Content-Type": "application/json",
+      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json"
     }
   );
 }
