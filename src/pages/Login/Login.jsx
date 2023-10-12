@@ -37,6 +37,8 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const externalWallet = useSelector((state) => state.auth.externalWallet);
+  console.log("ex", externalWallet)
   const navigate = useNavigate();
 
   const [cookies, setCookie] = useCookies(["walletAddress"]);
@@ -221,6 +223,7 @@ const Login = () => {
         setEmail("");
         setPassword("");
         dispatch(loginSuccess());
+
         dispatch(hasExternalWallet());
         navigate("/clouds");
       } else {
@@ -303,11 +306,11 @@ function LogIn({
   // const [selectedType, setSelectedType] = useState(" ");
   // const [selectedWay, setSelectedWay] = useState(" ");
   const [cookies, setCookie] = useCookies(["selectedType"]);
-  
+  // const [type, setType] = useState("customer");
   const handleSelectChange = (e) => {
     e.preventDefault();
     const newValue = e.target.value;
-
+    // setType(newValue);
     setSelectedType(newValue);
     setCookie("selectedType", newValue, { path: "/" });
   };
@@ -316,7 +319,7 @@ function LogIn({
     <div>
       
       <form className="infoForm authForm">
-        <div className="typeSelect rounded-t-xl flex-initial" >
+        <div className="typeSelect rounded-t-xl " >
           <button
             onClick={handleSelectChange}
             value="customer"
@@ -333,7 +336,7 @@ function LogIn({
           </button>
         </div>
 
-        <div className="flex flex-row align-middle">
+        <div className="flex align-middle">
           <h3>Log In </h3>
         </div>
 
@@ -501,11 +504,11 @@ function SignUp({
 
   return (
     <div>
-      <form className="infoForm authForm" onSubmit={handleSubmit}>
-        <div className="flex flex-row align-middle">
-          <h3>Sign Up</h3>
+      <form className="infoForm authForm md:p-4" onSubmit={handleSubmit}>
+        <div>
+          <h3 className="mt-4">Sign Up</h3>
 
-          <div>
+          <div className="mb-4">
             <input
               type="checkbox"
               checked={isChecked}
