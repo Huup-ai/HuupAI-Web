@@ -25,7 +25,7 @@ import { Market, MyCloud, UserProfile } from ".";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
-  <TooltipComponent content={title} position="BottomCenter">
+  <TooltipComponent content={title} >
     <button
       type="button"
       onClick={() => customFunc()}
@@ -201,8 +201,7 @@ const Navbar = ({ currentPage }) => {
         params: [{ chainId: `0x${selectedNetwork.id.toString(16)}` }],
       });
       setConnectedNetwork(selectedNetwork);
-      console.log("net", connectedNetwork);
-      const mess = "successfully connected to: " + connectedNetwork.name;
+      const mess = "successfully connected to: " + selectedNetwork.name;
       alert(mess);
     } catch (error) {
       console.error("Error switching network:", error);
@@ -277,13 +276,12 @@ const Navbar = ({ currentPage }) => {
         {displayContent ? <>{Provider}</> : <>{Consumer}</>}
       </div>
 
-      <div className=" flex gap-2 mt-2 items-center">
+      <div className=" flex gap-2 items-center">
         {externalWallet ? (
           <>
-            <div className=" border-2 rounded-xl flex flex-col p-2 items-end">
+            <div className="border-2 rounded-xl flex gap-2 p-1 items-center">
               <div className="flex">
                 <select
-                  className=""
                   id="networkSelect"
                   onChange={handleNetworkChange}
                   value={selectedNetwork ? selectedNetwork.id : ""}
@@ -299,9 +297,6 @@ const Navbar = ({ currentPage }) => {
                     </option>
                   ))}
                 </select>
-                {/* <div className="ml-2">
-                  current network:{" "}
-                </div> */}
               </div>
 
               <TooltipComponent
@@ -328,7 +323,7 @@ const Navbar = ({ currentPage }) => {
 
         <button
           type="button"
-          className="flex hover:bg-white text-white py-2 px-4 rounded-xl"
+          className="flex hover:bg-white text-white p-1 px-4 rounded-xl"
           style={{ background: currentColor }}
           onClick={connectWallet}
           disabled={!walletCookie.walletAddress}
@@ -350,7 +345,7 @@ const Navbar = ({ currentPage }) => {
           position="BottomCenter"
         >
           <div
-            className="relative text-xl rounded-full p-1 hover-button"
+            className="relative text-xl rounded-full hover-button"
             onClick={() => copyAddress(walletCookie.walletAddress)}
           >
             {copied === walletCookie.walletAddress ? (
