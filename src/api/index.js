@@ -1,7 +1,7 @@
 import API_URL from './apiAddress';
 
 
-const FetchRequest = async (url, method, header = {}, data = {}) => {
+export const FetchRequest = async (url, method, header = {}, data = {}) => {
   let requestParam = {
     method: method,
     headers: header,
