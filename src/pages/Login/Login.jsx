@@ -143,7 +143,7 @@ const Login = () => {
 };
 
 
-const [externalWallet, setExternalWallet] = useState(true);
+// const [externalWallet, setExternalWallet] = useState(true);
 
 const handleLoginClick = async (e) => {
   e.preventDefault();
