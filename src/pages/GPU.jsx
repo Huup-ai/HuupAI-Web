@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { GridComponent, Inject, ColumnsDirective, ColumnDirective, Search, Page, Toolbar } from '@syncfusion/ej2-react-grids';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 // import { GPUsData, employeesGrid } from '../data/dummy';
 import { Header } from '../components';
@@ -12,6 +16,7 @@ import { setPrice } from "../reducers/priceSlicer";
 function GPU() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -74,13 +79,23 @@ function GPU() {
       headerText: 'Price', 
       width: 120,
       template: (rowData) => {
-        return <Link
-                  to={`/clouds/confirmation GPU/${rowData.id}`}
-                  onClick={() => {
-                    dispatch(setPrice(rowData.price))
-                  }}>{rowData.price}</Link>;
+        const handleLinkClick = () => {
+          // Check if the string contains any non-zero characters
+          const hasNonZeroCpu = [...rowData.cpu].some(char => char !== "0");
+          
+          const routePath = hasNonZeroCpu ? `/clouds/confirmation CPU` : `/clouds/confirmation GPU/${rowData.id}`;
+          
+          // Dispatch the action
+          dispatch(setPrice(rowData.price));
+    
+          // Navigate to the desired route
+          navigate(routePath);
+        };
+        
+        return <button onClick={handleLinkClick}>{rowData.price}</button>;
       }
     }
+    
 
 ];
 
@@ -101,40 +116,3 @@ function GPU() {
 }
 
 export default GPU;
-
-// const GPU = () => {
-//   const toolbarOptions = ['Search'];
-
-//   const editing = { allowDeleting: true, allowEditing: true };
-//   const settings = { wrapMode: 'Content' };
-
-//   return (
-//     <div className="m-2 md:m-20 mt-24 p-2 md:p-20 bg-white rounded-3xl">
-//       <Header category="GPU" title="Save big on your cloud services" />
-      
-      
-//       <GridComponent
-//         rowHeight={70}
-//         dataSource={GPUsData}
-//         width="auto"
-//         allowPaging
-//         allowSorting
-//         pageSettings={{ pageCount: 5 }}
-//         editSettings={editing}
-//         toolbar={toolbarOptions}
-//         allowTextWrap={true} 
-//         textWrapSettings={settings} 
-//         // height='400'
-//         // className = "overflow-visible text-clip h-96"
-//       >
-//         <ColumnsDirective >
-//           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-//           {employeesGrid.map((item, index) => <ColumnDirective key={index} {...item} />)}
-//         </ColumnsDirective>
-//         <Inject services={[Search, Page, Toolbar]} />
-
-//       </GridComponent>
-//     </div>
-//   );
-// };
-// export default GPU;

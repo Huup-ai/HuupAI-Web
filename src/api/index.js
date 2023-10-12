@@ -103,8 +103,8 @@ export async function loginProvider(email, password) {
 
       return await response;
   } catch (error) {
-      console.error('Error:', error);
-      throw error;
+        console.error('Error:', error);
+        throw error;
   }
 }
 
@@ -219,8 +219,6 @@ export async function checkPaymentAuth(token) {
   }
 
 }
-
-
 
 export async function getVmStatus(clusterId, namespace, vmName) {
   const requestBody = {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const Countbox = () => {
-    const [count, setCount] = useState(" ");
+    const [count, setCount] = useState(0);
 
     const handleIncrement = () => {
       setCount(count + 1);
@@ -13,12 +13,29 @@ const Countbox = () => {
       }
     };
 
+    // const handleInputChange = (event) => {
+    //     const inputValue = parseInt(event.target.value);
+    //     // if (!isNaN(inputValue)) {
+    //       setCount(inputValue);
+    //     // }
+    //   };
+    
     const handleInputChange = (event) => {
-        const inputValue = parseInt(event.target.value);
-        // if (!isNaN(inputValue)) {
-          setCount(inputValue);
-        // }
-      };
+      const inputValue = event.target.value;
+
+      // Allow empty values (for deleting or correcting input)
+      if (inputValue === "") {
+          setCount("");
+          return;
+      }
+
+      const numericValue = parseFloat(inputValue);
+      
+      if (!isNaN(numericValue)) {
+          setCount(numericValue);
+      }
+  };
+
   return (
     <div >
       {/* <button onClick={handleDecrement}>&#9666;</button> */}

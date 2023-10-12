@@ -20,11 +20,11 @@ const DefaultPay = () => {
     // store the selection in backend
   };
   return (
-    <div className="border-2 rounded-xl">
-      <div className="flex flex-col md:p-2">
-        <h6 className="w-72">Setup default Payment Method: </h6>
+    <div className="border-2 rounded-xl w-1/2">
+      <h6 className="md:p-2">Setup default Payment Method: </h6>
 
-        <div className="flex flex-col md:px-20 md:py-5 gap-2">
+      <div className="flex flex-col items-center justify-between">
+        <div className="flex flex-col flex-auto md:px-20 md:py-5 gap-2">
           <div>
             <input
               type="radio"
@@ -57,16 +57,15 @@ const DefaultPay = () => {
             />
             <label htmlFor="creditCard">Credit Card</label>
           </div>
-
-          <div className="md:mt-5">
-            <Button
-              color="white"
-              bgColor={currentColor}
-              text="Submit"
-              // onClickCallback={handleDeposit}
-              borderRadius="10px"
-            />
-          </div>
+        </div>
+        <div className="md:mb-5 ">
+          <Button
+            color="white"
+            bgColor={currentColor}
+            text="Submit"
+            // onClickCallback={handleDeposit}
+            borderRadius="10px"
+          />
         </div>
       </div>
     </div>
