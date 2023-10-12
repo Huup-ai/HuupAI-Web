@@ -40,7 +40,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const externalWallet = useSelector((state) => state.auth.externalWallet);
-  console.log("ex", externalWallet)
+  // console.log("ex", externalWallet)
   const navigate = useNavigate();
 
   const [cookies, setCookie] = useCookies(["walletAddress"]);
@@ -128,6 +128,7 @@ const Login = () => {
 
       // Send Wallet Address to backend
       const walletResponse = await addWallet(walletAddress, true, token); // Since it's provider, setting is_provider to true
+      // console.log("store", walletResponse)
 
       // Validate if the response from addWallet indicates success
       if (!walletResponse || walletResponse.error) {
@@ -171,6 +172,8 @@ const handleLoginClick = async (e) => {
       const data = await response.json();
       const token = data.access; // Assuming the token is directly on the response object
       console.log("t", token);
+      localStorage.setItem("jwtToken", token); // storing token in localStorage
+      console.log("Login successful", response);
 
       // get stored wallet address(created when signup) from backend and store in cookie
       const singleWallet = await getWallet(token);
@@ -183,12 +186,11 @@ const handleLoginClick = async (e) => {
       // console.log("single address", singleWallet[0].address);
       // updateWalletAddress(singleWallet[0].address);
       if (selectedType === "provider"&&singleWallet.length===0){
+        console.log("create wallet working", createWallet)
         await createWallet();
        }
-    
       
-      localStorage.setItem("jwtToken", token); // storing token in localStorage
-      console.log("Login successful", response);
+      
       setEmail("");
       setPassword("");
       dispatch(loginSuccess());
