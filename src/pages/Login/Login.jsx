@@ -23,6 +23,8 @@ import { ethers } from "ethers";
 // import { ethers } from "ethers";
 // import {faucetContract} from "../../ethereum/faucet";
 
+ 
+
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -71,102 +73,136 @@ const Login = () => {
   // Configure the environment with the specified options
   configureEnvironment(options);
 
-  const createWallet = async (event) => {
-    // event.preventDefault();
-    const auth = new Auth({ privateKey: PRIVATE_KEY });
+  // const createWallet = async (event) => {
+  //   // event.preventDefault();
+  //   const auth = new Auth({ privateKey: PRIVATE_KEY });
 
+  //   try {
+  //     // Create a FunWallet instance for the user
+  //     const funWallet = new FunWallet({
+  //       users: [{ userId: await auth.getAddress() }],
+  //       uniqueId: await auth.getWalletUniqueId(),
+  //     });
+  //     console.log("ID", auth.getWalletUniqueId());
+
+  //     // Create a user operation
+  //     const userOp = await funWallet.create(auth, await auth.getAddress());
+  //     // console.log("OP", userOp)
+
+  //     // deploy wallet
+  //     // await funWallet.executeOperation(auth, userOp);
+
+  //     // Extract the wallet address from userOp
+  //     const walletAddress = userOp.walletAddr;
+
+  //     // Store the wallet address in a cookie
+  //     updateWalletAddress(walletAddress);
+
+  //     // Send Wallet Address to backend
+  //     const token = localStorage.getItem("jwtToken");
+
+  //     const walletres = addWallet(walletAddress, false, token);
+
+  //     console.log("wwres2", walletres);
+
+  //     console.log("Wallet Address:", walletAddress);
+  //   } catch (error) {
+  //     console.error("Error creating wallet:", error);
+  //   }
+  // };
+  
+  const createWallet = async () => {
     try {
-      // Create a FunWallet instance for the user
+      const auth = new Auth({ privateKey: PRIVATE_KEY });
+      
       const funWallet = new FunWallet({
         users: [{ userId: await auth.getAddress() }],
         uniqueId: await auth.getWalletUniqueId(),
       });
-      console.log("ID", auth.getWalletUniqueId());
-
-      // Create a user operation
+      
       const userOp = await funWallet.create(auth, await auth.getAddress());
-      // console.log("OP", userOp)
-
-      // deploy wallet
-      // await funWallet.executeOperation(auth, userOp);
-
-      // Extract the wallet address from userOp
       const walletAddress = userOp.walletAddr;
-
-      // Store the wallet address in a cookie
       updateWalletAddress(walletAddress);
-
-      // Send Wallet Address to backend
+      
       const token = localStorage.getItem("jwtToken");
 
-      const walletres = addWallet(walletAddress, false, token);
+      // Send Wallet Address to backend
+      const walletResponse = await addWallet(walletAddress, true, token); // Since it's provider, setting is_provider to true
 
-      console.log("wwres2", walletres);
+      // Validate if the response from addWallet indicates success
+      if (!walletResponse || walletResponse.error) {
+          throw new Error('Failed to save the wallet address to the backend.');
+      }
 
-      console.log("Wallet Address:", walletAddress);
+      console.log("Wallet Address saved:", walletAddress);
+      return walletAddress; // Returning the new wallet address
     } catch (error) {
       console.error("Error creating wallet:", error);
+      throw error;  // Propagate the error to be handled in the calling function
     }
-  };
+};
 
-  const handleLoginClick = async (e) => {
-    e.preventDefault();
-    try {
-      let response;
 
-      if (selectedType === "provider") {
-        response = await loginProvider(email, password);
-      } else {
-        response = await loginUser(email, password);
-      }
+const [externalWallet, setExternalWallet] = useState(true);
 
-      // console.log("11",response)
+const handleLoginClick = async (e) => {
+  e.preventDefault();
+  try {
+    let response;
 
-      //JWT
-      //const token = response.data.token;
-      //localStorage.setItem('jwtToken', token); // storing token in localStorage
+    if (selectedType === "provider") {
+      response = await loginProvider(email, password);
+    } else {
+      response = await loginUser(email, password);
+    }
 
-      // console.log("outside");
-      // console.log("Received response: ", response.message);
+    // console.log("11",response)
 
-      // Check if the response is as expected. This is a placeholder.
-      // You need to replace this with an acter logged in succeual check based on your API's response.
-      if (response && response.status === 200) {
-        const data = await response.json();
-        const token = data.access; // Assuming the token is directly on the response object
-        console.log("t", token);
+    //JWT
+    //const token = response.data.token;
+    //localStorage.setItem('jwtToken', token); // storing token in localStorage
 
-        // get stored wallet address(created when signup) from backend and store in cookie
-        const singleWallet = await getWallet(token);
-        if (singleWallet && singleWallet.length > 0 && singleWallet[0].address) {
-          updateWalletAddress(singleWallet[0].address);
-         } else {
-          console.error("No wallet data found for the user.");
-         }
-        // console.log("single address", singleWallet[0].address);
-        // updateWalletAddress(singleWallet[0].address);
+    // console.log("outside");
+    // console.log("Received response: ", response.message);
 
-        if (selectedType === "provider"&&singleWallet.length===0){
-          console.log("provider login")
-          await createWallet();
-         }
-        
-        localStorage.setItem("jwtToken", token); // storing token in localStorage
-        console.log("Login successful", response);
-        setEmail("");
-        setPassword("");
-        dispatch(loginSuccess());
-        // navigate("/clouds");
-      } else {
-        // Handle login failure, perhaps pop up an error message
-        console.error("Login failed: ", response.message);
-        alert("Login failed. Please check your credentials.");
-      }
-    } catch (error) {
-      console.error("Login error", error);
+    // Check if the response is as expected. This is a placeholder.
+    // You need to replace this with an acter logged in succeual check based on your API's response.
+    if (response && response.status === 200) {
+      const data = await response.json();
+      const token = data.access; // Assuming the token is directly on the response object
+      console.log("t", token);
+
+      // get stored wallet address(created when signup) from backend and store in cookie
+      const singleWallet = await getWallet(token);
+      console.log("singlewallet", singleWallet);
+      if (singleWallet && singleWallet.length > 0 && singleWallet[0].address) {
+        updateWalletAddress(singleWallet[0].address);
+       } else {
+        console.error("No wallet data found for the user.");
+       }
+      // console.log("single address", singleWallet[0].address);
+      // updateWalletAddress(singleWallet[0].address);
+      if (selectedType === "provider"&&singleWallet.length===0){
+        await createWallet();
+       }
+       console.log("create wallet working", createWallet)
+      
+      localStorage.setItem("jwtToken", token); // storing token in localStorage
+      console.log("Login successful", response);
+      setEmail("");
+      setPassword("");
+      dispatch(loginSuccess());
+      // navigate("/clouds");
+    } else {
+      // Handle login failure, perhaps pop up an error message
+      console.error("Login failed: ", response.message);
       alert("Login failed. Please check your credentials.");
     }
-  };
+  } catch (error) {
+    console.error("Login error", error);
+    alert("Login failed. Please check your credentials.");
+  }
+};
 
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
@@ -179,6 +215,7 @@ const Login = () => {
         setMetaAddress(accounts[0]);
         /* get signer */
         updateWalletAddress(metaAddress);
+        // updateWalletAddress(accounts[0]);
         setSigner(provider.getSigner());
         /* local contract instance */
         setFcContract(faucetContract(provider));
