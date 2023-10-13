@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GridComponent, Inject, ColumnsDirective, ColumnDirective, Search, Page, Toolbar } from '@syncfusion/ej2-react-grids';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 
 
@@ -80,8 +81,11 @@ function GPU() {
       width: 120,
       template: (rowData) => {
         const handleLinkClick = () => {
+          // Set a GPU cookie when the user clicks on GPU component
+          Cookies.set('userClickedGPU', true);
+          Cookies.set('userClickedCPU', false);
           // Check if the string contains any non-zero characters
-          const hasNonZeroCpu = [...rowData.cpu].some(char => char !== "0");
+          const hasNonZeroCpu = false;
           
           const routePath = hasNonZeroCpu ? `/clouds/confirmation CPU` : `/clouds/confirmation GPU/${rowData.id}`;
           

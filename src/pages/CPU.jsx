@@ -1,4 +1,6 @@
 import React from "react";
+import Cookies from 'js-cookie';
+
 import {
   GridComponent,
   Inject,
@@ -17,6 +19,14 @@ const CPU = () => {
 
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
+
+  const handleCPULinkClick = () => {
+    // Set a CPU cookie when the user clicks on CPU component
+    Cookies.set('userClickedCPU', 'true'); // 'userClickedCPU' is the cookie name
+    Cookies.set('userClickedGPU', 'true'); 
+
+    // Optionally, you can perform other actions here
+  };
 
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
