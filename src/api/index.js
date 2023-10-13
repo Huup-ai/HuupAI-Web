@@ -293,3 +293,14 @@ export async function generateInvoice() {
     throw error;
   }
 }
+
+export async function getUserInfo() {
+  return FetchRequest(
+    `${API_URL}/users/info/`,
+    "GET",
+    {
+      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json"
+    }
+  );
+}
