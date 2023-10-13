@@ -188,7 +188,8 @@ const Navbar = ({ currentPage }) => {
   const [connectedNetwork, setConnectedNetwork] = useState(null);
   const networks = [
     { id: 1, name: 'Ethereum Mainnet' },
-    { id: 11155111, name: "Sepolia" }, // Sepolia network
+    { id: 11155111, name: "Sepolia" },
+    { id: 5, name: 'Goerli' }, // Sepolia network
     // Add more networks as needed
   ];
   const externalWallet = useSelector((state) => state.auth.externalWallet);
@@ -318,7 +319,8 @@ const Navbar = ({ currentPage }) => {
             </div>
           </>
         ) : (
-          <> </>
+          <>
+          <span>Network Connected: Goerli</span> </>
         )}
 
         <button
