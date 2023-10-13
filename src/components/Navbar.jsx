@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useCookies } from "react-cookie";
-import { AiOutlineHome, AiOutlineMenu } from "react-icons/ai";
+import {
+  AiOutlineHome,
+  AiOutlineMenu,
+  AiOutlineCopy,
+  AiFillCopy,
+} from "react-icons/ai";
 // import { FiShoppingCart } from "react-icons/fi";
 import { BsPerson } from "react-icons/bs";
 import { RiNotification3Line } from "react-icons/ri";
 // import { MdKeyboardArrowDown } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { addWallet } from "../api";
-import { Button } from "../components";
+import { useSelector } from "react-redux";
 
 import { faucetContract } from "../ethereum/faucet";
 import { contractAddress, customerToken } from "../Address";
@@ -20,7 +25,7 @@ import { Market, MyCloud, UserProfile } from ".";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
-  <TooltipComponent content={title} position="BottomCenter">
+  <TooltipComponent content={title} >
     <button
       type="button"
       onClick={() => customFunc()}
@@ -179,6 +184,40 @@ const Navbar = ({ currentPage }) => {
     }
   };
 
+  const [selectedNetwork, setSelectedNetwork] = useState(null);
+  const [connectedNetwork, setConnectedNetwork] = useState(null);
+  const networks = [
+    { id: 1, name: 'Ethereum Mainnet' },
+    { id: 11155111, name: "Sepolia" }, // Sepolia network
+    // Add more networks as needed
+  ];
+  const externalWallet = useSelector((state) => state.auth.externalWallet);
+  // console.log("ex", externalWallet)
+
+  const switchToNetwork = async () => {
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: `0x${selectedNetwork.id.toString(16)}` }],
+      });
+      setConnectedNetwork(selectedNetwork);
+      const mess = "successfully connected to: " + selectedNetwork.name;
+      alert(mess);
+    } catch (error) {
+      console.error("Error switching network:", error);
+      alert("Error switching network");
+    }
+  };
+
+  const handleNetworkChange = (event) => {
+    const selectedNetworkId = parseInt(event.target.value, 10);
+    const network = networks.find(
+      (network) => network.id === selectedNetworkId
+    );
+    setSelectedNetwork(network);
+    console.log("selected", network);
+  };
+
   const getCurrentWalletConnected = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       try {
@@ -216,6 +255,14 @@ const Navbar = ({ currentPage }) => {
     }
   };
 
+  const [copied, setCopied] = useState("");
+  const copyAddress = (address) => {
+    setCopied(address);
+    navigator.clipboard.writeText(address);
+    setTimeout(() => setCopied(false), 3000);
+    // console.log("copy", walletCookie.walletAddress);
+  };
+
   return (
     <div className="flex justify-between px-2 pt-2 md:ml-6 md:mr-6 relative ">
       <div className="flex justify-start ">
@@ -229,20 +276,86 @@ const Navbar = ({ currentPage }) => {
         {displayContent ? <>{Provider}</> : <>{Consumer}</>}
       </div>
 
-      <div className="mt-2">
+      <div className=" flex gap-2 items-center">
+        {externalWallet ? (
+          <>
+            <div className="border-2 rounded-xl flex gap-2 p-1 items-center">
+              <div className="flex">
+                <select
+                  id="networkSelect"
+                  onChange={handleNetworkChange}
+                  value={selectedNetwork ? selectedNetwork.id : ""}
+                >
+                  <option value=" ">Choose a network</option>
+
+                  {networks.map((network) => (
+                    <option key={network.id} value={network.id}>
+                      {network.name}{" "}
+                      {connectedNetwork && connectedNetwork.id === network.id
+                        ? "- Connected"
+                        : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <TooltipComponent
+                content="Connect to network"
+                position="BottomCenter"
+              >
+                <button
+                  type="button"
+                  className="flex hover:bg-white text-white p-1 rounded-xl mt-2 "
+                  style={{ background: currentColor }}
+                  onClick={switchToNetwork}
+                >
+                  <span className="text-sm">
+                    Switch to {selectedNetwork ? selectedNetwork.name : ""}{" "}
+                    network
+                  </span>
+                </button>
+              </TooltipComponent>
+            </div>
+          </>
+        ) : (
+          <> </>
+        )}
+
         <button
           type="button"
-          className=" hover:bg-blue-700 text-white py-2 px-4 rounded-xl"
+          className="flex hover:bg-white text-white p-1 px-4 rounded-xl"
           style={{ background: currentColor }}
           onClick={connectWallet}
+          disabled={!walletCookie.walletAddress}
         >
-          <span>
+          <span className="text-base">
             {walletCookie.walletAddress !== "undefined"
               ? `Wallet Connected: ${walletCookie.walletAddress}`
               : "Connect Wallet"}
             {/* {walletCookie.walletAddress} */}
           </span>
         </button>
+
+        <TooltipComponent
+          content={
+            copied === walletCookie.walletAddress
+              ? "Address Copied"
+              : "Copy Address"
+          }
+          position="BottomCenter"
+        >
+          <div
+            className="relative text-xl rounded-full hover-button"
+            onClick={() => copyAddress(walletCookie.walletAddress)}
+          >
+            {copied === walletCookie.walletAddress ? (
+              <AiFillCopy />
+            ) : (
+              <AiOutlineCopy />
+            )}
+            {/* <AiOutlineCopy /> */}
+          </div>
+        </TooltipComponent>
       </div>
     </div>
   );

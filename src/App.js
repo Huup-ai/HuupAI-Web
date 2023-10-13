@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-// import { Route, Routes, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Clouds from "./pages/Clouds/Clouds";
 // import GPU from "./pages/GPU";
@@ -9,12 +8,13 @@ import Login from "./pages/Login/Login";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
-import Inventory from "./pages/Inventory";
+// import Inventory from "./pages/Inventory";
 // import Billing from "./pages/Billing";
 // import Profile from "./pages/Profile";
 // import Instances from "./pages/Instances";
 //import GPU from "./pages/GPU";
 // import CPU from "./pages/CPU";
+import Inventory from "./pages/Inventory";
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

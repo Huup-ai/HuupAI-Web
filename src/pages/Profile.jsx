@@ -7,6 +7,7 @@ import {
   DefaultPay,
   UpdatePwd,
   InvoiceInfo,
+  UpdateBank
 } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import { useCookies } from "react-cookie";
@@ -38,93 +39,35 @@ const Profile = () => {
     setDisplayContent(cookies.selectedType === "provider");
   }, [cookies.selectedType]);
 
-  // const [isToggled, setToggled] = useState(() => {
-  //   const storedValue = localStorage.getItem("crypto");
-  //   return storedValue ? JSON.parse(storedValue) : false;
-  // });
-
-  // const handleToggle = () => {
-  //   const newValue = !isToggled;
-  //   setToggled(newValue);
-  //   localStorage.setItem("crypto", JSON.stringify(newValue));
-  // };
-
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header category="My Cloud > Profile" title="Welcome" />
 
-      <div className = "flex flex-row justify-around">
+      {displayContent ? (<><div className="flex flex-row justify-around">
+        <InvoiceInfo />
+        <div className="w-8"></div>
+        <UpdateBank />
+      </div>
+</>):(<><div className="flex flex-row justify-around">
         <UpdateCredit />
+        <div className="w-8"></div>
         <DefaultPay />
       </div>
+      <div className="h-8"></div>
 
-      <div className = "flex flex-row justify-around">
+      <div className="flex flex-row justify-around">
         <InvoiceInfo />
+        <div className="w-8"></div>
         <UpdatePwd />
-      </div>
+      </div></>)}
+      
 
-      <form className="infoForm">
+
+
+
+      {/* <form className="infoForm">
     
-        {/* <div className="flex flex-row items-center">
-          <h6 className="w-72">Setup default Payment Method: </h6>
-
-          <div>
-            <input
-              type="radio"
-              id="eitherWay"
-              value="eitherWay"
-              checked={payment === "eitherWay"}
-              onChange={handleCheckboxChange}
-            />
-            <label htmlFor="eitherWay">Either Way(default)</label>
-          </div>
-
-          <div>
-            <input
-              type="radio"
-              id="crypto"
-              value="crypto"
-              checked={payment === "crypto"}
-              onChange={handleCheckboxChange}
-            />
-            <label htmlFor="crypto">Crypto</label>
-          </div>
-
-          <div>
-            <input
-              type="radio"
-              id="creditCard"
-              value="creditCard"
-              checked={payment === "creditCard"}
-              onChange={handleCheckboxChange}
-            />
-            <label htmlFor="creditCard">Credit Card</label>
-          </div>
-        </div> */}
-
-        {/* <div className="flex flex-row items-center">
-          <h6 className="mt-4 w-48">Payment Method: </h6>
-          <span className="text-gray-700">$USD</span>
-
-          <div
-            className={`relative h-8 inline-block w-14 align-middle select-none transition duration-200 ease-in ${
-              isToggled ? "bg-blue-400" : "bg-gray-300"
-            } rounded-xl p-1`}
-            onClick={handleToggle}
-          >
-            <div
-              className={`absolute w-6 h-6 bg-white rounded-full transition-transform duration-200 ease-in transform ${
-                isToggled ? "translate-x-full" : ""
-              }`}
-            ></div>
-          </div>
-          <span className="text-gray-700 ml-2">Crypto</span>
-          <div className="text-xs">
-            Note: based on the user selection above, we will either display the
-            left or right
-          </div>
-        </div> */}
-
+        
         {displayContent ? (
           <>
             {" "}
@@ -312,12 +255,12 @@ const Profile = () => {
             )}{" "}
           </>
         )}
-      </form>
+      </form> */}
 
       {/* <Divider className="py-5">   </Divider> */}
-      <div className="mt-8 border-t-4"> </div>
+      {/* <div className="mt-8 border-t-4"> </div> */}
 
-      <form className="infoForm mt-12">
+      {/* <form className="infoForm mt-12">
         <h3>Change Password</h3>
 
         <div>
@@ -348,7 +291,7 @@ const Profile = () => {
           text="Update"
           borderRadius="10px"
         />
-      </form>
+      </form> */}
     </div>
   );
 };
