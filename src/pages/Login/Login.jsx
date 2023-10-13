@@ -186,7 +186,6 @@ const handleLoginClick = async (e) => {
       // console.log("single address", singleWallet[0].address);
       // updateWalletAddress(singleWallet[0].address);
       if (selectedType === "provider"&&singleWallet.length===0){
-        console.log("create wallet working", createWallet)
         await createWallet();
        }
       
