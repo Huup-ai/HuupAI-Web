@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch} from "react-redux";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
 import { loadStripe } from "@stripe/stripe-js";
@@ -8,12 +8,14 @@ import { Stripe_KEY } from "../Address";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { addPaymentAuth, checkPaymentAuth } from "../api";
+import { addPaymentMethod } from "../reducers/authSlicer";
 
 const stripePromise = loadStripe(Stripe_KEY);
 
 const PayinComfirmation = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const dispatch = useDispatch(); // Add useDispatch
 
   const { currentColor } = useStateContext();
   // console.log("currentColor", currentColor);
@@ -30,7 +32,8 @@ const PayinComfirmation = () => {
   const [checkCreditAuth, setCheckCreditAuth] = useState(false);
   const JWTtoken = localStorage.getItem("jwtToken");
 
-  if (
+  useEffect(()=>{
+    if (
     (payment === "creditCard" )||
     (payment === "eitherWay" && isCrypto === false)
   ) {
@@ -46,7 +49,8 @@ const PayinComfirmation = () => {
         console.error("Error:", error);
       });
   }
-
+},[payment]) //每次payment改变时，进行刷新
+  
   const paymentMethod = [
     <div className="">
       <div className="flex flex-row items-center">
@@ -177,8 +181,12 @@ const PayinComfirmation = () => {
     } else {
       console.log("Payment Token:", paymentMethod.paymentMethod.id);
       // Send the token to your backend for further processing
-      const response = addPaymentAuth(paymentMethod.id, JWTtoken);
+      const response = addPaymentAuth(paymentMethod.paymentMethod.id, JWTtoken);
       // alert("response", response);
+      if (response.success) {
+        // Dispatch the addPaymentMethod action to update hasPaymentMethod in Redux
+        dispatch(addPaymentMethod());
+      }
     }
   };
 
@@ -264,19 +272,6 @@ const PayinComfirmation = () => {
       </form>
     </>,
   ];
-
-  //   console.log(
-  //     "Crypto",
-  //     isCrypto,
-  //     "paymethod",
-  //     payment,
-  //     "balance",
-  //     checkBalance,
-  //     "exWallet",
-  //     externalWallet,
-  //     "creditAuth",
-  //     checkCreditAuth
-  //   );
 
   if (payment === "eitherWay") {
     choosepay = paymentMethod;
