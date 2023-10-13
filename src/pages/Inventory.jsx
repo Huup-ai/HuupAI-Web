@@ -53,58 +53,58 @@ const Inventory = () => {
 };
 
 // Fetch clusters associated with the provider
-const fetchClusters = async () => {
-  try {
-      const token = localStorage.getItem("jwtToken");
-      const response = await fetch(`${API_URL}/clusters/my_clusters/`, {
-          headers: {
-              'Authorization': `Bearer ${token}`,
-          },
-      }); 
+// const fetchClusters = async () => {
+//   try {
+//       const token = localStorage.getItem("jwtToken");
+//       const response = await fetch(`${API_URL}/clusters/my_clusters/`, {
+//           headers: {
+//               'Authorization': `Bearer ${token}`,
+//           },
+//       }); 
       
-      if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`Failed to fetch clusters. Status: ${response.status}. Response: ${text}`);
-      }
+//       if (!response.ok) {
+//           const text = await response.text();
+//           throw new Error(`Failed to fetch clusters. Status: ${response.status}. Response: ${text}`);
+//       }
 
-      const data = await response.json();
-      console.log("Fetched Clusters:", data);
-      setClusters(data);
-  } catch (error) {
-      console.error('There was an error fetching the clusters', error);
-  }
-}
+//       const data = await response.json();
+//       console.log("Fetched Clusters:", data);
+//       setClusters(data);
+//   } catch (error) {
+//       console.error('There was an error fetching the clusters', error);
+//   }
+// }
 
 useEffect(() => {
-  fetchClusters();  // On component mount, fetch the clusters of the provider
+  getClusterById();  // On component mount, fetch the clusters of the provider
 }, []);
 
 useEffect(() => {
   console.log("ClusterPrice changed:", clusterPrice);
 }, [clusterPrice]);
 
-const handleClusterChange = async (e) => {
-  const clusterId = e.target.value;
-  console.log("Selected Cluster ID:", clusterId);
-  setSelectedAction(clusterId);
+// const handleClusterChange = async (e) => {
+//   const clusterId = e.target.value;
+//   console.log("Selected Cluster ID:", clusterId);
+//   setSelectedAction(clusterId);
 
-  if (clusterId) {
-    const clusterDetails = await getClusterById(clusterId);
-    console.log("Fetched Cluster Details:", clusterDetails);
+//   if (clusterId) {
+//     const clusterDetails = await getClusterById(clusterId);
+//     console.log("Fetched Cluster Details:", clusterDetails);
 
-  if (clusterDetails && (clusterDetails.id || clusterDetails.item_id)) {
-    setClusters([clusterDetails]);
+//   if (clusterDetails && (clusterDetails.id || clusterDetails.item_id)) {
+//     setClusters([clusterDetails]);
 
-    const currentClusterPrice = clusterDetails.price ? clusterDetails.price : null;
-    setClusterPrice(currentClusterPrice);
-    setShowPriceBox(currentClusterPrice === null); // Show countbox if price is null
+//     const currentClusterPrice = clusterDetails.price ? clusterDetails.price : null;
+//     setClusterPrice(currentClusterPrice);
+//     setShowPriceBox(currentClusterPrice === null); // Show countbox if price is null
 
-} else {
-    console.error("Unexpected cluster data structure:", clusterDetails);
-    fetchClusters();
-}
-  }
-};
+// } else {
+//     console.error("Unexpected cluster data structure:", clusterDetails);
+//     fetchClusters();
+// }
+//   }
+// };
 
 const handleSetPrice = async () => {
   console.log("handleSetPrice function called");
@@ -161,43 +161,8 @@ const handleSetPrice = async () => {
 return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header category="My Cloud > Inventory" title="Set your Inventory Price" />
-        <div className="text-left ml-4 mb-5f flex flex-col">
-            <div className="flex mb-5">
-                <span className="w-60"> Select Cluster</span>
-                <select
-                    className="border-solid border-2 rounded-md border-grey w-40"
-                    value={selectedAction}
-                    onChange={handleClusterChange}
-                >
-                    
-                    <option value=""> </option>
-                    {clusters.map(cluster => (
-                        <option key={cluster.id || cluster.item_id} value={cluster.id || cluster.item_id}>
-                            {cluster.id || cluster.item_id}
-                    </option>
-                    ))}
-                </select>
-            </div>
-  
-    {showPriceBox && (
-      <div className="flex mb-5">
-          <span className="w-60">Set Price per hour in USD</span>
-          <Countbox value={clusterPrice === null ? '' : clusterPrice} onChange={e => setClusterPrice(e.target.value)} />
-      </div>
-)}
-
-<div className="mb-10">
-<Button
-  color="white"
-  bgColor={currentColor}
-  text="Set"
-  borderRadius="10px"
-  onClickCallback={handleSetPrice}
-/>
-</div>
-</div>
-<div>
-  <h3> My Inventory List</h3>
+        
+      <h3 className="mb-4">My Inventory List</h3>
   <GridComponent
     rowHeight={70}
     dataSource={clusters}
@@ -212,17 +177,29 @@ return (
     // height='400'
     // className = "overflow-visible text-clip h-96"
   >
-    
     <ColumnsDirective>
-      {InventoryGrid.map((item, index) => (
-        <ColumnDirective key={index} {...item} />
-      ))}
+            {InventoryGrid.map((column) => (
+              <ColumnDirective 
+                key={column.field || column.headerText}
+                {...column} 
+              />
+            ))}
     </ColumnsDirective>
     <Inject services={[Search, Page, Toolbar]} />
   </GridComponent>
 </div>
 
-    </div>
+// {/* <div className="mt-4">
+// <Button
+//   color="white"
+//   bgColor={currentColor}
+//   text="Set"
+//   borderRadius="10px"
+//   onClickCallback={handleSetPrice}
+// />
+// </div> */}
+
+    
   );
 };
 
