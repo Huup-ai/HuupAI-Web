@@ -155,7 +155,7 @@ const Invoices = () => {
       <div className="drop-shadow-[0px_5px_5px_rgba(0,0,0,0.15)]">
         <GridComponent
           rowHeight={100}
-          dataSource={invoice}
+          dataSource={invoicesData}
           width="auto"
           allowPaging
           allowSorting
