@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useStateContext } from "../contexts/ContextProvider";
 import { Button } from "../components";
 import { loadStripe } from "@stripe/stripe-js";
@@ -8,7 +8,7 @@ import { Stripe_KEY } from "../Address";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { addPaymentAuth, checkPaymentAuth } from "../api";
-import { addPaymentMethod } from "../reducers/authSlicer";
+import { addPaymentMethod, updateSelection } from "../reducers/authSlicer";
 
 const stripePromise = loadStripe(Stripe_KEY);
 
@@ -32,25 +32,28 @@ const PayinComfirmation = () => {
   const [checkCreditAuth, setCheckCreditAuth] = useState(false);
   const JWTtoken = localStorage.getItem("jwtToken");
 
-  useEffect(()=>{
+  useEffect(() => {
+    // console.log("creditAuth", checkCreditAuth)
+
     if (
-    (payment === "creditCard" )||
-    (payment === "eitherWay" && isCrypto === false)
-  ) {
-    const checkAuth = checkPaymentAuth(JWTtoken);
-    console.log("checkAuth", checkAuth)
-    checkAuth
-      .then((result) => {
-        // console.log(result);
-        setCheckCreditAuth(result);
-        // console.log("checkCreditAuth", checkCreditAuth);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
-},[payment]) //每次payment改变时，进行刷新
-  
+      payment === "creditCard" ||
+      (payment === "eitherWay" && isCrypto === false)
+    ) {
+      const checkAuth = checkPaymentAuth(JWTtoken);
+      // console.log("checkAuth", checkAuth)
+      checkAuth
+        .then((result) => {
+          // console.log(result);
+          setCheckCreditAuth(result);
+          // dispatch(updateSelection("creditCard"))
+          // console.log("checkCreditAuth", checkCreditAuth);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  }, [checkCreditAuth, payment]); //每次payment改变时，进行刷新
+
   const paymentMethod = [
     <div className="">
       <div className="flex flex-row items-center">
@@ -139,24 +142,7 @@ const PayinComfirmation = () => {
       </div>
     </>,
   ];
-
-  // const [creditCardNumber, setCreditCardNumber] = useState("");
-
-  // const handleCardNumChange = (event) => {
-  //   const { value } = event.target;
-
-  //   // Remove non-numeric characters
-  //   const numericValue = value.replace(/\D/g, "");
-
-  //   // Format the credit card number with spaces
-  //   const formattedValue = numericValue
-  //     .replace(/(\d{4})/g, "$1 ")
-  //     .trim()
-  //     .substr(0, 19); // Limit to 19 characters (16 digits + 3 spaces)
-
-  //   setCreditCardNumber(formattedValue);
-  // };
-
+  
   const handleSubmit = async (event) => {
     // event.preventDefault();
 
@@ -179,64 +165,29 @@ const PayinComfirmation = () => {
     if (error) {
       alert("err", error);
     } else {
-      console.log("Payment Token:", paymentMethod.paymentMethod.id, paymentMethod);
+      console.log(
+        "Payment Token:",
+        paymentMethod.paymentMethod.id,
+        paymentMethod
+      );
       // Send the token to your backend for further processing
       const response = addPaymentAuth(paymentMethod.paymentMethod.id, JWTtoken);
-      // alert("response", response);
-      if (response.success) {
-        // Dispatch the addPaymentMethod action to update hasPaymentMethod in Redux
+
+      response
+      .then((result) => {       
         dispatch(addPaymentMethod());
-      }
+        setCheckCreditAuth(true);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    
     }
   };
 
   const creditCard = [
     <>
       <form className="mt-5 w-1/2 border-2 rounded-lg shadow-lg">
-        {/* <div className="flex md:m-10 justify-between">
-          <label htmlFor="creditCardNumber">Credit Card</label>
-
-          <input
-            className="border-2"
-            type="text"
-            id="creditCardNumber"
-            name="creditCardNumber"
-            value={creditCardNumber}
-            onChange={handleCardNumChange}
-            maxLength={19} // Maximum length for a formatted credit card number
-            placeholder="xxxx xxxx xxxx xxxx"
-          />
-        </div>
-
-        <div className="flex md:m-10 justify-between">
-          <label>Expiration Date</label>
-
-          <input
-            className="border-2"
-            type="date"
-            
-          />
-        </div> */}
-        {/* <div className="flex md:m-10 justify-between">
-          <label className="p-2">Name on the card</label>
-
-          <input className="border-2 p-2 rounded" type="text" />
-        </div> */}
-        {/* <div className="flex md:m-10 justify-between">
-          <label>Authorization Code</label>
-
-          <input
-            className="border-2"
-            type="text"
-            
-          />
-        </div> */}
-        {/* <div className="flex md:m-10 justify-between">
-          <label className="p-2">Billing Address</label>
-
-          <input className="border-2 p-2 rounded" type="text" />
-        </div> */}
-
         <div className="md:m-10 justify-between">
           <label className="p-2">Card Information:</label>
 
