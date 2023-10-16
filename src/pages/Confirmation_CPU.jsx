@@ -16,6 +16,7 @@ const Confirmation_CPU = () => {
   const { currentColor, currentMode } = useStateContext();
   const { id } = useParams();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // check if user is logged in
+  const [userName, setUserName] = useState(""); 
   console.log("Is Authenticated:", isAuthenticated); // Log the value
   let hasPaymentMethod = useSelector((state) => state.auth.hasPaymentMethod); // check if user has a payment method
 

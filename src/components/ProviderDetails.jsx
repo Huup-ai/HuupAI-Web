@@ -1,13 +1,49 @@
-import {React, useState} from "react";
+import {React, useState, useEffect} from "react";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 
+// const ProviderDetails = () => {
+//   const { currentColor } = useStateContext();
+//   const [isCrypto, setIsCrypto] = useState(() => {
+//     const storedValue = localStorage.getItem("crypto");
+//     return storedValue ? JSON.parse(storedValue) : false;
+//   });
 const ProviderDetails = () => {
   const { currentColor } = useStateContext();
+  const [paymentDetails, setPaymentDetails] = useState(null);
+  const [billingDetails, setBillingDetails] = useState(null);
   const [isCrypto, setIsCrypto] = useState(() => {
     const storedValue = localStorage.getItem("crypto");
     return storedValue ? JSON.parse(storedValue) : false;
   });
+
+  useEffect(() => {
+    // Fetch payment details from your backend.
+    fetch("/users/payment_method/")
+      .then((response) => response.json())
+      .then((data) => {
+        setPaymentDetails(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching payment details:", error);
+      });
+    
+    // Fetch billing details from your backend.
+    fetch("/users/info/")
+      .then((response) => response.json())
+      .then((data) => {
+        setBillingDetails(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching billing details:", error);
+      });
+  }, []);
+
+   
+
+  if (!paymentDetails || !billingDetails) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div id="Payment Details">
@@ -30,18 +66,18 @@ const ProviderDetails = () => {
           <div>
             <span className="inline-block w-60">PAYMENT METHOD</span>
             <span>:</span>
-            <span>Crypto</span>
+            <span>{paymentDetails.payment_method}</span>
           </div>
           <div>
             <span className="inline-block w-60">Account Payable Window</span>
             <span>:</span>
-            <span>30 Days</span>
+            <span>{paymentDetails.account_payable_window}</span>
           </div>
          
           <div>
             <span className="inline-block w-60">Wallet Address</span>
             <span>:</span>
-            <span>XXXXXXXXXXX1234</span>
+            <span>{paymentDetails.wallet_address}</span>
           </div>
           {/* <div className="mt-2 mb-2">
             <Button
@@ -61,22 +97,22 @@ const ProviderDetails = () => {
             <div>
               <span className="inline-block w-60">PAYMENT METHOD</span>
               <span>:</span>
-              <span>Bank</span>
+              <span>{paymentDetails.payment_method}</span>
             </div>
             <div>
               <span className="inline-block w-60">Account Payable Window</span>
               <span>:</span>
-              <span>45 Days</span>
+              <span>{paymentDetails.account_payable_window}</span>
             </div>
             <div>
               <span className="inline-block w-60">Bank Routing</span>
               <span>:</span>
-              <span>XXXX-XXXX-XXXX-1234</span>
+              <span>{paymentDetails.bank_routing}</span>
             </div>
             <div>
               <span className="inline-block w-60">Bank Account</span>
               <span>:</span>
-              <span>XXXX-XXXX-XXXX-1234</span>
+              <span>{paymentDetails.bank_account}</span>
             </div>
 
             <div className="mt-2 mb-2">
@@ -97,17 +133,17 @@ const ProviderDetails = () => {
             <div>
               <span className="inline-block w-40">NAME</span>
               <span>:</span>
-              <span>YU WANG</span>
+              <span>{billingDetails.name}</span>
             </div>
             <div>
               <span className="inline-block w-40">EMAIL</span>
               <span>:</span>
-              <span>USER_NAME</span>
+              <span>{billingDetails.email}</span>
             </div>
             <div>
               <span className="inline-block w-40">ADDRESS</span>
               <span>:</span>
-              <span>XXXX</span>
+              <span>{billingDetails.address}</span>
             </div>
             <div className="mt-2 mb-2">
               <Button

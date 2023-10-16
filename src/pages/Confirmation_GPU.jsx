@@ -15,41 +15,11 @@ const Confirmation_GPU = () => {
   const { id } = useParams();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);  // check if user is logged in
   console.log("Is Authenticated:", isAuthenticated);  // Log the value
+  const [customName, setCustomName] = useState("win2019-dv-01");
   let hasPaymentMethod = useSelector(state => state.auth.hasPaymentMethod); // check if user has a payment method
-
-  // Define a function to get the wallet
-//   const getWallet = async (token) => {
-//     try {
-//       // Make a GET request to the endpoint with headers
-//       const response = await fetch(`${API_URL}/wallets/get_wallets/`, {
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': 'Bearer ' + token
-//         }
-//       });
-
-//       // Check if the response is successful
-//       if (!response.ok) {
-//         throw new Error('Network response was not ok');
-//       }
-
-//       // Parse the JSON data from the response
-//       const data = await response.json();
-
-//       // Here, you can use the data as needed
-//       console.log(data); // For now, we'll just log it
-
-//       // If you want to display the address in an alert
-//       alert("Wallet Address: " + data.address);
-
-//     } catch (error) {
-//       console.error("There was a problem with the fetch operation:", error.message);
-//       alert("Failed to fetch wallet address: " + error.message);
-//     }
-//   };
-
-
+  console.log("hasPaymentMethod:", hasPaymentMethod); 
+  const [metadataName, setMetadataName] = useState("win2019-dv-01");
+  
   const navigate = useNavigate();
 
   const hasEnoughCredit = async () => {
@@ -63,19 +33,15 @@ const Confirmation_GPU = () => {
     return threshHoldHour * rate < remainingCredit
   }
 
+  const handleMetadataNameChange = (event) => {
+    setMetadataName(event.target.value);
+  };
+
 
   const handleConfirmOrder = async () => {
-    console.log('Button clicked!');
-    console.log({ id } );
-    //console.log(user.id);
-    const token = localStorage.getItem('jwtToken');
-
-    //getWallet(token);
-    if (!await hasEnoughCredit()) {
-      hasPaymentMethod = false
-    }
-    //if statement check if user has add a payment method. 
-    if(hasPaymentMethod){
+  
+  const token = localStorage.getItem('jwtToken');
+  if(hasPaymentMethod){
     try {
         const response = await fetch(`${API_URL}/instances/${id}/createvm/`, {
 
@@ -88,7 +54,7 @@ const Confirmation_GPU = () => {
             body: JSON.stringify({
               
                 "metadata": {
-                  "name": "win2019-dv-01",
+                  name: customName,
                   "namespace": "default"
                 },
                 "spec": {
@@ -236,6 +202,18 @@ const Confirmation_GPU = () => {
       <Header category="Market Could > GPU > Order Confirmation" title="Rent GPU Server" />
 
       <PayinComfirmation/>
+
+      <div className="mb-10">
+        <label htmlFor="customName">Custom Name:</label>
+        <input
+          type="text"
+          id="customName"
+          name="customName"
+          value={customName}
+          onChange={(e) => setCustomName(e.target.value)}
+        />
+      </div>
+
       <div className="mt-12 flex space-x-20 mb-10">
         <p>OS</p>
         <OSDropdown />
