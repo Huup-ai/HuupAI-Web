@@ -203,11 +203,12 @@ const Confirmation_GPU = () => {
 
       <PayinComfirmation/>
 
-      <div className="mb-10">
-        <label htmlFor="customName">Custom Name:</label>
+      <div className="mt-12 flex space-x-20">
+        <label htmlFor="customName">Instance Name:</label>
         <input
           type="text"
           id="customName"
+          className="border-2 border-gray-200 rounded-md"
           name="customName"
           value={customName}
           onChange={(e) => setCustomName(e.target.value)}
