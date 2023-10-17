@@ -179,15 +179,20 @@ const Confirmation_GPU = () => {
         // Handle the response data as needed.
         if (!response.ok) {
           console.error("Server Response:", data);  // This will print any error detail from the server
+          alert("There was an issue creating the vm.");
       } else if(data.success) {
           console.log("VM Created!");
+          alert("VM Created!");
+          navigate('/clouds/instances')
       } else {
           console.log("There was an issue creating the vm.");
+          alert("There was an issue creating the vm.");
           console.log("Server Response:", data);   // Add this line to print server's detailed response
       }
 
     } catch (error) {
         console.error("Error confirming order:", error);
+        alert("Error confirming order:", error)
     }
   }else{
     console.log("Please add a payment method or charge your wallet")
