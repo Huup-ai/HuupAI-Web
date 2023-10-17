@@ -56,6 +56,7 @@ const Login = () => {
     Auth,
     configureEnvironment,
     generatePrivateKey,
+    Goerli,
   } = require("@funkit/core");
 
   // Generate a private key for the wallet
@@ -63,7 +64,7 @@ const Login = () => {
   // console.log("PRIVATE_KEY:", PRIVATE_KEY);
 
   const options = {
-    chain: "goerli",
+    chain: Goerli,
     gasSponsor: {
       sponsorAddress: sponsorAddress,
     },
