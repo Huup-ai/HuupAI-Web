@@ -7,6 +7,10 @@ import { logout } from "../reducers/authSlicer";
 import { useStateContext } from "../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../reducers/authSlicer";
+import { useStateContext } from "../contexts/ContextProvider";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 const MyCloud = () => {
   const [cookies] = useCookies();
@@ -73,7 +77,7 @@ const MyCloud = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     
     localStorage.clear(); // Clears all data in localStorage
     const cookies = document.cookie.split("; ");
