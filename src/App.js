@@ -14,6 +14,8 @@ import Inventory from "./pages/Inventory";
 // import Instances from "./pages/Instances";
 //import GPU from "./pages/GPU";
 // import CPU from "./pages/CPU";
+import Landing from "./pages/Landing/Landing";
+
 
 
 function App() {
@@ -27,9 +29,11 @@ function App() {
       <div className="blur" style={{ top: "-18%", right: "0" }}></div>
       <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
       <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/" element={<Landing />} /> 
+      {/* <Route path="/" element={<Navigate to="/login" />} /> */}
       {/* <Route path="/login" element={<Login />} /> */}
       {/* <Route path="/clouds/*" element={<Clouds />} />  */}
+      
       <Route
         path="/login"
         element={isAuthenticated ? <Navigate to="/clouds" /> : <Login />}

@@ -159,9 +159,9 @@ const handleSetPrice = async () => {
 
 
 return (
+  <>
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
-      <Header category="My Cloud > Inventory" title="Set your Inventory Price" />
-        
+      <Header category="My Cloud > Inventory" title="Set your Inventory Price" /> 
       <h3 className="mb-4">My Inventory List</h3>
   <GridComponent
     rowHeight={70}
@@ -189,15 +189,17 @@ return (
   </GridComponent>
 </div>
 
-// {/* <div className="mt-4">
-// <Button
-//   color="white"
-//   bgColor={currentColor}
-//   text="Set"
-//   borderRadius="10px"
-//   onClickCallback={handleSetPrice}
-// />
-// </div> */}
+
+<div className="mt-4">
+<Button
+  color="white"
+  bgColor={currentColor}
+  text="Set"
+  borderRadius="10px"
+  onClickCallback={handleSetPrice}
+/>
+</div>
+</>
 
     
   );

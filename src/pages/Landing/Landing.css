@@ -1,0 +1,471 @@
+/* Landing.css */
+
+.landing {
+    background-color: #0a0019;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    }
+
+.landing .landing-page {
+    background-color: #0a0019;
+    height: 1931px;
+    width: 1440px;
+    }
+/* .landing .overlap {
+background-image: url(./image-1.png);
+background-size: 100% 100%;
+height: 1931px;
+position: relative;
+} */
+/* .landing .overlap-group {
+height: 1829px;
+left: 0;
+position: absolute;
+top: 0;
+width: 1440px;
+} */
+
+                        /*Navigation CSS*/
+.navigation-bar {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-color: #ffffff29;
+    height: 100px;
+    width: 1440px;
+    }
+
+.navigation-bar .frame {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    left: 120px;
+    position: relative;
+    top: 24px;
+    width: 1200px;
+    }
+
+.navigation-bar .logo-with-company {
+    height: 19px;
+    position: relative;
+    width: 94px;
+    }
+
+.navigation-bar .text-wrapper {
+color: #f7f2ff;
+font-family: "Poppins-Bold", Helvetica;
+font-size: 24px;
+font-weight: 700;
+left: 0;
+letter-spacing: -0.72px;
+line-height: 19.2px;
+position: absolute;
+text-align: justify;
+top: 0;
+white-space: nowrap;
+}
+
+.navigation-bar .button {
+    all: unset;
+    align-items: center;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 32px;
+    position: relative;
+    }
+
+.navigation-bar .signup-button {
+    color: #f0e5ff;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.36px;
+    line-height: 27px;
+    position: relative;
+    text-align: justify;
+    white-space: nowrap;
+    width: fit-content;
+    }
+
+.navigation-bar .start-button {
+    width: 125px;
+    height: 52px;
+    background-color: #6A00FF;
+    border: none;
+    border-radius: 30px;
+    padding: 13px 24px;
+    cursor: pointer;
+    color: white; 
+    font-size: 16px; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    gap: 10px; 
+    margin-left: 10px;
+}
+                        /*Main CSS*/
+.label {
+    height: 144px;
+    width: 1016px;
+    }
+    
+.label .enhance-LLM {
+color: #ffffff;
+font-family: "Poppins-Bold", Helvetica;
+font-size: 48px;
+font-weight: 700;
+height: 144px;
+left: 0;
+letter-spacing: 1.44px;
+line-height: normal;
+position: fixed;
+text-align: center;
+top: 0;
+width: 1016px;
+}
+
+
+.landing .subtract {
+    height: 936px;
+    left: 0;
+    position: absolute;
+    top: 79px;
+    width: 929px;
+    }
+.landing .img {
+height: 970px;
+left: 383px;
+position: absolute;
+top: 169px;
+width: 1057px;
+}
+
+.landing .frame-2 {
+    height: 77px;
+    left: 255px;
+    position: absolute;
+    top: 701px;
+    width: 403px;
+    }
+.landing .ai-model {
+    color: #ffffff;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 32px;
+    font-weight: 500;
+    height: 48px;
+    left: 258px;
+    letter-spacing: 0.96px;
+    line-height: normal;
+    position: absolute;
+    top: 12px;
+    }
+.landing .span {
+color: #ffffff;
+font-family: "Poppins-Medium", Helvetica;
+font-size: 32px;
+font-weight: 500;
+letter-spacing: 0.96px;
+}
+.landing .group {
+height: 77px;
+left: 0;
+position: absolute;
+top: 0;
+width: 246px;
+}
+
+.landing .overlap-group-2 {
+    height: 77px;
+    position: relative;
+    width: 242px;
+    }
+
+.landing .text-wrapper-2 {
+-webkit-background-clip: text !important;
+-webkit-text-fill-color: transparent;
+background: linear-gradient(180deg, rgb(0, 255, 170) 0%, rgb(63.75, 0, 153) 100%);
+background-clip: text;
+color: transparent;
+filter: blur(5px);
+font-family: "Poppins-SemiBoldItalic", Helvetica;
+font-size: 48px;
+font-style: italic;
+font-weight: 600;
+height: 72px;
+left: 0;
+letter-spacing: 1.44px;
+line-height: normal;
+position: absolute;
+text-fill-color: transparent;
+top: 5px;
+}
+
+.landing .text-wrapper-3 {
+color: #ffffff;
+font-family: "Poppins-SemiBoldItalic", Helvetica;
+font-size: 48px;
+font-style: italic;
+font-weight: 600;
+height: 72px;
+left: 2px;
+letter-spacing: 1.44px;
+line-height: normal;
+position: absolute;
+top: 0;
+}
+
+.landing .frame-3 {
+    height: 77px;
+    left: 787px;
+    position: absolute;
+    top: 701px;
+    width: 419px;
+    }
+.landing .GPU-cloud {
+color: #ffffff;
+font-family: "Poppins-Medium", Helvetica;
+font-size: 32px;
+font-weight: 500;
+height: 46px;
+left: 237px;
+letter-spacing: 0.96px;
+line-height: normal;
+position: absolute;
+top: 14px;
+width: 178px;
+}
+.landing .overlap-group-wrapper {
+height: 77px;
+left: 0;
+position: absolute;
+top: 0;
+width: 228px;
+}
+.landing .overlap-group-3 {
+height: 77px;
+position: relative;
+width: 224px;
+}
+.landing .element-hr {
+-webkit-background-clip: text !important;
+-webkit-text-fill-color: transparent;
+background: linear-gradient(180deg, rgb(0, 255, 170) 0%, rgb(106.25, 0, 255) 100%);
+background-clip: text;
+color: transparent;
+filter: blur(5px);
+font-family: "Poppins-SemiBold", Helvetica;
+font-size: 48px;
+font-weight: 600;
+height: 72px;
+left: 0;
+letter-spacing: 1.44px;
+line-height: normal;
+position: absolute;
+text-fill-color: transparent;
+top: 5px;
+}
+.landing .text-wrapper-4 {
+color: #000000;
+font-family: "Poppins-SemiBoldItalic", Helvetica;
+font-style: italic;
+}
+.landing .p {
+color: #ffffff;
+font-family: "Poppins-SemiBold", Helvetica;
+font-size: 48px;
+font-weight: 600;
+height: 72px;
+left: 1px;
+letter-spacing: 1.44px;
+line-height: normal;
+position: absolute;
+top: 0;
+}
+.landing .text-wrapper-5 {
+font-family: "Poppins-SemiBoldItalic", Helvetica;
+font-style: italic;
+}
+
+
+
+                        /*Partnership CSS*/
+.partnership-frame {
+    background-color: #0b0019;
+    height: 720px;
+    position: relative;
+    width: 1440px;
+    }
+/* .partnership-frame {
+    background-color: #0b0019;
+    height: 720px;
+    left: 0;
+    position: relative;
+    top: 1109px;
+    width: 1440px;
+    } */
+
+.partnership-overlap {
+/* background-image: url(./group-1.png); */
+background-size: 100% 100%;
+height: 201px;
+left: 439px;
+position: absolute;
+top: 7px;
+width: 563px;
+}
+
+.partnership-text {
+color: #f0e5ff;
+font-family: "Poppins-Medium", Helvetica;
+font-size: 32px;
+font-weight: 500;
+height: 22px;
+left: 150px;
+letter-spacing: 0.96px;
+line-height: normal;
+position: absolute;
+text-align: center;
+top: 70px;
+white-space: nowrap;
+}
+
+
+                            /*Partnership Logo CSS*/
+.landing .mask-group {
+    height: 94px;
+    left: 129px;
+    position: absolute;
+    top: 340px;
+    width: 94px;
+    }
+.landing .element {
+    height: 68px;
+    left: 510px;
+    object-fit: cover;
+    position: absolute;
+    top: 226px;
+    width: 114px;
+    }
+.landing .element-2 {
+    height: 91px;
+    left: 765px;
+    object-fit: cover;
+    position: absolute;
+    top: 208px;
+    width: 71px;
+    }
+.landing .element-3 {
+    height: 48px;
+    left: 176px;
+    object-fit: cover;
+    position: absolute;
+    top: 234px;
+    width: 200px;
+    }
+.landing .element-4 {
+    height: 139px;
+    left: 319px;
+    object-fit: cover;
+    position: absolute;
+    top: 318px;
+    width: 185px;
+    }
+.landing .XMLID {
+    height: 48px;
+    left: 840px;
+    mix-blend-mode: lighten;
+    position: absolute;
+    top: 363px;
+    width: 247px;
+    }
+.landing .XMLID-2 {
+    height: 53px;
+    left: 977px;
+    position: absolute;
+    top: 229px;
+    width: 240px;
+    }
+
+.image {
+    height: 103px;
+    left: 1183px;
+    object-fit: cover;
+    position: absolute;
+    top: 340px;
+    width: 130px;
+    }
+
+                            /*Footer CSS*/
+.footer {
+    background-color: #0b0019;
+    height: 100px;
+    width: 1440px;
+}
+
+.footer .frame {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    left: 120px;
+    position: relative;
+    top: 36px;
+    width: 1200px;
+}
+
+.footer .div {
+    align-items: flex-start;
+    display: inline-flex;
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.footer .text-wrapper {
+    color: #999999;
+    font-family: "Poppins-Regular", Helvetica;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 27.3px;
+    margin-top: -1px;
+    position: relative;
+    width: 17px;
+}
+
+.footer .text-wrapper-2 {
+    color: #999999;
+    font-family: "Poppins-Regular", Helvetica;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 27.3px;
+    margin-top: -1px;
+    position: relative;
+    width: 41px;
+}
+
+.footer .text-wrapper-3 {
+    color: #aaaaaa;
+    font-family: "Poppins-Regular", Helvetica;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 27.3px;
+    margin-top: -1px;
+    position: relative;
+    width: 280px;
+}
+
+.footer .text-wrapper-4 {
+    color: #aaaaaa;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 27.3px;
+    margin-top: -1px;
+    position: relative;
+    white-space: nowrap;
+    width: fit-content;
+}
