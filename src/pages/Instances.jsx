@@ -26,7 +26,7 @@ const Instances = () => {
 
   useEffect(() => {
     authBackendGet('/instances/get_instances/')
-      .then(response => response.json())
+      //.then(response => response.json())
       .then(responseData => {
         setData(responseData);  // Set the "data" key of the response to state
       })
