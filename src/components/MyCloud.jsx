@@ -73,7 +73,7 @@ const MyCloud = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     
     localStorage.clear(); // Clears all data in localStorage
     const cookies = document.cookie.split("; ");
