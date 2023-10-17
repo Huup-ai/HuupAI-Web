@@ -18,6 +18,7 @@ export const ContextProvider = ({ children }) => {
   const [activeMenu, setActiveMenu] = useState(true);
   const [isClicked, setIsClicked] = useState(initialState);
   const [externalWallet, setExternalWallet] = useState(initialState.externalWallet);
+  const [userInfo, setUserInfo] = useState(null);
 
   const setMode = (e) => {
     setCurrentMode(e.target.value);
@@ -54,6 +55,8 @@ export const ContextProvider = ({ children }) => {
         setThemeSettings,
         externalWallet,
         setExternalWallet,
+        userInfo,        // Provide userInfo
+        setUserInfo,     // Provide setUserInfo
       }}
     >
       {children}
