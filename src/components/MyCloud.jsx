@@ -3,6 +3,10 @@ import { useCookies } from "react-cookie";
 import { MdOutlineCancel } from "react-icons/md";
 import { Button } from ".";
 import { Link, NavLink } from "react-router-dom";
+import { logout } from "../reducers/authSlicer";
+import { useStateContext } from "../contexts/ContextProvider";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 const MyCloud = () => {
   const [cookies] = useCookies();
@@ -11,7 +15,7 @@ const MyCloud = () => {
   useEffect(() => {
     // Check the type
     // consumer sidebar
-    if (cookies.selectedType === "customer") {
+    if (cookies.selectedType !== "provider") {
       setDisplayContent(
         <ul className="py-2">
           <Link to="./profile">
@@ -63,6 +67,26 @@ const MyCloud = () => {
     }
   }, [cookies.selectedType]);
 
+  const { currentColor } = useStateContext();
+  const navigate = useNavigate();
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    
+    localStorage.clear(); // Clears all data in localStorage
+    const cookies = document.cookie.split("; ");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookieParts = cookies[i].split("=");
+      const cookieName = cookieParts[0];
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <div className="nav-item absolute right-1 top-16 bg-white drop-shadow-xl dark:bg-[#42464D] p-8 rounded-lg w-56">
       <div className="flex justify-between items-center">
@@ -77,6 +101,17 @@ const MyCloud = () => {
       </div>
 
       {displayContent}
+
+      <div className="mt-5">
+        <Button
+          color="white"
+          bgColor={currentColor}
+          text="Logout"
+          borderRadius="10px"
+          width="full"
+          onClickCallback={handleLogout}
+        />
+      </div>
     </div>
   );
 };
