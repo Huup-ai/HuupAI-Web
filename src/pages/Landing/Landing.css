@@ -1,4 +1,13 @@
-/* Landing.css */
+:root {
+    --primary-0: rgba(255, 255, 255, 1);
+    --primary-500: rgba(124, 92, 252, 1);
+    --semibold-type-16-font-family: "PlusJakarta Sans-SemiBold", Helvetica;
+    --semibold-type-16-font-size: 16px;
+    --semibold-type-16-font-style: normal;
+    --semibold-type-16-font-weight: 600;
+    --semibold-type-16-letter-spacing: -0.32px;
+    --semibold-type-16-line-height: 150%;
+    }
 
 .landing {
     background-color: #0a0019;
@@ -6,37 +15,52 @@
     flex-direction: row;
     justify-content: center;
     width: 100%;
-    }
+}
 
-.landing .landing-page {
+.landing-page {
     background-color: #0a0019;
     height: 1931px;
     width: 1440px;
-    }
-/* .landing .overlap {
-background-image: url(./image-1.png);
-background-size: 100% 100%;
-height: 1931px;
-position: relative;
-} */
-/* .landing .overlap-group {
-height: 1829px;
-left: 0;
-position: absolute;
-top: 0;
-width: 1440px;
-} */
+}
 
-                        /*Navigation CSS*/
+.overlap {
+    background-image: url(https://s3-alpha-sig.figma.com/img/4d2f/e72f/ed6e6abc8a9a49656c83c0270223ccdf?Expires=1698624000&Signature=G7dPDzjfIauS567UbK3WBjf2d9ASsXrI4kgnU4RMhDdzceiJWd0Jxe6YIJgIC5gsuDOJ7NW7eSghT9Hz-nOtInIiOgmr5z1PO6TOFT9Ma~LkFoRnMFl6MAKarHp81IgiJDCQhcpNsQz-DFIJoZxBUYB2oy03Cx8bvBG3jEhPbjxxtfR4ozBMUwNDFUOdTd-PUHc9NHaqv5xH5NyVMZtqj85Y0SO90J70LpVuEKE96IbGiF4hhAgcMs3E28e70TMjUTdNqPdLHG30Gg-HDww4BPK9dx1gm08AfrKLDITmvAczd9ZPMmCovrtMIpv9pSIQRn3FMOfm4vLwhLSweXHRpw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4);
+    background-size: 230% 135%;
+    height: 1931px;
+    position: relative;
+    background-position: center -750px;
+    
+}
+
+.overlap-image {
+    width: 140%;  
+    height: 1200px;
+    position: relative;
+    background-size: 180% 135%;
+    background-position: center -600px;
+    
+}
+
+.overlap-group {
+    position: absolute;
+    width: 1439px;
+    height: 1017px;
+    top: 0;
+    left: 0;
+}
+                            /*Navigation Bar CSS*/
 .navigation-bar {
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-color: #ffffff29;
     height: 100px;
+    left: 0;
+    position: absolute;
+    top: 0;
     width: 1440px;
-    }
+}
 
-.navigation-bar .frame {
+.frame {
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -44,29 +68,29 @@ width: 1440px;
     position: relative;
     top: 24px;
     width: 1200px;
-    }
+}
 
-.navigation-bar .logo-with-company {
+.logo-with-company {
     height: 19px;
     position: relative;
     width: 94px;
-    }
-
-.navigation-bar .text-wrapper {
-color: #f7f2ff;
-font-family: "Poppins-Bold", Helvetica;
-font-size: 24px;
-font-weight: 700;
-left: 0;
-letter-spacing: -0.72px;
-line-height: 19.2px;
-position: absolute;
-text-align: justify;
-top: 0;
-white-space: nowrap;
 }
 
-.navigation-bar .button {
+.text-wrapper {
+    color: #f7f2ff;
+    font-family: "Poppins-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: -0.72px;
+    line-height: 19.2px;
+    position: absolute;
+    text-align: justify;
+    top: 0;
+    white-space: nowrap;
+}
+
+.landing .button {
     all: unset;
     align-items: center;
     box-sizing: border-box;
@@ -74,22 +98,10 @@ white-space: nowrap;
     flex: 0 0 auto;
     gap: 32px;
     position: relative;
-    }
+}
 
-.navigation-bar .signup-button {
-    color: #f0e5ff;
-    font-family: "Poppins-Medium", Helvetica;
-    font-size: 18px;
-    font-weight: 500;
-    letter-spacing: -0.36px;
-    line-height: 27px;
-    position: relative;
-    text-align: justify;
-    white-space: nowrap;
-    width: fit-content;
-    }
 
-.navigation-bar .start-button {
+.start-button {
     width: 125px;
     height: 52px;
     background-color: #6A00FF;
@@ -105,27 +117,83 @@ white-space: nowrap;
     gap: 10px; 
     margin-left: 10px;
 }
-                        /*Main CSS*/
-.label {
-    height: 144px;
-    width: 1016px;
-    }
-    
-.label .enhance-LLM {
-color: #ffffff;
-font-family: "Poppins-Bold", Helvetica;
-font-size: 48px;
-font-weight: 700;
-height: 144px;
-left: 0;
-letter-spacing: 1.44px;
-line-height: normal;
-position: fixed;
-text-align: center;
-top: 0;
-width: 1016px;
+
+.landing .div {
+    color: #f0e5ff;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.36px;
+    line-height: 27px;
+    position: relative;
+    text-align: justify;
+    white-space: nowrap;
+    width: fit-content;
 }
 
+/* .landing .type-primary-icon-false-position-none-state-main-size-large {
+    background-color: #6a00ff !important;
+    border-radius: 30px !important;
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: unset !important;
+}
+
+.landing .type-primary-icon-instance {
+    font-family: "Poppins-SemiBold", Helvetica !important;
+    font-size: 16px !important;
+    font-style: unset !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.32px !important;
+    line-height: 24px !important;
+    margin-left: unset !important;
+    margin-right: unset !important;
+}
+
+.landing .type-primary-icon-false-position-none-state-main-size-large-instance {
+    background-color: #6a00ff !important;
+    border-radius: 30px !important;
+    display: inline-flex !important;
+    left: 651px !important;
+    position: absolute !important;
+    top: 548px !important;
+    width: unset !important;
+} */
+                                    /*Body CSS*/
+.enhance-LLM {
+    color: #ffffff;
+    font-family: "Poppins-Bold", Helvetica;
+    font-size: 48px;
+    font-weight: 700;
+    height: 144px;
+    left: 212px;
+    letter-spacing: 1.44px;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 383px;
+    width: 1016px;
+}
+
+.start-button-2 {
+    width: 125px;
+    height: 40px;
+    background-color: #6a00ff;
+    border: none;
+    border-radius: 60px;
+    padding: 13px 24px;
+    cursor: pointer;
+    color: white; 
+    font-size: 16px; 
+    /* display: flex; */
+    justify-content: center; 
+    align-items: center; 
+    gap: 10px; 
+    margin-left: 10px;
+    margin-left: unset;
+    margin-right: unset ;
+    border-radius: 30px
+}
 
 .landing .subtract {
     height: 936px;
@@ -133,13 +201,20 @@ width: 1016px;
     position: absolute;
     top: 79px;
     width: 929px;
-    }
-.landing .img {
-height: 970px;
-left: 383px;
-position: absolute;
-top: 169px;
-width: 1057px;
+}
+
+.image-section {
+    position: relative;
+    height: 600px; 
+    margin-top: 60px;
+    
+  }
+    
+.img {   
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    position: relative;
 }
 
 .landing .frame-2 {
@@ -148,7 +223,8 @@ width: 1057px;
     position: absolute;
     top: 701px;
     width: 403px;
-    }
+}
+
 .landing .ai-model {
     color: #ffffff;
     font-family: "Poppins-Medium", Helvetica;
@@ -159,234 +235,234 @@ width: 1057px;
     letter-spacing: 0.96px;
     line-height: normal;
     position: absolute;
-    top: 12px;
-    }
-.landing .span {
-color: #ffffff;
-font-family: "Poppins-Medium", Helvetica;
-font-size: 32px;
-font-weight: 500;
-letter-spacing: 0.96px;
-}
-.landing .group {
-height: 77px;
-left: 0;
-position: absolute;
-top: 0;
-width: 246px;
+    top: -20px;
 }
 
-.landing .overlap-group-2 {
+.landing .span {
+    color: #ffffff;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: 0.96px;
+}
+
+.group {
+    height: 77px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 246px;
+}
+
+.overlap-group-2 {
     height: 77px;
     position: relative;
     width: 242px;
-    }
-
-.landing .text-wrapper-2 {
--webkit-background-clip: text !important;
--webkit-text-fill-color: transparent;
-background: linear-gradient(180deg, rgb(0, 255, 170) 0%, rgb(63.75, 0, 153) 100%);
-background-clip: text;
-color: transparent;
-filter: blur(5px);
-font-family: "Poppins-SemiBoldItalic", Helvetica;
-font-size: 48px;
-font-style: italic;
-font-weight: 600;
-height: 72px;
-left: 0;
-letter-spacing: 1.44px;
-line-height: normal;
-position: absolute;
-text-fill-color: transparent;
-top: 5px;
 }
 
-.landing .text-wrapper-3 {
-color: #ffffff;
-font-family: "Poppins-SemiBoldItalic", Helvetica;
-font-size: 48px;
-font-style: italic;
-font-weight: 600;
-height: 72px;
-left: 2px;
-letter-spacing: 1.44px;
-line-height: normal;
-position: absolute;
-top: 0;
+.text-wrapper-2 {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(180deg, rgb(0, 255, 170) 0%, rgb(63.75, 0, 153) 100%);
+    background-clip: text;
+    color: transparent;
+    filter: blur(5px);
+    font-family: "Poppins-SemiBoldItalic", Helvetica;
+    font-size: 48px;
+    font-style: italic;
+    font-weight: 600;
+    height: 72px;
+    left: 0;
+    letter-spacing: 1.44px;
+    line-height: normal;
+    position: absolute;
+    text-fill-color: transparent;
+    top: -25px;
 }
 
-.landing .frame-3 {
+.text-wrapper-3 {
+    color: #ffffff;
+    font-family: "Poppins-SemiBoldItalic", Helvetica;
+    font-size: 48px;
+    font-style: italic;
+    font-weight: 600;
+    height: 72px;
+    left: 2px;
+    letter-spacing: 1.44px;
+    line-height: normal;
+    position: absolute;
+    top: -30px;
+}
+
+.frame-3 {
     height: 77px;
     left: 787px;
     position: absolute;
     top: 701px;
     width: 419px;
-    }
-.landing .GPU-cloud {
-color: #ffffff;
-font-family: "Poppins-Medium", Helvetica;
-font-size: 32px;
-font-weight: 500;
-height: 46px;
-left: 237px;
-letter-spacing: 0.96px;
-line-height: normal;
-position: absolute;
-top: 14px;
-width: 178px;
-}
-.landing .overlap-group-wrapper {
-height: 77px;
-left: 0;
-position: absolute;
-top: 0;
-width: 228px;
-}
-.landing .overlap-group-3 {
-height: 77px;
-position: relative;
-width: 224px;
-}
-.landing .element-hr {
--webkit-background-clip: text !important;
--webkit-text-fill-color: transparent;
-background: linear-gradient(180deg, rgb(0, 255, 170) 0%, rgb(106.25, 0, 255) 100%);
-background-clip: text;
-color: transparent;
-filter: blur(5px);
-font-family: "Poppins-SemiBold", Helvetica;
-font-size: 48px;
-font-weight: 600;
-height: 72px;
-left: 0;
-letter-spacing: 1.44px;
-line-height: normal;
-position: absolute;
-text-fill-color: transparent;
-top: 5px;
-}
-.landing .text-wrapper-4 {
-color: #000000;
-font-family: "Poppins-SemiBoldItalic", Helvetica;
-font-style: italic;
-}
-.landing .p {
-color: #ffffff;
-font-family: "Poppins-SemiBold", Helvetica;
-font-size: 48px;
-font-weight: 600;
-height: 72px;
-left: 1px;
-letter-spacing: 1.44px;
-line-height: normal;
-position: absolute;
-top: 0;
-}
-.landing .text-wrapper-5 {
-font-family: "Poppins-SemiBoldItalic", Helvetica;
-font-style: italic;
 }
 
+.GPU-cloud {
+    color: #ffffff;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 32px;
+    font-weight: 500;
+    height: 46px;
+    left: 237px;
+    letter-spacing: 0.96px;
+    line-height: normal;
+    position: absolute;
+    top: -20px;
+    width: 178px;
+}
 
+.overlap-group-wrapper {
+    height: 77px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 228px;
+}
 
-                        /*Partnership CSS*/
-.partnership-frame {
-    background-color: #0b0019;
-    height: 720px;
+.overlap-group-3 {
+    height: 77px;
     position: relative;
-    width: 1440px;
-    }
-/* .partnership-frame {
+    width: 224px;
+    top: -30px;
+}
+
+.element-hr {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(180deg, rgb(0, 255, 170) 0%, rgb(106.25, 0, 255) 100%);
+    background-clip: text;
+    color: transparent;
+    filter: blur(5px);
+    font-family: "Poppins-SemiBold", Helvetica;
+    font-size: 48px;
+    font-weight: 600;
+    height: 72px;
+    left: 0;
+    letter-spacing: 1.44px;
+    line-height: normal;
+    position: absolute;
+    text-fill-color: transparent;
+}
+
+.text-wrapper-4 {
+    color: #000000;
+    font-family: "Poppins-SemiBoldItalic", Helvetica;
+    font-style: italic;
+    
+}
+
+.p {
+    color: #ffffff;
+    font-family: "Poppins-SemiBold", Helvetica;
+    font-size: 48px;
+    font-weight: 600;
+    height: 72px;
+    left: 1px;
+    letter-spacing: 1.44px;
+    line-height: normal;
+    position: absolute;
+    top: 0;
+}
+
+.text-wrapper-5 {
+    font-family: "Poppins-SemiBoldItalic", Helvetica;
+    font-style: italic;
+}
+                        /*Partnership and logos CSS*/
+.frame-4 {
     background-color: #0b0019;
     height: 720px;
     left: 0;
     position: relative;
     top: 1109px;
     width: 1440px;
-    } */
-
-.partnership-overlap {
-/* background-image: url(./group-1.png); */
-background-size: 100% 100%;
-height: 201px;
-left: 439px;
-position: absolute;
-top: 7px;
-width: 563px;
+    border-bottom-style: solid;
+    /* border-bottom-width: 0.2px; */
+    background-size: 100% 100%;
 }
 
-.partnership-text {
-color: #f0e5ff;
-font-family: "Poppins-Medium", Helvetica;
-font-size: 32px;
-font-weight: 500;
-height: 22px;
-left: 150px;
-letter-spacing: 0.96px;
-line-height: normal;
-position: absolute;
-text-align: center;
-top: 70px;
-white-space: nowrap;
+.div-wrapper {
+    /* background-image: url(https://s3-alpha-sig.figma.com/img/4d2f/e72f/ed6e6abc8a9a49656c83c0270223ccdf?Expires=1698624000&Signature=G7dPDzjfIauS567UbK3WBjf2d9ASsXrI4kgnU4RMhDdzceiJWd0Jxe6YIJgIC5gsuDOJ7NW7eSghT9Hz-nOtInIiOgmr5z1PO6TOFT9Ma~LkFoRnMFl6MAKarHp81IgiJDCQhcpNsQz-DFIJoZxBUYB2oy03Cx8bvBG3jEhPbjxxtfR4ozBMUwNDFUOdTd-PUHc9NHaqv5xH5NyVMZtqj85Y0SO90J70LpVuEKE96IbGiF4hhAgcMs3E28e70TMjUTdNqPdLHG30Gg-HDww4BPK9dx1gm08AfrKLDITmvAczd9ZPMmCovrtMIpv9pSIQRn3FMOfm4vLwhLSweXHRpw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4); */
+    background-size: 100% 100%;
+    height: 201px;
+    left: 470px;
+    position: absolute;
+    top: 7px;
+    width: 563px;
 }
 
+.text-wrapper-6 {
+    color: #f0e5ff;
+    font-family: "Poppins-Medium", Helvetica;
+    font-size: 32px;
+    font-weight: 500;
+    height: 22px;
+    left: 150px;
+    letter-spacing: 0.96px;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 70px;
+    white-space: nowrap;
+}
 
-                            /*Partnership Logo CSS*/
-.landing .mask-group {
+.mask-group {
     height: 94px;
     left: 129px;
     position: absolute;
     top: 340px;
     width: 94px;
-    }
-.landing .element {
+}
+
+.element {
     height: 68px;
     left: 510px;
     object-fit: cover;
     position: absolute;
     top: 226px;
     width: 114px;
-    }
-.landing .element-2 {
+}
+
+.element-2 {
     height: 91px;
     left: 765px;
     object-fit: cover;
     position: absolute;
     top: 208px;
     width: 71px;
-    }
-.landing .element-3 {
+}
+
+.element-3 {
     height: 48px;
     left: 176px;
     object-fit: cover;
     position: absolute;
     top: 234px;
     width: 200px;
-    }
-.landing .element-4 {
+}
+
+.element-4 {
     height: 139px;
     left: 319px;
     object-fit: cover;
     position: absolute;
     top: 318px;
     width: 185px;
-    }
-.landing .XMLID {
+}
+
+.XMLID {
     height: 48px;
     left: 840px;
     mix-blend-mode: lighten;
     position: absolute;
     top: 363px;
     width: 247px;
-    }
-.landing .XMLID-2 {
-    height: 53px;
-    left: 977px;
-    position: absolute;
-    top: 229px;
-    width: 240px;
-    }
+}
 
 .image {
     height: 103px;
@@ -395,16 +471,34 @@ white-space: nowrap;
     position: absolute;
     top: 340px;
     width: 130px;
-    }
+}
 
+.tencent-cloud-logo {
+    height: 111px;
+    left: 600px;
+    position: absolute;
+    top: 332px;
+    width: 144px;
+}
+
+.frame-5 {
+    height: 54px;
+    left: 977px;
+    position: absolute;
+    top: 227px;
+    width: 240px;
+}
                             /*Footer CSS*/
 .footer {
     background-color: #0b0019;
     height: 100px;
+    left: 0;
+    position: absolute;
+    top: 1829px;
     width: 1440px;
 }
 
-.footer .frame {
+.frame-6 {
     align-items: flex-start;
     display: flex;
     justify-content: space-between;
@@ -414,14 +508,14 @@ white-space: nowrap;
     width: 1200px;
 }
 
-.footer .div {
+.frame-7 {
     align-items: flex-start;
     display: inline-flex;
     flex: 0 0 auto;
     position: relative;
 }
 
-.footer .text-wrapper {
+.text-wrapper-7 {
     color: #999999;
     font-family: "Poppins-Regular", Helvetica;
     font-size: 16px;
@@ -433,7 +527,7 @@ white-space: nowrap;
     width: 17px;
 }
 
-.footer .text-wrapper-2 {
+.text-wrapper-8 {
     color: #999999;
     font-family: "Poppins-Regular", Helvetica;
     font-size: 16px;
@@ -445,7 +539,7 @@ white-space: nowrap;
     width: 41px;
 }
 
-.footer .text-wrapper-3 {
+.text-wrapper-9 {
     color: #aaaaaa;
     font-family: "Poppins-Regular", Helvetica;
     font-size: 16px;
@@ -457,7 +551,7 @@ white-space: nowrap;
     width: 280px;
 }
 
-.footer .text-wrapper-4 {
+.text-wrapper-10 {
     color: #aaaaaa;
     font-family: "Poppins-Medium", Helvetica;
     font-size: 16px;
