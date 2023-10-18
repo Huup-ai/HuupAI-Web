@@ -175,20 +175,27 @@ const Confirmation_GPU = () => {
         });
 
         const data = await response.json();
-
-        // Handle the response data as needed.
-        if (!response.ok) {
-          console.error("Server Response:", data);  // This will print any error detail from the server
-          alert("There was an issue creating the vm.");
-      } else if(data.success) {
-          console.log("VM Created!");
-          alert("VM Created!");
-          navigate('/clouds/instances')
-      } else {
-          console.log("There was an issue creating the vm.");
-          alert("There was an issue creating the vm.");
-          console.log("Server Response:", data);   // Add this line to print server's detailed response
-      }
+        console.log("server response",data);
+        if(data.error) {
+          throw new Error(data.error);
+        }
+        alert("VM Created!");
+        navigate('/clouds/instances');
+      //   console.log("Server Response:", data);  
+      //   //TODO: 写逻辑的那位把这里重写一下，请求用axios，然后处理axios的response
+      //   // Handle the response data as needed.
+      //   if (!response.ok) {
+      //     console.error("Server Response:", data);  // This will print any error detail from the server
+      //     alert("There was an issue creating the vm.");
+      // } else if(data.success) {
+      //     console.log("VM Created!");
+      //     alert("VM Created!");
+      //     navigate('/clouds/instances')
+      // } else {
+      //     console.log("There was an issue creating the vm.");
+      //     alert("There was an issue creating the vm.");
+      //     console.log("Server Response:", data);   // Add this line to print server's detailed response
+      // }
 
     } catch (error) {
         console.error("Error confirming order:", error);
