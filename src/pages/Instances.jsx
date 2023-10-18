@@ -13,7 +13,7 @@ import { InstancesData, InstancesGrid } from "../data/dummy";
 import { Header } from "../components";
 import { DropdownAction } from "../components/DropdownAction";
 import { BsPlusLg } from "react-icons/bs";
-import { authBackendGet } from "../api/apiUtil";
+import { getUserInstances } from '../api';
 import { Link } from "react-router-dom";
 
 const Instances = () => {
@@ -25,7 +25,7 @@ const Instances = () => {
   const settings = { wrapMode: "Content" };
 
   useEffect(() => {
-    authBackendGet('/instances/get_instances/')
+    getUserInstances()
       .then(responseData => {
         setData(responseData);  // Set the "data" key of the response to state
       })
@@ -68,7 +68,7 @@ const Instances = () => {
         <ColumnsDirective>
           <ColumnDirective
             clipMode="EllipsisWithTooltip"
-            field="Inventory Name"
+            field="vm_name"
             headerText="Inventory Name"
             width="120"
             textAlign="Center"
@@ -127,7 +127,7 @@ const Instances = () => {
           />
           <ColumnDirective
             clipMode="EllipsisWithTooltip"
-            field="STATUS"
+            field="status"
             headerText="STATUS"
             width="100"
             textAlign="Center"
