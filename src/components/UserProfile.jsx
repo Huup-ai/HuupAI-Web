@@ -15,19 +15,19 @@ const UserProfile = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
-  const handleLogout = async () => {
+  // const handleLogout = async () => {
     
-    localStorage.clear(); // Clears all data in localStorage
-    const cookies = document.cookie.split("; ");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookieParts = cookies[i].split("=");
-      const cookieName = cookieParts[0];
-      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    }
+  //   localStorage.clear(); // Clears all data in localStorage
+  //   const cookies = document.cookie.split("; ");
+  //   for (let i = 0; i < cookies.length; i++) {
+  //     const cookieParts = cookies[i].split("=");
+  //     const cookieName = cookieParts[0];
+  //     document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  //   }
 
-    dispatch(logout());
-    navigate("/login");
-  };
+  //   dispatch(logout());
+  //   navigate("/login");
+  // };
 
   return (
     <div className="nav-item absolute right-1 top-16 bg-white drop-shadow-xl dark:bg-[#42464D] p-8 rounded-lg w-96">
@@ -60,7 +60,7 @@ const UserProfile = () => {
         </div>
       </div>
 
-      <div className="mt-5">
+      {/* <div className="mt-5">
         <Button
           color="white"
           bgColor={currentColor}
@@ -69,7 +69,7 @@ const UserProfile = () => {
           width="full"
           onClickCallback={handleLogout}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
