@@ -518,39 +518,34 @@ const Deposit = {
 
     const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, signer);
     const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-    // const tx = await usdtContract.approve(
-    //   contractAddress,
-    //     ethers.utils.parseUnits("1000", 6)
-    // //   depositAmount
-    // );
-
-    // await tx.wait();
-
-    // const depositTx = await contract.deposit(
-    // //   depositAmount
-    //     ethers.utils.parseUnits("1000", 6)
-    // );
-    // await depositTx.wait();
-
-    const approveAmount = ethers.utils.parseUnits("1000", 6); // Set the amount you want to approve
+    
+    const approveAmount = ethers.utils.parseUnits("1000", 18); // Set the amount you want to approve
     const approveTx = await usdtContract.approve(
       contractAddress,
       approveAmount
     );
+    alert("Approve successful! Please wait to deposit...")
     await approveTx.wait();
+    
 
     // Deposit the approved USDT tokens
-    const depositAmount_acc = ethers.utils.parseUnits(depositAmount, 6); // Set the deposit amount
+    // const depositAmount_acc = ethers.utils.parseUnits("10", 18);
+    const depositAmount_acc = ethers.utils.parseUnits(depositAmount, 18); // Set the deposit amount
+    // console.log(typeof "10", typeof depositAmount, depositAmount)
     const depositTx = await contract.deposit(depositAmount_acc);
     await depositTx.wait();
-    console.log("Deposit successful!");
+
   },
 };
 
 export default Deposit;
 
-export function performDeposit(depositAmount) {
+export async function performDeposit(depositAmount) {
   return Deposit.depositUSDT(depositAmount)
-    .then(() => console.log("Deposit done!"))
-    .catch((err) => console.error(err));
+    .then(() => {
+        alert("Deposit successful!");
+        console.log("Deposit done!")})
+    .catch((err) => {
+        alert("Deposit failed!");
+        console.error(err)});
 }

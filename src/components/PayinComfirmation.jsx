@@ -116,17 +116,25 @@ const PayinComfirmation = () => {
   ];
 
   const [depositAmount, setDepositAmount] = useState(0);
+  const [buttonText, setButtonText] = useState('Deposit');
 
   const handleDepositAmoutnChange = (event) => {
     setDepositAmount(event.target.value);
   }
 
   const handleDeposit = () => {
+    // console.log("www", depositAmount)
+    setButtonText('Depositing...'); 
 
-    console.log("www", depositAmount)
-    performDeposit(depositAmount);
-  };
-
+    performDeposit(depositAmount)
+      .then(() => {
+        setButtonText('Deposit'); 
+      })
+      .catch((err) => {
+        console.error(err);
+        setButtonText('Deposit'); 
+      });
+    }
   const MetaMask = [
     <>
       <div className="mt-5 w-1/2 border-2 rounded-lg shadow-lg md:p-10">
@@ -146,7 +154,7 @@ const PayinComfirmation = () => {
             <Button
               color="white"
               bgColor={currentColor}
-              text="Deposit"
+              text={buttonText}
               borderRadius="10px"
 
               onClickCallback={handleDeposit} // deposit to wallet
