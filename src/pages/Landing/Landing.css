@@ -31,10 +31,10 @@
     width: 1440px;
     height: 1009px;
     top: 100px;
-    left: 0;
+    left: -20px;
     background-image: url(https://s3-alpha-sig.figma.com/img/4d2f/e72f/ed6e6abc8a9a49656c83c0270223ccdf?Expires=1698624000&Signature=G7dPDzjfIauS567UbK3WBjf2d9ASsXrI4kgnU4RMhDdzceiJWd0Jxe6YIJgIC5gsuDOJ7NW7eSghT9Hz-nOtInIiOgmr5z1PO6TOFT9Ma~LkFoRnMFl6MAKarHp81IgiJDCQhcpNsQz-DFIJoZxBUYB2oy03Cx8bvBG3jEhPbjxxtfR4ozBMUwNDFUOdTd-PUHc9NHaqv5xH5NyVMZtqj85Y0SO90J70LpVuEKE96IbGiF4hhAgcMs3E28e70TMjUTdNqPdLHG30Gg-HDww4BPK9dx1gm08AfrKLDITmvAczd9ZPMmCovrtMIpv9pSIQRn3FMOfm4vLwhLSweXHRpw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4);
-    background-size: 280% 330%;
-    background-position: center center;
+    background-size: 220% 300%;
+    background-position: 51% center;
 }
 
 .enhance-GEN-AI-s {
@@ -448,23 +448,23 @@
 
 .div-wrapper {
     position: absolute;
-    width: 563px;
+    width: 30%;
     height: 201px;
     top: 7px;
     left: 439px;
-    /* background-image: url(./img/group-1.png); */
+    background-image: 
+        linear-gradient(to top left, transparent 5%, #9C7ACCCC 15%, #A565FF00 50%, transparent 95%),
+        radial-gradient(at top , #150033, #0B001A20, #0B001A00);
+    background-size: 100% 1px, 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 50% top, center center;
+}
+/* linear-gradient(to left, transparent 5%, #9C7ACCCC 15%, #A565FF00 70%, transparent 100%), */
+/* background-image: url(./img/group-1.png); */
     /* background-size: 100% 100%; */
     /* border-top-width: 1px; */
     /* border-top-color: #ffffff29; */
     /* background-image: radial-gradient(circle 100% at 50% 0%,#150033, #0B001A00); */
-    background-image: 
-    linear-gradient(to right, transparent, #9C7ACCCC, #A565FF00, transparent),
-        radial-gradient(at 50% 0%, #ffffff22, transparent 25%, #150033 30%, #0B001A00);
-    background-size: 100% 1px, 100% 100%;
-    background-repeat: no-repeat;
-    background-position: center top, center center;
-    /* radial-gradient(circle 100% at 50% 0%, #ffffff 0%, #150033 5%, #27203a 40%, #0B001A00); */
-}
 
 .text-wrapper-11 {
     position: absolute;
@@ -479,6 +479,7 @@
     letter-spacing: 0.96px;
     line-height: normal;
     white-space: nowrap;
+    /* margin-top: 50px; */
     /* background-color: rgba(0, 0, 139, 0.7);  
     padding: 5px 10px;  */
     /* border-radius: 5px;   */
