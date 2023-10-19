@@ -13,18 +13,6 @@
     position: relative;
 }
 
-/* .label {
-    position: relative;
-    width: fit-content;
-    font-family: "Poppins-SemiBold", Helvetica;
-    font-weight: 600;
-    color: var(--primary-0);
-    font-size: 16px;
-    text-align: center;
-    letter-spacing: -0.32px;
-    line-height: 24px;
-    white-space: nowrap;
-} */
                             /*** Middle Part CSS ***/
 .overlap {
     position: absolute;
@@ -256,7 +244,7 @@
     height: 19px;
 }
 
-.landing-page-re .text-wrapper-5 {
+.text-wrapper-5 {
     position: absolute;
     top: 0;
     left: 0;
@@ -269,22 +257,6 @@
     line-height: 19.2px;
     white-space: nowrap;
 }
-/* .button-container {
-    display: inline-flex;
-    height: 52px;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 13px 24px;
-    position: absolute;
-    top: 448px;
-    left: 651px;
-    background-color: #6a00ff;
-    border-radius: 30px;
-    all: unset;
-    box-sizing: border-box;
-    flex-direction: column;
-} */
 
 .button-container {
     all: unset;
@@ -326,28 +298,7 @@
     margin-left: 10px;
 }
 
-/* .button-2 {
-    gap: 32px;
-    display: inline-flex;
-    align-items: center;
-    position: relative;
-    flex: 0 0 auto;
-} */
-
-/* .text-wrapper-6 {
-    position: relative;
-    width: fit-content;
-    font-family: "Poppins-Medium", Helvetica;
-    font-weight: 500;
-    color: #f0e5ff;
-    font-size: 18px;
-    text-align: justify;
-    letter-spacing: -0.36px;
-    line-height: 27px;
-    white-space: nowrap;
-} */
-
-.landing-page-re .label-wrapper {
+.label-wrapper {
     height: 52px;
     justify-content: center;
     gap: 10px;
