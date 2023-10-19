@@ -624,7 +624,7 @@ function SignUp({
           <p className="text-xs">
             Already have an account?{" "}
             <span
-              onClick={Login}
+              onClick={onLoginClick}
               style={{ cursor: "pointer", color: "blue" }}
             >
               Login
