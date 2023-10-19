@@ -9,7 +9,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { addPaymentAuth, checkPaymentAuth } from "../api";
 import { addPaymentMethod, updateSelection } from "../reducers/authSlicer";
-// import Deposit from "./Deposit";
+import { performDeposit } from "./Deposit";
 
 const stripePromise = loadStripe(Stripe_KEY);
 
@@ -115,11 +115,17 @@ const PayinComfirmation = () => {
     </>,
   ];
 
-  // const handleDeposit = () => {
-  //   Deposit.depositUSDT()
-  //     .then(() => console.log("Deposit done!"))
-  //     .catch((err) => console.error(err));
-  // };
+  const [depositAmount, setDepositAmount] = useState(0);
+
+  const handleDepositAmoutnChange = (event) => {
+    setDepositAmount(event.target.value);
+  }
+
+  const handleDeposit = () => {
+
+    console.log("www", depositAmount)
+    performDeposit(depositAmount);
+  };
 
   const MetaMask = [
     <>
@@ -130,7 +136,8 @@ const PayinComfirmation = () => {
           <input
             className="border-2 mt-2"
             type="text"
-            // onChange={handleInputChange}
+            onChange={handleDepositAmoutnChange}
+            value={depositAmount}
             placeholder="Minumum Deposit" //get from backend info
           />
 
@@ -142,7 +149,7 @@ const PayinComfirmation = () => {
               text="Deposit"
               borderRadius="10px"
 
-              // onClickCallback={handleDeposit} // deposit to wallet
+              onClickCallback={handleDeposit} // deposit to wallet
             />
           </span>
         </div>
