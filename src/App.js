@@ -8,12 +8,17 @@ import Login from "./pages/Login/Login";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
-// import Inventory from "./pages/Inventory";
+import Inventory from "./pages/Inventory";
 // import Billing from "./pages/Billing";
 // import Profile from "./pages/Profile";
 // import Instances from "./pages/Instances";
 //import GPU from "./pages/GPU";
 // import CPU from "./pages/CPU";
+import Landing from "./pages/Landing/Landing";
+import SignUp from "./pages/Login/Signup";
+
+
+
 
 
 function App() {
@@ -24,12 +29,15 @@ function App() {
 
   return (
     <div className="App">
-      <div className="blur" style={{ top: "-18%", right: "0" }}></div>
-      <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
+      {/* <div className="blur" style={{ top: "-18%", right: "0" }}></div>
+      <div className="blur" style={{ top: "36%", left: "-8rem" }}></div> */}
       <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/" element={<Landing />} /> 
+      <Route path="/signup" element={ <SignUp />} />
+      {/* <Route path="/" element={<Navigate to="/login" />} /> */}
       {/* <Route path="/login" element={<Login />} /> */}
       {/* <Route path="/clouds/*" element={<Clouds />} />  */}
+      
       <Route
         path="/login"
         element={isAuthenticated ? <Navigate to="/clouds" /> : <Login />}
@@ -51,5 +59,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

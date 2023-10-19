@@ -35,7 +35,7 @@ const Login = () => {
   const [signer, setSigner] = useState();
   const [fcContract, setFcContract] = useState();
   const [isChecked, setIsChecked] = useState(true);
-  // const navigate = useNavigate();
+  
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -187,7 +187,6 @@ const handleLoginClick = async (e) => {
       // console.log("single address", singleWallet[0].address);
       // updateWalletAddress(singleWallet[0].address);
       if (selectedType === "provider"&&singleWallet.length===0){
-        console.log("create wallet working", createWallet)
         await createWallet();
        }
       
@@ -451,6 +450,7 @@ function LogIn({
   );
 }
 
+
 function SignUp({
   onLoginClick,
   navigate,
@@ -624,7 +624,7 @@ function SignUp({
           <p className="text-xs">
             Already have an account?{" "}
             <span
-              onClick={onLoginClick}
+              onClick={Login}
               style={{ cursor: "pointer", color: "blue" }}
             >
               Login
