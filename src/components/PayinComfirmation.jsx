@@ -9,6 +9,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { addPaymentAuth, checkPaymentAuth } from "../api";
 import { addPaymentMethod, updateSelection } from "../reducers/authSlicer";
+import Deposit from "./Deposit";
 
 const stripePromise = loadStripe(Stripe_KEY);
 
@@ -114,6 +115,12 @@ const PayinComfirmation = () => {
     </>,
   ];
 
+  // const handleDeposit = () => {
+  //   Deposit.depositUSDT()
+  //     .then(() => console.log("Deposit done!"))
+  //     .catch((err) => console.error(err));
+  // };
+
   const MetaMask = [
     <>
       <div className="mt-5 w-1/2 border-2 rounded-lg shadow-lg md:p-10">
@@ -135,14 +142,14 @@ const PayinComfirmation = () => {
               text="Deposit"
               borderRadius="10px"
 
-              // onClickCallback={} // deposit to wallet
+              onClickCallback={handleDeposit} // deposit to wallet
             />
           </span>
         </div>
       </div>
     </>,
   ];
-  
+
   const handleSubmit = async (event) => {
     // event.preventDefault();
 
@@ -174,14 +181,13 @@ const PayinComfirmation = () => {
       const response = addPaymentAuth(paymentMethod.paymentMethod.id, JWTtoken);
 
       response
-      .then((result) => {       
-        dispatch(addPaymentMethod());
-        setCheckCreditAuth(true);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    
+        .then((result) => {
+          dispatch(addPaymentMethod());
+          setCheckCreditAuth(true);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   };
 
