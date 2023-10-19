@@ -15,6 +15,9 @@ import Inventory from "./pages/Inventory";
 //import GPU from "./pages/GPU";
 // import CPU from "./pages/CPU";
 import Landing from "./pages/Landing/Landing";
+import SignUp from "./pages/Login/Signup";
+
+
 
 
 
@@ -30,6 +33,7 @@ function App() {
       <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
       <Routes>
       <Route path="/" element={<Landing />} /> 
+      <Route path="/signup" element={ <SignUp />} />
       {/* <Route path="/" element={<Navigate to="/login" />} /> */}
       {/* <Route path="/login" element={<Login />} /> */}
       {/* <Route path="/clouds/*" element={<Clouds />} />  */}
@@ -55,5 +59,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

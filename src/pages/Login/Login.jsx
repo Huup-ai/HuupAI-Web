@@ -35,7 +35,7 @@ const Login = () => {
   const [signer, setSigner] = useState();
   const [fcContract, setFcContract] = useState();
   const [isChecked, setIsChecked] = useState(true);
-  // const navigate = useNavigate();
+  
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -449,6 +449,7 @@ function LogIn({
   );
 }
 
+
 function SignUp({
   onLoginClick,
   navigate,
@@ -622,7 +623,7 @@ function SignUp({
           <p className="text-xs">
             Already have an account?{" "}
             <span
-              onClick={onLoginClick}
+              onClick={Login}
               style={{ cursor: "pointer", color: "blue" }}
             >
               Login
