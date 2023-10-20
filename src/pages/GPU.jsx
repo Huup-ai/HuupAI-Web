@@ -51,7 +51,7 @@ function GPU() {
       width: "100",
       textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.id}</div>;
+        return <div>{rowData.item_id}</div>;
       },
     },
     {
@@ -94,7 +94,7 @@ function GPU() {
       width: "100",
       textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.is_audited}</div>;
+        return <div>{rowData.is_audited.toString()}</div>;
       },
     },
     {
