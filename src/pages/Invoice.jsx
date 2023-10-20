@@ -43,7 +43,7 @@ const Billing = () => {
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       {/* title for provider */}
       
-      <Header category="My Cloud > Invoice" title={`Invoice For ${userInfo?.first_name}`} />
+      <Header category="My Cloud > Invoice" title={`Invoice For ${userInfo?.company}`} />
 
       <p className="text-lg text-gray-400">
         Current billing period runs from {formattedDate} to {laterMonth}{" "}

@@ -13,7 +13,7 @@ const ProviderDetails = () => {
   const { currentColor } = useStateContext();
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [billingDetails, setBillingDetails] = useState(null);
-  const { setUserInfo } = useStateContext();
+  const {setUserInfo} = useStateContext();
   const token = localStorage.getItem("jwtToken");
   const [isCrypto, setIsCrypto] = useState(() => {
     const storedValue = localStorage.getItem("crypto");
@@ -124,7 +124,7 @@ if (!billingDetails) {
         // Content to display when isToggled is true
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
         <div className="px-4">
-          <h3>Payment Information</h3>
+          {/* <h3>Payment Information</h3> */}
           <div>
             <span className="inline-block w-60">PAYMENT METHOD</span>
             <span>:</span>
@@ -195,7 +195,7 @@ if (!billingDetails) {
             <div>
               <span className="inline-block w-40">NAME</span>
               <span>:</span>
-              <span>{billingDetails.name}</span>
+              <span>{billingDetails.company}</span>
             </div>
             <div>
               <span className="inline-block w-40">EMAIL</span>
@@ -206,6 +206,30 @@ if (!billingDetails) {
               <span className="inline-block w-40">ADDRESS</span>
               <span>:</span>
               <span>{billingDetails.address}</span>
+            </div>
+            {/* <div className="mt-2 mb-2">
+            <span className="inline-block w-40">USDT to Fiat</span>
+              <Button
+                color="white"
+                bgColor={currentColor}
+                text="Moon Pay"
+                borderRadius="10px"
+              />
+            </div> */}
+          </div>
+        </div>
+        <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
+          <div className="px-4">
+            {/* <h3>Billing Information</h3> */}
+            <div>
+              <span className="inline-block w-40">PAYMENT METHOD</span>
+              <span>:</span>
+              <span>{paymentDetails.account_payable_window}</span>
+            </div>
+            <div>
+              <span className="inline-block w-40">Wallet Adrress</span>
+              <span>:</span>
+              <span>{paymentDetails.wallet_address}</span>
             </div>
             <div className="mt-2 mb-2">
             <span className="inline-block w-40">USDT to Fiat</span>

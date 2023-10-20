@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Header } from "../components";
 import {
+  Header,
   Button,
   UpdateCredit,
   DefaultPay,
@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateSelection, selectSelectedOption } from "../reducers/authSlicer";
 
 const Profile = () => {
-  const { currentColor } = useStateContext();
+  const { currentColor, userInfo } = useStateContext();
 
   const [cookies] = useCookies(["selectedType"]);
 
@@ -41,7 +41,7 @@ const Profile = () => {
 
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
-      <Header category="My Cloud > Profile" title="Welcome" />
+      <Header category="My Cloud > Profile" title={`Welcome ${userInfo?.company}`} />
 
       {displayContent ? (<><div className="flex flex-row justify-around">
         <InvoiceInfo />
