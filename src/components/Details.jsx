@@ -8,9 +8,14 @@ import { useSelector } from "react-redux";
 
 import { ethers } from "ethers";
 
+import { getCryptoPayment } from "../api/middlewareRequest";
+import { getUserInfo } from "../api";
+
 const Details = () => {
   const { currentColor } = useStateContext();
   const [walletMoney, setWalletMoney] = useState(0);
+  const [walletCookie, setWalletCookie] = useCookies(["walletAddress"]);
+
 
   // const [isCrypto, setIsCrypto] = useState(() => {
   //   const storedValue = localStorage.getItem("crypto");
@@ -33,12 +38,19 @@ const Details = () => {
   const [transactionData, setTransactionData] = useState("");
   const [balance, setBalance] = useState("Please connect wallet");
   const [deposit, setDeposit] = useState("Please connect wallet");
+  const [userInfo, setUserInfo] = useState({
+    "first_name":"none",
+    "last_name":"none",
+    "address":"none"
+  });
 
   useEffect(() => {
     getCurrentWalletConnected();
     addWalletListener();
-    getBalanceHandler();
-    getDepositHandler();
+    //getBalanceHandler();
+    //getDepositHandler();
+    getCryptoPaymentHandler();
+    getUserInfoHandler();
   }, [walletAddress]);
 
   const connectWallet = async () => {
@@ -98,6 +110,7 @@ const Details = () => {
     }
   };
 
+  /*
   const getBalanceHandler = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
       // test getBalance
@@ -120,6 +133,33 @@ const Details = () => {
       // console.log("wallet address", walletAddress);
     }
   };
+  */
+
+  const getCryptoPaymentHandler = async () => {
+    getCryptoPayment(walletCookie.walletAddress)
+      .then((res) => {
+        setBalance(res.data.balance)
+        setDeposit(res.data.deposit)
+      })
+      .catch((error) => {
+        console.error("Failed to fetch crypto payment: ", error);
+      });
+  };
+
+  const getUserInfoHandler = async () => {
+    getUserInfo()
+      .then((res) => {
+        const info = {
+          "first_name": res.first_name,
+          "last_name": res.last_name,
+          "address": res.address
+        }
+        setUserInfo(info)
+      })
+      .catch((error) => {
+        console.error("Failed to fetch user info: ", error);
+      });
+  }
 
   async function depositEther(etherAmount) {
     console.log("USDT", etherAmount);
@@ -208,7 +248,7 @@ const Details = () => {
                   />
                 </div>
 
-                <div className="mt-2 mb-2">
+                {/*<div className="mt-2 mb-2">
                   <Button
                     color="white"
                     bgColor={currentColor}
@@ -216,7 +256,7 @@ const Details = () => {
                     onClickCallback={connectWallet}
                     borderRadius="10px"
                   />
-                </div>
+                </div>*/}
               </div>
             </div>
           </div>
@@ -305,7 +345,7 @@ const Details = () => {
                 <div>
                   <span className="inline-block w-40">Wallet Address</span>
                   <span>:</span>
-                  <span>{walletAddress}</span>
+                  <span>{walletCookie.walletAddress}</span>
                 </div>
 
                 <div>
@@ -329,7 +369,7 @@ const Details = () => {
                   />
                 </div>
 
-                <div className="mt-2 mb-2">
+                {/*<div className="mt-2 mb-2">
                   <Button
                     color="white"
                     bgColor={currentColor}
@@ -337,7 +377,7 @@ const Details = () => {
                     onClickCallback={connectWallet}
                     borderRadius="10px"
                   />
-                </div>
+              </div>*/}
               </div>
             </div>
           </>
@@ -349,17 +389,17 @@ const Details = () => {
             <div>
               <span className="inline-block w-40">NAME</span>
               <span>:</span>
-              <span>YU WANG</span>
+              <span>{userInfo.first_name}</span>
             </div>
             <div>
               <span className="inline-block w-40">EMAIL</span>
               <span>:</span>
-              <span>USER_NAME</span>
+              <span>{userInfo.last_name}</span>
             </div>
             <div className="mb-2">
               <span className="inline-block w-40">ADDRESS</span>
               <span>:</span>
-              <span>XXXX</span>
+              <span>{userInfo.address}</span>
             </div>
             {/* <div className="mt-2 mb-2">
               <Button

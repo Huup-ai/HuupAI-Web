@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
+import Cookies from 'js-cookie'; // Import Cookies
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { Navbar, Footer, Sidebar, ThemeSettings } from "../../components";
 import {
@@ -19,6 +20,7 @@ import "./Clouds.css";
 import { useStateContext } from "../../contexts/ContextProvider";
 
 const Clouds = () => {
+  const navigate = useNavigate(); // Get the navigate function
   const {
     setCurrentColor,
     setCurrentMode,
@@ -37,6 +39,14 @@ const Clouds = () => {
       setCurrentMode(currentThemeMode);
     }
   }, [setCurrentColor, setCurrentMode]);
+
+  const handleCPURouteClick = () => {
+    console.log('CPU link clicked');
+
+    // Set a CPU cookie when the user clicks on the /CPU route
+    Cookies.set('userClickedCPU', true); // 'userClickedCPU' is the cookie name
+    //navigate('/CPU');
+  };
 
   return (
     <div className={currentMode === "Dark" ? "dark" : ""}>
@@ -79,7 +89,7 @@ const Clouds = () => {
               {/* Market  */}
               <Route path="/" element={<Instances />} />
               <Route path="/GPU" element={<GPU />} />
-              <Route path="/CPU" element={<CPU />} />
+              <Route path="/CPU" element={<CPU />} onClick={handleCPURouteClick}/>
 
               {/* My Clouds  */}
               <Route path="/instances" element={<Instances />} />
@@ -92,7 +102,7 @@ const Clouds = () => {
                 path="/confirmation GPU/:id"
                 element={<Confirmation_GPU />}
               />
-              <Route path="/confirmation CPU" element={<Confirmation_CPU />} />
+              <Route path="/confirmation CPU/:id" element={<Confirmation_CPU />} />
 
               {/* Provider */}
               <Route path="/inventory" element={<Inventory />} />

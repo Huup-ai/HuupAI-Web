@@ -35,7 +35,7 @@ const Login = () => {
   const [signer, setSigner] = useState();
   const [fcContract, setFcContract] = useState();
   const [isChecked, setIsChecked] = useState(true);
-  // const navigate = useNavigate();
+  
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -56,6 +56,7 @@ const Login = () => {
     Auth,
     configureEnvironment,
     generatePrivateKey,
+    Goerli,
   } = require("@funkit/core");
 
   // Generate a private key for the wallet
@@ -63,7 +64,7 @@ const Login = () => {
   // console.log("PRIVATE_KEY:", PRIVATE_KEY);
 
   const options = {
-    chain: "goerli",
+    chain: Goerli,
     gasSponsor: {
       sponsorAddress: sponsorAddress,
     },
@@ -176,7 +177,6 @@ const handleLoginClick = async (e) => {
       // console.log("single address", singleWallet[0].address);
       // updateWalletAddress(singleWallet[0].address);
       if (selectedType === "provider"&&singleWallet.length===0){
-        console.log("create wallet working", createWallet)
         await createWallet();
        }
       
@@ -439,6 +439,7 @@ function LogIn({
     </div>
   );
 }
+
 
 function SignUp({
   onLoginClick,

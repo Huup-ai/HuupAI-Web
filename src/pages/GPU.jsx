@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { GridComponent, Inject, ColumnsDirective, ColumnDirective, Search, Page, Toolbar } from '@syncfusion/ej2-react-grids';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-
-
-
+import React, { useState, useEffect } from "react";
+import {
+  GridComponent,
+  Inject,
+  ColumnsDirective,
+  ColumnDirective,
+  Search,
+  Page,
+  Toolbar,
+} from "@syncfusion/ej2-react-grids";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 // import { GPUsData, employeesGrid } from '../data/dummy';
-import { Header } from '../components';
+import { Header } from "../components";
 import API_URL from "../api/apiAddress";
+import { GrLocation } from "react-icons/gr";
 
 import { useDispatch } from "react-redux";
 import { setPrice } from "../reducers/priceSlicer";
@@ -17,97 +24,141 @@ function GPU() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const toolbarOptions = ["Search"];
+
+  const editing = { allowDeleting: true, allowEditing: true };
+  const settings = { wrapMode: "Content" };
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetch(`${API_URL}/clusters/`)
-      .then(response => response.json())
-      .then(responseData => {
-        setData(responseData);  // Set the "data" key of the response to state
+    fetch(`${API_URL}/clusters/gpu`)
+      .then((response) => response.json())
+      .then((responseData) => {
+        setData(responseData); // Set the "data" key of the response to state
         setLoading(false);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
         setLoading(false);
       });
   }, []);
 
   const columns = [
-    { 
-      field: 'id', 
-      headerText: 'ID', 
-      width: 120,
+    {
+      field: "id",
+      headerText: "ID",
+      width: "100",
+      textAlign: "Center",
       template: (rowData) => {
         return <div>{rowData.id}</div>;
-      }
+      },
     },
-    { 
-      field: 'region', 
-      headerText: 'Region', 
-      width: 120,
+    {
+      field: "gpu",
+      headerText: "GPU",
+      width: "100",
+      textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.region}</div>;
-      }
+        return <div>{rowData.gpu}</div>;
+      },
     },
-    { 
-      field: 'cpu', 
-      headerText: 'CPU', 
-      width: 120,
+    {
+      field: "configuration",
+      headerText: "Configuration",
+      width: "100",
+      textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.cpu}</div>;
-      }
+        return <div>{rowData.configuration}</div>;
+      },
     },
-    { 
-      field: 'memory', 
-      headerText: 'Memory', 
-      width: 120,
+    {
+      field: "region",
+      headerText: "Region",
+      width: "100",
+      textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.memory}</div>;
-      }
+        return (
+          <div className="flex items-center justify-center gap-2">
+            <GrLocation />
+            <span>{rowData.region}</span>
+          </div>
+        );
+
+      },
     },
-    { 
-      field: 'pods', 
-      headerText: 'Pods', 
-      width: 120,
+    
+    {
+      field: "audited",
+      headerText: "Audited",
+      width: "100",
+      textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.pods}</div>;
-      }
+        return <div>{rowData.is_audited}</div>;
+      },
     },
-    { 
-      field: 'price', 
-      headerText: 'Price', 
-      width: 120,
+    {
+      field: "price",
+      headerText: "Price",
+      width: "100",
+      textAlign: "Center",
       template: (rowData) => {
         const handleLinkClick = () => {
+          // Set a GPU cookie when the user clicks on GPU component
+          Cookies.set("userClickedGPU", true);
+          Cookies.set("userClickedCPU", false);
           // Check if the string contains any non-zero characters
-          const hasNonZeroCpu = [...rowData.cpu].some(char => char !== "0");
-          
-          const routePath = hasNonZeroCpu ? `/clouds/confirmation CPU` : `/clouds/confirmation GPU/${rowData.id}`;
-          
+          const hasNonZeroCpu = false;
+
+          const routePath = hasNonZeroCpu
+            ? `/clouds/confirmation CPU`
+            : `/clouds/confirmation GPU/${rowData.id}`;
+
           // Dispatch the action
           dispatch(setPrice(rowData.price));
-    
+
           // Navigate to the desired route
           navigate(routePath);
         };
-        
-        return <button onClick={handleLinkClick}>{rowData.price}</button>;
-      }
-    }
-    
 
-];
+        return (
+          <div className="text-center">
+            <button
+              onClick={handleLinkClick}
+              className="italic text-purple-400 underline underline-offset-1"
+            >
+              {" "}
+              Request Instance
+            </button>
+
+            <p>{rowData.price}</p>
+          </div>
+        );
+        
+      },
+    },
+  ];
 
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
-      <Header category="Market Cloud > GPU" title="Display Data" />
+      <Header category="Market Cloud > GPU" title="Save big on your cloud services" />
       <GridComponent
+        rowHeight={70}
         dataSource={data}
+        width="auto"
+        allowPaging
+        allowSorting
+        pageSettings={{ pageCount: 5 }}
+        editSettings={editing}
+        toolbar={toolbarOptions}
+        allowTextWrap={true}
+        textWrapSettings={settings}
         // ... other props
       >
         <ColumnsDirective>
-          {columns.map((col, index) => <ColumnDirective key={index} {...col} />)}
+          {columns.map((col, index) => (
+            <ColumnDirective key={index} {...col} />
+          ))}
         </ColumnsDirective>
         <Inject services={[Search, Page, Toolbar]} />
       </GridComponent>

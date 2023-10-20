@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../components";
 import { Link, NavLink } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 import {
   AiOutlineCalendar,
@@ -99,19 +100,29 @@ const gridEmployeeProfile = (props) => (
   </div>
 );
 
-const gridPriceCPU = (props) => (
-  <div className="text-center">
-    <Link
-      to={`/clouds/confirmation%20CPU`}
-      className="italic text-purple-400 underline underline-offset-1"
-    >
-      {" "}
-      Request Instance
-    </Link>
+const gridPriceCPU = (props) => {
+  const handleRequestInstanceClick = () => {
+    // Set a cookie when the "Request Instance" link is clicked
+    Cookies.set('userClickedCPU', true); // 'userClickedCPU' is the cookie name
+    Cookies.set('userClickedGPU', false);
+  };
 
-    <p>{props.Price}</p>
-  </div>
-);
+  return (
+    <div className="text-center">
+      <Link
+        to={`/clouds/confirmation%20CPU`}
+        className="italic text-purple-400 underline underline-offset-1"
+        onClick={handleRequestInstanceClick} // Add the onClick handler
+      >
+        {" "}
+        Request Instance
+      </Link>
+
+      <p>{props.Price}</p>
+    </div>
+  );
+};
+
 const gridCharge = (props) => (
   <div className="text-center">
     <p>$ {props.Charge}</p>
@@ -274,6 +285,14 @@ export const InventoryGrid = [
     textAlign: "Center",
   },
   { field: "Type", headerText: "GPU", width: "100", textAlign: "Center" },
+
+  {
+    field: "Configuration",
+    headerText: "Configuration",
+    width: "100",
+    textAlign: "Center",
+  },
+  
   {
     headerText: "Region",
     width: "100",
@@ -282,23 +301,24 @@ export const InventoryGrid = [
   },
 
   {
-    field: "Configuration",
-    headerText: "Configuration",
-    width: "100",
-    textAlign: "Center",
-  },
-
-  {
     field: "Privacy",
     headerText: "Privacy",
     width: "100",
     textAlign: "Center",
   },
+  // {
+  //   field: "Price",
+  //   headerText: "Hourly Rate (USD)",
+  //   width: "100",
+  //   // template: gridPriceGPU,
+  //   textAlign: "Center",
+  // },
   {
-    field: "Price",
     headerText: "Hourly Rate (USD)",
-    width: "100",
-    // template: gridPriceGPU,
+    width: "120",
+    template: () => (
+      <input type="text" className="border rounded" />
+    ),
     textAlign: "Center",
   },
 ];

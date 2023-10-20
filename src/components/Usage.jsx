@@ -9,20 +9,21 @@ import {
   Page,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
-import { getUserInstances } from "../api";
+import { getUserInstances, getUserUsage } from "../api";
 
 const Usage = () => {
   const toolbarOptions = ["Search"];
   const [userInstances, setUserInstances] = useState([]);
+  const [userUsage, setUserUsage] = useState([]);
 
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
 
   useEffect(() => {
     // call the API to get the user instances
-    getUserInstances("user@example.com")
+    getUserUsage(localStorage.getItem("jwtToken"))
       .then((data) => {
-        setUserInstances(data);
+        setUserUsage(data);
       })
       .catch((error) => {
         console.error("Failed to fetch user instances: ", error);
@@ -41,7 +42,7 @@ const Usage = () => {
       <div className="drop-shadow-[0px_5px_5px_rgba(0,0,0,0.15)]">
         <GridComponent
           rowHeight={100}
-          dataSource={UsagesData}
+          dataSource={userUsage}
           width="auto"
           allowPaging
           allowSorting

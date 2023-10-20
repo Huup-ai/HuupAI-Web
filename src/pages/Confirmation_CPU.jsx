@@ -16,6 +16,8 @@ const Confirmation_CPU = () => {
   const { currentColor, currentMode } = useStateContext();
   const { id } = useParams();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // check if user is logged in
+  const [userName, setUserName] = useState(""); 
+  const [InstName, setInstName] = useState("win2019-dv-01");
   console.log("Is Authenticated:", isAuthenticated); // Log the value
   let hasPaymentMethod = useSelector((state) => state.auth.hasPaymentMethod); // check if user has a payment method
 
@@ -197,6 +199,18 @@ const Confirmation_CPU = () => {
       />
 
       <PayinComfirmation />
+
+      <div className="mt-12 flex space-x-20">
+        <label htmlFor="InstName">Instance Name:</label>
+        <input
+          type="text"
+          id="InstName"
+          className="border-2 border-gray-200 rounded-md"
+          name="InstName"
+          value={InstName}
+          onChange={(e) => setInstName(e.target.value)}
+        />
+      </div>
 
       <div className="mt-12 flex mb-10">
         <p className="underline underline-offset-4 w-20">vCPU</p>
