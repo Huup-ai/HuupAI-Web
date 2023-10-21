@@ -111,8 +111,8 @@ function GPU() {
           const hasNonZeroCpu = false;
 
           const routePath = hasNonZeroCpu
-            ? `/clouds/confirmation CPU`
-            : `/clouds/confirmation GPU/${rowData.id}`;
+            ? `/clouds/confirmation CPU/${rowData.item_id}`
+            : `/clouds/confirmation GPU/${rowData.item_id}`;
 
           // Dispatch the action
           dispatch(setPrice(rowData.price));

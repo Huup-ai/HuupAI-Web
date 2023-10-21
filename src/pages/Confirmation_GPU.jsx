@@ -41,6 +41,7 @@ const Confirmation_GPU = () => {
   const handleConfirmOrder = async () => {
   
   const token = localStorage.getItem('jwtToken');
+  console.log(id)
   if(hasPaymentMethod){
     try {
         const response = await fetch(`${API_URL}/instances/${id}/createvm/`, {
