@@ -551,7 +551,7 @@ export async function performDeposit(depositAmount) {
 export async function getUserWalletBalance() {
   return Deposit.getUserWalletBalance()
     .then((balance) => {
-      console.log("Balance:", balance);
+      // console.log("Balance:", balance);
       return balance;
     })
     .catch((err) => {

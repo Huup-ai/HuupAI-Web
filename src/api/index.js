@@ -162,6 +162,8 @@ export async function getWallet(token) {
 
 }
 
+
+
 export async function addPaymentAuth(payToken, JWTtoken) {
 
   // console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
