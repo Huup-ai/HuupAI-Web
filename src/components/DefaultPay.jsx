@@ -4,6 +4,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSelection, selectSelectedOption } from "../reducers/authSlicer";
 import Button from "./Button";
+import { updatePay } from "../api";
 
 const DefaultPay = () => {
   const { currentColor } = useStateContext();
@@ -19,6 +20,20 @@ const DefaultPay = () => {
 
     // store the selection in backend
   };
+
+  const handleSubmit = (event) => {
+    // console.log(payment)
+    updatePay(payment)
+    .then((res) => {
+      // console.log("res",res)
+      const mess = "Default Payment Method Successfullt Set to " + payment
+      alert(mess)
+       
+    })
+    .catch((error) => {
+      console.error("Failed to set Default Payment Method ", error);
+    });
+  }
   return (
     <div className="border-2 rounded-xl w-1/2">
       <h6 className="md:p-2">Setup default Payment Method: </h6>
@@ -63,7 +78,7 @@ const DefaultPay = () => {
             color="white"
             bgColor={currentColor}
             text="Submit"
-            // onClickCallback={handleDeposit}
+            onClickCallback={handleSubmit}
             borderRadius="10px"
           />
         </div>
