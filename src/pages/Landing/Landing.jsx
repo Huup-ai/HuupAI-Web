@@ -23,8 +23,8 @@ return (
             
             <div>
             <p className="enhance-GEN-AI-s">
-                Enhance GEN AI ‘s <br />
-                reliability, affordability and efficiency <br />
+                Meet Reliable,  <br />
+                Affordable, Efficient GEN AI <br />
             <button className="start-button-2" onClick={handleStartClick}>Get Started</button>
             </p>
             

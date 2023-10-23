@@ -277,7 +277,7 @@ export const employeesGrid = [
     textAlign: "Center",
   },
 ];
-export const InventoryGrid = [
+export const InventoryGrid = (handleHourlyRateChange) => ([
   {
     field: "Name",
     width: "100",
@@ -306,22 +306,29 @@ export const InventoryGrid = [
     width: "100",
     textAlign: "Center",
   },
-  // {
-  //   field: "Price",
-  //   headerText: "Hourly Rate (USD)",
-  //   width: "100",
-  //   // template: gridPriceGPU,
-  //   textAlign: "Center",
-  // },
+
   {
+    field: "Price", 
     headerText: "Hourly Rate (USD)",
     width: "120",
-    template: () => (
-      <input type="text" className="border rounded" />
+    template: (dataItem) => (
+      <input 
+        type="number" 
+        value={dataItem.Price || ''} 
+        className="border rounded" 
+        onChange={(e) => handleHourlyRateChange(e, dataItem)}
+      />
     ),
     textAlign: "Center",
+    // field: "Price", 
+    // headerText: "Hourly Rate (USD)",
+    // width: "120",
+    // template: (data) => (
+    //   <input type="number" className="border rounded" />
+    // ),
+    // textAlign: "Center",
   },
-];
+]);
 
 export const CPUsGrid = [
   {
