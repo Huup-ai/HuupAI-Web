@@ -14,10 +14,10 @@ const Confirmation_GPU = () => {
   const { currentColor, currentMode } = useStateContext();
   const { id } = useParams();
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);  // check if user is logged in
-  console.log("Is Authenticated:", isAuthenticated);  // Log the value
+  // console.log("Is Authenticated:", isAuthenticated);  // Log the value
   const [customName, setCustomName] = useState("win2019-dv-01");
   let hasPaymentMethod = useSelector(state => state.auth.hasPaymentMethod); // check if user has a payment method
-  console.log("hasPaymentMethod:", hasPaymentMethod); 
+  // console.log("hasPaymentMethod:", hasPaymentMethod); 
   const [metadataName, setMetadataName] = useState("win2019-dv-01");
   
   const navigate = useNavigate();

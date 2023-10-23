@@ -285,6 +285,14 @@ export const InventoryGrid = [
     textAlign: "Center",
   },
   { field: "Type", headerText: "GPU", width: "100", textAlign: "Center" },
+
+  {
+    field: "Configuration",
+    headerText: "Configuration",
+    width: "100",
+    textAlign: "Center",
+  },
+  
   {
     headerText: "Region",
     width: "100",
@@ -293,23 +301,24 @@ export const InventoryGrid = [
   },
 
   {
-    field: "Configuration",
-    headerText: "Configuration",
-    width: "100",
-    textAlign: "Center",
-  },
-
-  {
     field: "Privacy",
     headerText: "Privacy",
     width: "100",
     textAlign: "Center",
   },
+  // {
+  //   field: "Price",
+  //   headerText: "Hourly Rate (USD)",
+  //   width: "100",
+  //   // template: gridPriceGPU,
+  //   textAlign: "Center",
+  // },
   {
-    field: "Price",
     headerText: "Hourly Rate (USD)",
-    width: "100",
-    // template: gridPriceGPU,
+    width: "120",
+    template: () => (
+      <input type="text" className="border rounded" />
+    ),
     textAlign: "Center",
   },
 ];

@@ -18,7 +18,7 @@ const Confirmation_CPU = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // check if user is logged in
   const [userName, setUserName] = useState(""); 
   const [InstName, setInstName] = useState("win2019-dv-01");
-  console.log("Is Authenticated:", isAuthenticated); // Log the value
+  // console.log("Is Authenticated:", isAuthenticated); // Log the value
   let hasPaymentMethod = useSelector((state) => state.auth.hasPaymentMethod); // check if user has a payment method
 
   const navigate = useNavigate();

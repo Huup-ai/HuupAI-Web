@@ -30,11 +30,15 @@ function CPU() {
   const settings = { wrapMode: "Content" };
 
   const dispatch = useDispatch();
+  // console.log(API_URL)
 
   useEffect(() => {
     fetch(`${API_URL}/clusters/`)
+    
+    
       .then((response) => response.json())
       .then((responseData) => {
+  
         setData(responseData); // Set the "data" key of the response to state
         setLoading(false);
       })
