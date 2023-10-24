@@ -74,43 +74,9 @@ export default Inventory;
 //         const data = await response.json();
 //         // e.g., setClusterDetails(data);
 
-//       const data = await response.json();
-//       console.log("Fetched Clusters:", data);
-//       setClusters(data);
-//   } catch (error) {
-//       console.error('There was an error fetching the clusters', error);
-//   }
-// }
-
-useEffect(() => {
-  getClusterById();  // On component mount, fetch the clusters of the provider
-}, []);
-
-useEffect(() => {
-  console.log("ClusterPrice changed:", clusterPrice);
-}, [clusterPrice]);
-
-// const handleClusterChange = async (e) => {
-//   const clusterId = e.target.value;
-//   console.log("Selected Cluster ID:", clusterId);
-//   setSelectedAction(clusterId);
-
-//   if (clusterId) {
-//     const clusterDetails = await getClusterById(clusterId);
-//     console.log("Fetched Cluster Details:", clusterDetails);
-
-//   if (clusterDetails && (clusterDetails.id || clusterDetails.item_id)) {
-//     setClusters([clusterDetails]);
-
-//     const currentClusterPrice = clusterDetails.price ? clusterDetails.price : null;
-//     setClusterPrice(currentClusterPrice);
-//     setShowPriceBox(currentClusterPrice === null); // Show countbox if price is null
-
-// } else {
-//     console.error("Unexpected cluster data structure:", clusterDetails);
-//     fetchClusters();
-// }
-//   }
+//     } catch (error) {
+//         console.error('There was an error fetching the cluster details', error);
+//     }
 // };
 
 // Fetching provider's clusters
@@ -158,7 +124,7 @@ useEffect(() => {
 //     setSelectedAction(e.target.value);
 //     if (e.target.value) {
 //       getClusterById(e.target.value); // Get the cluster by ID
-//       fetchClusters(); // Fetch provider’s clusters  
+//       fetchClusters(); // Fetch provider's clusters  
 //     }
 // };
 

@@ -2,6 +2,7 @@ import {React, useState, useEffect} from "react";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import API_URL from "../api/apiAddress";
+import { getWallet } from "../api";
 
 // const ProviderDetails = () => {
 //   const { currentColor } = useStateContext();
@@ -10,58 +11,58 @@ import API_URL from "../api/apiAddress";
 //     return storedValue ? JSON.parse(storedValue) : false;
 //   });
 const ProviderDetails = () => {
-  const { currentColor } = useStateContext();
+  const { currentColor, setUserInfo } = useStateContext();
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [billingDetails, setBillingDetails] = useState(null);
-  const {setUserInfo} = useStateContext();
-  const token = localStorage.getItem("jwtToken");
+  const token = localStorage.getItem('jwtToken');
+  const [walletAddress, setWalletAddress] = useState(localStorage.getItem('walletAddress') || '');
   const [isCrypto, setIsCrypto] = useState(() => {
-    const storedValue = localStorage.getItem("crypto");
+    const storedValue = localStorage.getItem('crypto');
     return storedValue ? JSON.parse(storedValue) : false;
   });
 
   useEffect(() => {
     const fetchData = async () => {
-        // Add the token to headers
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // assuming token is available in this scope
-        };
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
 
-        try {
-            let response = await fetch(`${API_URL}/users/payment_method/`, { headers: headers });
-            if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error("Unauthorized. Token may be expired or invalid.");
-                } else {
-                    throw new Error("Error fetching payment details");
-                }
-            }
-            let data = await response.json();
-            setPaymentDetails(data);
-        } catch (error) {
-            console.error("Error fetching payment details:", error);
-        }
+      try {
+        const walletData = await getWallet(token);
+        const walletAddress = walletData[0].address; // Access wallet address from the API response
+        localStorage.setItem('walletAddress', walletAddress); // Store the wallet address in local storage
+        setWalletAddress(walletAddress); // Update the walletAddress state variable
+      } catch (error) {
+        console.error('Error fetching wallet data:', error);
+      }
 
-        try {
-            let response = await fetch(`${API_URL}/users/info/`, { headers: headers });
-            if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error("Unauthorized. Token may be expired or invalid.");
-                } else {
-                    throw new Error("Error fetching billing details");
-                }
-            }
-            let data = await response.json();
-            setBillingDetails(data);
-            setUserInfo(data);
-        } catch (error) {
-            console.error("Error fetching billing details:", error);
+      try {
+        const response = await fetch(`${API_URL}/users/payment_method/`, { headers });
+        if (!response.ok) {
+          throw new Error('Error fetching payment details');
         }
-    }
+        const data = await response.json();
+        setPaymentDetails(data);
+      } catch (error) {
+        console.error('Error fetching payment details:', error);
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/users/info/`, { headers });
+        if (!response.ok) {
+          throw new Error('Error fetching billing details');
+        }
+        const data = await response.json();
+        setBillingDetails(data);
+        setUserInfo(data);
+      } catch (error) {
+        console.error('Error fetching billing details:', error);
+      }
+    };
 
     fetchData();
-}, []);
+  }, [token, setUserInfo]);
 
 if (!paymentDetails) {
     return <div>Echo is loading...</div>;
@@ -70,42 +71,7 @@ if (!paymentDetails) {
 if (!billingDetails) {
     return <div>Michael is loading...</div>;
 }
-//   useEffect(() => {
-//     const fetchData = async () => {
-//         try {
-//             let response = await  fetch(`${API_URL}/users/payment_method/`);
-//             if (!response.ok) throw new Error("Error fetching payment details");
-//             let data = await response.json();
-//             setPaymentDetails(data);
-//         } catch (error) {
-//             console.error("Error fetching payment details:", error);
-//         }
 
-//         try {
-//             let response = await fetch(`${API_URL}/users/info/`);
-//             if (!response.ok) throw new Error("Error fetching billing details");
-//             let data = await response.json();
-//             setBillingDetails(data);
-//         } catch (error) {
-//             console.error("Error fetching billing details:", error);
-//         }
-//     }
-
-//     fetchData();
-// }, []);
-
-   
-
-//   // if (!paymentDetails || !billingDetails) {
-//   //   return <div>Echo is loading...</div>;
-//   // }
-//   if (!paymentDetails) {
-//     return <div>Echo is loading...</div>;
-//   }
-  
-//   if (!billingDetails) {
-//     return <div>Michael is loading...</div>;
-//   }
 
   return (
     <div id="Payment Details">
@@ -224,12 +190,12 @@ if (!billingDetails) {
             <div>
               <span className="inline-block w-40">PAYMENT METHOD</span>
               <span>:</span>
-              <span>{paymentDetails.account_payable_window}</span>
+              <span>{paymentDetails.payment_method}</span>
             </div>
             <div>
               <span className="inline-block w-40">Wallet Adrress</span>
               <span>:</span>
-              <span>{paymentDetails.wallet_address}</span>
+              <span>{walletAddress}</span>
             </div>
             <div className="mt-2 mb-2">
             <span className="inline-block w-40">USDT to Fiat</span>
