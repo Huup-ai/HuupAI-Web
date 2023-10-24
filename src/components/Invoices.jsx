@@ -61,7 +61,7 @@
 //                 {...item}
 //               />
 //             ))}
-            
+
 //             <ColumnDirective
 //               headerText="Actions"
 //               template={record => record.status === "Unpaid" ? <button>Action</button> : null}
@@ -118,13 +118,13 @@ const Invoices = () => {
   // Set up web3 and the contract
   const web3 = new Web3(Web3.givenProvider); // uses MetaMask's provider
   // const contractAbi = ...;  // ABI from your contract
-  const contractAddress = '0xYourContractAddress';
+  const contractAddress = "0xYourContractAddress";
   // const contract = new web3.eth.Contract(contractAbi, contractAddress);
 
   // const withdrawEarnings = async () => {
   //   try {
   //     // Note: You might want to first ensure the user is connected to a wallet provider, e.g., MetaMask
-  //     const accounts = await web3.eth.getAccounts(); 
+  //     const accounts = await web3.eth.getAccounts();
   //     if (accounts.length === 0) {
   //       alert("Please connect to MetaMask.");
   //       return;
@@ -132,7 +132,7 @@ const Invoices = () => {
 
   //     const invoice = await generateInvoice();
   //     const earning = invoice.total_price;  // assuming total_price is the earning
-      
+
   //     await contract.methods.withdrawEarning(earning).send({ from: accounts[0] });
   //     alert('Earnings withdrawn successfully!');
 
@@ -165,16 +165,16 @@ const Invoices = () => {
           allowTextWrap={true}
           textWrapSettings={settings}
         >
-        <ColumnsDirective>
+          <ColumnsDirective>
             {InvoicesGrid.map((item) => (
               <ColumnDirective
-              key={item.field}
-              field={item.field}
-              headerText={item.headerText}
-              width={item.width}
-              textAlign={item.textAlign}
-              isPrimaryKey={item.isPrimaryKey}
-            />
+                key={item.field}
+                field={item.field}
+                headerText={item.headerText}
+                width={item.width}
+                textAlign={item.textAlign}
+                isPrimaryKey={item.isPrimaryKey}
+              />
             ))}
             {/* <ColumnDirective
               headerText="Actions"

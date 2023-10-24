@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 const Billing = ({ userInstances }) => {
   const [isSticky, setIsSticky] = useState(false);
   const [vmStatus, setVmStatus] = useState([]);
-  //store state for 
+  //store state for
 
   const handleScroll = () => {
     if (window.scrollY > 400) {
@@ -29,6 +29,7 @@ const Billing = ({ userInstances }) => {
     getVmStatus("mg01-syenbla-3", "default", "eijf-24-vm1")
       .then((data) => {
         setVmStatus(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Failed to fetch VM status: ", error);
