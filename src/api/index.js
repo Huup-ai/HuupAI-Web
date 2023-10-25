@@ -267,9 +267,64 @@ export async function generateInvoice() {
   }
 }
 
+export async function updateUserInfo(companyName, companyAddress, ein) {
+  const requestBody = {
+    ein: ein,
+    company: companyName,
+    address: companyAddress,
+  };
+  return FetchRequest(
+    `${API_URL}/users/info/`,
+    "POST",
+    {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json",
+    },
+    requestBody
+  );
+}
+
 export async function getUserInfo() {
   return FetchRequest(`${API_URL}/users/info/`, "GET", {
     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
     "Content-Type": "application/json",
   });
+}
+
+export async function updatePay(method) {
+  const requestBody = {
+    payment_method: method,
+  };
+  return FetchRequest(
+    `${API_URL}/users/payment_method/`,
+    "POST",
+    {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json",
+    },
+    requestBody
+  );
+}
+
+export async function getPay() {
+  return FetchRequest(`${API_URL}/users/payment_method/`, "GET", {
+    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    "Content-Type": "application/json",
+  });
+}
+
+export async function updatePwd(oldPwd, newPwd) {
+  const requestBody = {
+    old_password: oldPwd,
+    new_password: newPwd,
+  };
+  return FetchRequest(
+    `${API_URL}/users/change_password/`,
+    "POST",
+    {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json",
+    },
+    requestBody
+  );
 }

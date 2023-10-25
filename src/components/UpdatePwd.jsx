@@ -4,6 +4,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 import Button from "./Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { updatePwd } from "../api";
 
 const UpdatePwd = () => {
   const { currentColor } = useStateContext();
@@ -22,6 +23,34 @@ const UpdatePwd = () => {
   const toggleShowPassword_con = () => {
     setShowPassword_con(!showPassword_con);
   };
+
+  const handleUpdate = (event) => {
+    // console.log(password_old, password_new, password_con);
+    if (password_con !== password_new) {
+      // Password and Confirm Password do not match
+      alert("New Password and Confirm Password do not match");
+
+      return;
+    }
+    updatePwd(password_old, password_new)
+      .then((res) => {
+        if (res.status){
+          // console.log(res.status)
+          alert("Password Updated Successfully")
+        }
+        else if(res.old_password){
+          alert("Old Password is incorrect")
+        }
+        else{
+          alert("Password Update Failed")
+        }       
+      
+      })
+      .catch((error) => {
+        console.error("Update Password Failed ", error);
+      });
+  };
+
   return (
     <div className="border-2 rounded-xl w-1/2">
       <h6 className="md:p-2">Update Password: </h6>
@@ -91,7 +120,7 @@ const UpdatePwd = () => {
             color="white"
             bgColor={currentColor}
             text="Update"
-            // onClickCallback={handleDeposit}
+            onClickCallback={handleUpdate}
             borderRadius="10px"
           />
         </div>
