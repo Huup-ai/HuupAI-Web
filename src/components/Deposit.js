@@ -523,7 +523,7 @@ const Deposit = {
       const userAddress = await signer.getAddress();
       const balance = await usdtContract.balanceOf(userAddress);
 
-      // USDT has 6 decimals, so you may need to divide the balance by 1e6
+      // USDT has 18 decimals, so you may need to divide the balance by 1e18
       const formattedBalance = ethers.utils.formatUnits(balance, 18);
 
       return formattedBalance;
