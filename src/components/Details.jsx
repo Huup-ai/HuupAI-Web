@@ -218,13 +218,13 @@ const Details = () => {
                 <div>
                   <span className="inline-block w-40">Total Deposit</span>
                   <span>:</span>
-                  <span>{deposit} ETH USDT</span>
+                  <span>{deposit} USDT</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">Total Balance</span>
                   <span>:</span>
                   {/* {getBalanceHandler()} */}
-                  <span>{balance} ETH USDT</span>
+                  <span>{balance} USDT</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">Wallet Address</span>
@@ -339,13 +339,13 @@ const Details = () => {
                 <div>
                   <span className="inline-block w-40">Total Deposit</span>
                   <span>:</span>
-                  <span>{deposit} ETH USDT</span>
+                  <span>{deposit} USDT</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">Total Balance</span>
                   <span>:</span>
                   {/* {getBalanceHandler()} */}
-                  <span>{balance} ETH USDT</span>
+                  <span>{balance} USDT</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">Wallet Address</span>
