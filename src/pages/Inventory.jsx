@@ -23,6 +23,7 @@ const Inventory = () => {
   const [clusters, setClusters] = useState([]); 
   const [data, setData] = useState([]);
   const [modifiedPrices, setModifiedPrices] = useState({});
+  const itemIdToClusterIdMap = {};
 
 // Fetch clusters associated with the provider
 const fetchClusters = async () => {
@@ -40,6 +41,9 @@ const fetchClusters = async () => {
       }
 
       const data = await response.json();
+      data.forEach(cluster => {
+        itemIdToClusterIdMap[cluster.item_id] = cluster.cluster_id;
+    });
       console.log("Fetched Clusters:", data);
       setData(data);
       setClusters(data);
@@ -134,6 +138,11 @@ const InventoryGrid = [
   },
 ];
 
+const getClusterIdByItemId = (itemId) => {
+  const cluster = clusters.find(cluster => cluster.item_id === itemId);
+  return cluster ? cluster.cluster_id : null;
+}
+
 const handleSetPrice = async () => {
   console.log("handleSetPrice function called");
   
@@ -142,11 +151,14 @@ const handleSetPrice = async () => {
   console.log("Full modifiedPrices object:", modifiedPrices);
   let allUpdatesSuccessful = true;
   
-  for (let clusterId in modifiedPrices) {
-      if (!clusterId || modifiedPrices[clusterId] === '') continue;
+  for (let itemId  in modifiedPrices) {
+      if (!itemId  || modifiedPrices[itemId ] === '') continue;
 
-      const modifiedPrice = modifiedPrices[clusterId];
+      const clusterId = getClusterIdByItemId(itemId); 
+      if (!clusterId) continue; 
 
+      const modifiedPrice = modifiedPrices[itemId];
+      
       try {
           console.log(`About to send fetch request for cluster with id ${clusterId}`);
           const response = await fetch(`${API_URL}/clusters/set_price/`, {
