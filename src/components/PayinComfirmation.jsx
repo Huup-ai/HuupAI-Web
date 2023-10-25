@@ -103,7 +103,7 @@ const PayinComfirmation = () => {
       <div className="mt-5 w-1/2 border-2 rounded-lg shadow-lg md:p-10">
         <div>
           Step #1. Fund your wallet by using{" "}
-          <a herf="" className="underline underline-offset-1 italic">
+          <a href="" className="underline underline-offset-1 italic">
             MoonPay
           </a>
         </div>

@@ -74,9 +74,7 @@ const UpdateCredit = () => {
     }
   };
 
-  useEffect(() => {
-    // call backend to get card number
-  }, [cardNumber]);
+
   return (
     <div className="border-2 rounded-xl w-1/2">
       <h6 className="md:p-2">Update Credit Card Info(optional): </h6>
