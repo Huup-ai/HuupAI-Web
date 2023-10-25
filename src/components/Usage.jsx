@@ -10,6 +10,7 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import { getUserInstances, getUserUsage } from "../api";
+import { flattenObject } from "../utils";
 
 const Usage = () => {
   const toolbarOptions = ["Search"];
@@ -18,22 +19,6 @@ const Usage = () => {
 
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
-
-  function flattenObject(ob) {
-    const result = {};
-
-    for (const i in ob) {
-      if (typeof ob[i] === "object" && !Array.isArray(ob[i])) {
-        const temp = flattenObject(ob[i]);
-        for (const j in temp) {
-          result[i + "_" + j] = temp[j];
-        }
-      } else {
-        result[i] = ob[i];
-      }
-    }
-    return result;
-  }
 
   useEffect(() => {
     // call the API to get the user instances
@@ -47,24 +32,6 @@ const Usage = () => {
         console.error("Failed to fetch user instances: ", error);
       });
   }, []);
-
-  // useEffect(() => {
-  //   Promise.all([
-  //     getUserInstances(),
-  //     // getUserUsage(localStorage.getItem("jwtToken")),
-  //   ])
-  //     .then(([instancesResponse]) => {
-  //       const flattenedInstances = instancesResponse.map((item) =>
-  //         flattenObject(item)
-  //       );
-  //       const merged = mergeData(flattenedInstances, mockUserUsage);
-  //       setMergedData(merged);
-  //       console.log(merged);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // }, []);
 
   const usageTemplate = (data) => {
     const formattedUsage = Number(data.usage).toFixed(2);

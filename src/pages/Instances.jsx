@@ -17,6 +17,7 @@ import { updateVM, terminateVM } from "../api/vm";
 import { Link } from "react-router-dom";
 import SSHCert from "../components/SSHCert";
 import DropdownAction from "../components/DropdownAction";
+import { flattenObject } from "../utils";
 
 const Instances = () => {
   const [data, setData] = useState([]);
@@ -25,22 +26,6 @@ const Instances = () => {
 
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
-
-  function flattenObject(ob) {
-    const result = {};
-
-    for (const i in ob) {
-      if (typeof ob[i] === "object" && !Array.isArray(ob[i])) {
-        const temp = flattenObject(ob[i]);
-        for (const j in temp) {
-          result[i + "_" + j] = temp[j];
-        }
-      } else {
-        result[i] = ob[i];
-      }
-    }
-    return result;
-  }
 
   useEffect(() => {
     getUserInstances()

@@ -41,6 +41,9 @@ const Details = () => {
     first_name: "none",
     last_name: "none",
     address: "none",
+    email: "none",
+    payment_method: "none",
+    credit_card: "none",
   });
 
   useEffect(() => {
