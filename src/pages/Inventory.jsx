@@ -24,6 +24,7 @@ const Inventory = () => {
   const [data, setData] = useState([]);
   const [modifiedPrices, setModifiedPrices] = useState({});
   const itemIdToClusterIdMap = {};
+  const [modifiedItemIds, setModifiedItemIds] = useState(new Set());
 
 // Fetch clusters associated with the provider
 const fetchClusters = async () => {
@@ -52,20 +53,15 @@ const fetchClusters = async () => {
   }
 }
 
-const handleHourlyRateBlur = (dataItemClusterId, newPrice) => {
-  console.log("Blur event for ID:", dataItemClusterId, "with price:", newPrice);
+const handleHourlyRateBlur = (dataItemItemId, newPrice) => {
+  console.log("Blur event for ID:", dataItemItemId, "with price:", newPrice);
   // Store modified prices in the state
   setModifiedPrices(prev => ({
     ...prev,
-    [dataItemClusterId]: newPrice
+    [dataItemItemId]: newPrice
   }));
-  setClusters(prevClusters => 
-    prevClusters.map(cluster => 
-      cluster.id === dataItemClusterId 
-        ? { ...cluster, price: newPrice } 
-        : cluster
-      )
-    );   
+  // Add the modified cluster's itemId to the set
+  setModifiedItemIds(prev => new Set([...prev, dataItemItemId]));
 };
 
 useEffect(() => {
@@ -76,9 +72,9 @@ useEffect(() => {
   console.log("ClusterPrice changed:", clusterPrice);
 }, [clusterPrice]);
 
-const PriceInput = ({ initialPrice, dataItem  }) => {
+const PriceInput = ({ initialPrice, modifiedPrice, dataItem  }) => {
   console.log("PriceInput for dataItem:", dataItem);
-  const [inputValue, setInputValue] = useState(initialPrice || '');
+  const [inputValue, setInputValue] = useState(modifiedPrice || initialPrice || '');
 
   return (
     <input 
@@ -88,7 +84,7 @@ const PriceInput = ({ initialPrice, dataItem  }) => {
       onChange={(e) => setInputValue(e.target.value)}
       onBlur={() => {
         if (inputValue !== initialPrice) {
-          handleHourlyRateBlur(dataItem.id, inputValue);
+          handleHourlyRateBlur(dataItem.itemId, inputValue);
         }
       }}
     />
@@ -133,15 +129,19 @@ const InventoryGrid = [
     field: "Price", 
     headerText: "Hourly Rate (USD)",
     width: "120",
-    template: (rowData) => <PriceInput initialPrice={rowData.price} dataItem={rowData} />,
+    template: (rowData) => <PriceInput 
+                            initialPrice={rowData.price} 
+                            modifiedPrice={modifiedPrices[rowData.item_id]} 
+                            dataItem={rowData}
+                            />,
     textAlign: "Center",
   },
 ];
 
-const getClusterIdByItemId = (itemId) => {
-  const cluster = clusters.find(cluster => cluster.item_id === itemId);
-  return cluster ? cluster.cluster_id : null;
-}
+// const getClusterIdByItemId = (itemId) => {
+//   const cluster = clusters.find(cluster => cluster.item_id === itemId);
+//   return cluster ? cluster.cluster_id : null;
+// }
 
 const handleSetPrice = async () => {
   console.log("handleSetPrice function called");
@@ -152,15 +152,12 @@ const handleSetPrice = async () => {
   let allUpdatesSuccessful = true;
   
   for (let itemId  in modifiedPrices) {
-      if (!itemId  || modifiedPrices[itemId ] === '') continue;
-
-      const clusterId = getClusterIdByItemId(itemId); 
-      if (!clusterId) continue; 
+      if (!itemId || !modifiedPrices[itemId]) continue;
 
       const modifiedPrice = modifiedPrices[itemId];
       
       try {
-          console.log(`About to send fetch request for cluster with id ${clusterId}`);
+          console.log(`About to send fetch request for cluster with id ${itemId}`);
           const response = await fetch(`${API_URL}/clusters/set_price/`, {
               method: 'POST',
               headers: {
@@ -168,7 +165,7 @@ const handleSetPrice = async () => {
                   'Authorization': `Bearer ${token}`
               },
               body: JSON.stringify({
-                  cluster_id: clusterId,
+                  item_id: itemId,
                   price: modifiedPrice
               }),
           });
@@ -178,13 +175,13 @@ const handleSetPrice = async () => {
               allUpdatesSuccessful = false;
               const text = await response.text();
               console.log("Error from API:", text);
-              throw new Error(`Failed to set price for cluster with id ${clusterId}`);
+              throw new Error(`Failed to set price for cluster with id ${itemId}`);
           }
 
           const data = await response.json();
           console.log("API Response for cluster:", data);
       } catch (error) {
-          console.error(`There was an error setting the price for cluster with id ${clusterId}`, error);
+          console.error(`There was an error setting the price for cluster with id ${itemId}`, error);
       }
   }
 
@@ -192,6 +189,7 @@ const handleSetPrice = async () => {
     alert("Prices updated successfully!");
     fetchClusters(); // Refreshing the data after updates
     setModifiedPrices({}); // Clear modified prices after update
+    setModifiedItemIds(new Set()); // Clear modified item IDs after update
   } else {
     alert("Failed to update some prices. Please try again.");
   }
