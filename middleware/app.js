@@ -1,5 +1,5 @@
-const app = require('./utils/setup');
+const app = require("./utils/setup");
 
-const contractRouter = require('./routers/contractRouter');
+const contractRouter = require("./routers/contractRouter");
 
-app.use('/contract', contractRouter);
+app.use("/contract", contractRouter);

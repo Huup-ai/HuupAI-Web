@@ -10,6 +10,7 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 import { getUserInstances, getUserUsage } from "../api";
+import { flattenObject } from "../utils";
 
 const Usage = () => {
   const toolbarOptions = ["Search"];
@@ -21,14 +22,26 @@ const Usage = () => {
 
   useEffect(() => {
     // call the API to get the user instances
-    getUserUsage(localStorage.getItem("jwtToken"))
-      .then((data) => {
-        setUserUsage(data);
+    getUserInstances()
+      .then((responseData) => {
+        const flattenedData = responseData.map((item) => flattenObject(item));
+        setUserInstances(flattenedData);
+        console.log(flattenedData);
       })
       .catch((error) => {
         console.error("Failed to fetch user instances: ", error);
       });
   }, []);
+
+  const usageTemplate = (data) => {
+    const formattedUsage = Number(data.usage).toFixed(2);
+    return <div>{formattedUsage}</div>;
+  };
+
+  const chargeTemplate = (data) => {
+    const charge = (Number(data.cluster_price) * Number(data.usage)).toFixed(2);
+    return <div>${charge}</div>;
+  };
 
   return (
     <div id="Current Usages">
@@ -42,7 +55,7 @@ const Usage = () => {
       <div className="drop-shadow-[0px_5px_5px_rgba(0,0,0,0.15)]">
         <GridComponent
           rowHeight={100}
-          dataSource={userUsage}
+          dataSource={userInstances}
           width="auto"
           allowPaging
           allowSorting
@@ -52,8 +65,7 @@ const Usage = () => {
           allowTextWrap={true}
           textWrapSettings={settings}
         >
-          <ColumnsDirective>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          {/* <ColumnsDirective>
             {UsagesGrid.map((item, index) => (
               <ColumnDirective
                 clipMode="EllipsisWithTooltip"
@@ -61,6 +73,29 @@ const Usage = () => {
                 {...item}
               />
             ))}
+          </ColumnsDirective> */}
+          <ColumnsDirective>
+            <ColumnDirective
+              field="vm_name"
+              headerText="Instance Name"
+              width="200"
+            />
+            <ColumnDirective field="cluster_gpu" headerText="GPU" width="150" />
+            <ColumnDirective
+              field="cluster_configuration"
+              headerText="Configuration"
+              width="200"
+            />
+            <ColumnDirective
+              headerText="Usage"
+              width="100"
+              template={usageTemplate}
+            />
+            <ColumnDirective
+              headerText="Charge"
+              width="100"
+              template={chargeTemplate}
+            />
           </ColumnsDirective>
           <Inject services={[Search, Page, Toolbar]} />
         </GridComponent>

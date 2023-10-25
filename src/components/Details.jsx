@@ -16,7 +16,6 @@ const Details = () => {
   const [walletMoney, setWalletMoney] = useState(0);
   const [walletCookie, setWalletCookie] = useCookies(["walletAddress"]);
 
-
   // const [isCrypto, setIsCrypto] = useState(() => {
   //   const storedValue = localStorage.getItem("crypto");
   //   return storedValue ? JSON.parse(storedValue) : false;
@@ -39,19 +38,22 @@ const Details = () => {
   const [balance, setBalance] = useState("Please connect wallet");
   const [deposit, setDeposit] = useState("Please connect wallet");
   const [userInfo, setUserInfo] = useState({
-    "first_name":"none",
-    "last_name":"none",
-    "address":"none"
+    first_name: "none",
+    last_name: "none",
+    address: "none",
+    email: "none",
+    payment_method: "none",
+    credit_card: "none",
   });
 
   useEffect(() => {
-    getCurrentWalletConnected();
-    addWalletListener();
+    // getCurrentWalletConnected();
+    // addWalletListener();
     //getBalanceHandler();
     //getDepositHandler();
     getCryptoPaymentHandler();
     getUserInfoHandler();
-  }, [walletAddress]);
+  }, []);
 
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
@@ -86,7 +88,7 @@ const Details = () => {
           setWalletAddress(accounts[0]);
           // console.log(accounts[0]);
         } else {
-          // console.log("Connect to MetaMask using the Connect button");
+          console.log("Connect to MetaMask using the Connect button");
         }
       } catch (err) {
         console.error(err.message);
@@ -138,8 +140,8 @@ const Details = () => {
   const getCryptoPaymentHandler = async () => {
     getCryptoPayment(walletCookie.walletAddress)
       .then((res) => {
-        setBalance(res.data.balance)
-        setDeposit(res.data.deposit)
+        setBalance(res.data.balance);
+        setDeposit(res.data.deposit);
       })
       .catch((error) => {
         console.error("Failed to fetch crypto payment: ", error);
@@ -150,16 +152,19 @@ const Details = () => {
     getUserInfo()
       .then((res) => {
         const info = {
-          "first_name": res.first_name,
-          "last_name": res.last_name,
-          "address": res.address
-        }
-        setUserInfo(info)
+          first_name: res.first_name,
+          last_name: res.last_name,
+          address: res.address,
+          email: res.email,
+          payment_method: res.payment_method,
+          credit_card: res.credit_card,
+        };
+        setUserInfo(info);
       })
       .catch((error) => {
         console.error("Failed to fetch user info: ", error);
       });
-  }
+  };
 
   async function depositEther(etherAmount) {
     console.log("USDT", etherAmount);
@@ -199,7 +204,7 @@ const Details = () => {
       </div>
 
       <div>
-        {payment == "crypto" ? (
+        {userInfo.payment_method === "crypto" ? (
           // Content to display when isToggled is true
           <div>
             <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
@@ -213,13 +218,13 @@ const Details = () => {
                 <div>
                   <span className="inline-block w-40">Total Deposit</span>
                   <span>:</span>
-                  <span>{deposit} ETH USDT</span>
+                  <span>{deposit} USDT</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">Total Balance</span>
                   <span>:</span>
                   {/* {getBalanceHandler()} */}
-                  <span>{balance} ETH USDT</span>
+                  <span>{balance} USDT</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">Wallet Address</span>
@@ -227,7 +232,7 @@ const Details = () => {
                   <span>{walletAddress}</span>
                 </div>
 
-                <div>
+                {/* <div>
                   <input
                     type="text"
                     className="border-solid border-2 rounded-md border-grey w-40"
@@ -246,7 +251,7 @@ const Details = () => {
                     onClickCallback={handleDeposit}
                     borderRadius="10px"
                   />
-                </div>
+                </div> */}
 
                 {/*<div className="mt-2 mb-2">
                   <Button
@@ -260,7 +265,7 @@ const Details = () => {
               </div>
             </div>
           </div>
-        ) : payment == "creditCard" ? (
+        ) : userInfo.payment_method === "credit_card" ? (
           // Content to display when isToggled is false
           <div>
             <div className="border-2 rounded-lg w-full shadow-lg">
@@ -269,17 +274,17 @@ const Details = () => {
                 <div>
                   <span className="inline-block w-40">PAYMENT METHOD</span>
                   <span>:</span>
-                  <span>VISA</span>
+                  <span>Credit Card</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">EXP DATE.</span>
                   <span>:</span>
-                  <span>date</span>
+                  <span>{userInfo.exp_date}</span>
                 </div>
                 <div className="mb-2">
                   <span className="inline-block w-40">CARD NUMBER</span>
                   <span>:</span>
-                  <span>XXXX-XXXX-XXXX-1234</span>
+                  <span>{"XXXX-XXXX-XXXX-" + userInfo.credit_card}</span>
                 </div>
                 {/* <div className="mt-2 mb-2">
                   <Button
@@ -334,13 +339,13 @@ const Details = () => {
                 <div>
                   <span className="inline-block w-40">Total Deposit</span>
                   <span>:</span>
-                  <span>{deposit} ETH USDT</span>
+                  <span>{deposit} USDT</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">Total Balance</span>
                   <span>:</span>
                   {/* {getBalanceHandler()} */}
-                  <span>{balance} ETH USDT</span>
+                  <span>{balance} USDT</span>
                 </div>
                 <div>
                   <span className="inline-block w-40">Wallet Address</span>
@@ -348,7 +353,7 @@ const Details = () => {
                   <span>{walletCookie.walletAddress}</span>
                 </div>
 
-                <div>
+                {/* <div>
                   <input
                     type="text"
                     className="border-solid border-2 rounded-md border-grey w-40"
@@ -367,7 +372,7 @@ const Details = () => {
                     onClickCallback={handleDeposit}
                     borderRadius="10px"
                   />
-                </div>
+                </div> */}
 
                 {/*<div className="mt-2 mb-2">
                   <Button
@@ -389,12 +394,12 @@ const Details = () => {
             <div>
               <span className="inline-block w-40">NAME</span>
               <span>:</span>
-              <span>{userInfo.first_name}</span>
+              <span>{userInfo.first_name + " " + userInfo.last_name}</span>
             </div>
             <div>
               <span className="inline-block w-40">EMAIL</span>
               <span>:</span>
-              <span>{userInfo.last_name}</span>
+              <span>{userInfo.email}</span>
             </div>
             <div className="mb-2">
               <span className="inline-block w-40">ADDRESS</span>
