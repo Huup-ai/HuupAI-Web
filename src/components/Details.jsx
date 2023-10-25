@@ -47,13 +47,13 @@ const Details = () => {
   });
 
   useEffect(() => {
-    getCurrentWalletConnected();
-    addWalletListener();
+    // getCurrentWalletConnected();
+    // addWalletListener();
     //getBalanceHandler();
     //getDepositHandler();
     getCryptoPaymentHandler();
     getUserInfoHandler();
-  }, [walletAddress]);
+  }, []);
 
   const connectWallet = async () => {
     if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
@@ -88,7 +88,7 @@ const Details = () => {
           setWalletAddress(accounts[0]);
           // console.log(accounts[0]);
         } else {
-          // console.log("Connect to MetaMask using the Connect button");
+          console.log("Connect to MetaMask using the Connect button");
         }
       } catch (err) {
         console.error(err.message);
@@ -232,7 +232,7 @@ const Details = () => {
                   <span>{walletAddress}</span>
                 </div>
 
-                <div>
+                {/* <div>
                   <input
                     type="text"
                     className="border-solid border-2 rounded-md border-grey w-40"
@@ -251,7 +251,7 @@ const Details = () => {
                     onClickCallback={handleDeposit}
                     borderRadius="10px"
                   />
-                </div>
+                </div> */}
 
                 {/*<div className="mt-2 mb-2">
                   <Button
@@ -353,7 +353,7 @@ const Details = () => {
                   <span>{walletCookie.walletAddress}</span>
                 </div>
 
-                <div>
+                {/* <div>
                   <input
                     type="text"
                     className="border-solid border-2 rounded-md border-grey w-40"
@@ -372,7 +372,7 @@ const Details = () => {
                     onClickCallback={handleDeposit}
                     borderRadius="10px"
                   />
-                </div>
+                </div> */}
 
                 {/*<div className="mt-2 mb-2">
                   <Button
