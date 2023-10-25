@@ -1,14 +1,13 @@
-import API_URL from './apiAddress';
-
+import API_URL from "./apiAddress";
 
 export const FetchRequest = async (url, method, header = {}, data = {}) => {
   let requestParam = {
     method: method,
     headers: header,
     body: JSON.stringify(data),
-  }
-  if (method == 'GET') {
-    delete requestParam['body']
+  };
+  if (method == "GET") {
+    delete requestParam["body"];
   }
   const response = await fetch(url, requestParam);
   return response.json();
@@ -27,7 +26,6 @@ export async function registerUser(
     firstName: firstName,
     ...additionalData,
   };
-  
 
   const response = await FetchRequest(
     `${API_URL}/users/register/`,
@@ -55,68 +53,66 @@ export async function logoutUser() {
   }
 }
 
-
 export async function loginUser(email, password) {
   const requestBody = {
-      email: email,
-      password: password,
+    email: email,
+    password: password,
   };
 
   try {
-      const response = await fetch(`${API_URL}/users/login/`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
+    const response = await fetch(`${API_URL}/users/login/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
       }),
-        credentials: 'include'
+      credentials: "include",
     });
 
-      return await response;
+    return await response;
   } catch (error) {
-      console.error('Error:', error);
-      throw error;
+    console.error("Error:", error);
+    throw error;
   }
 }
 
 export async function loginProvider(email, password) {
   const requestBody = {
-      email: email,
-      password: password,
+    email: email,
+    password: password,
   };
 
   try {
-      const response = await fetch(`${API_URL}/provider/login/`, {
-          method: 'POST',
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-        }),
-          credentials: 'include'
-      });
+    const response = await fetch(`${API_URL}/provider/login/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+      credentials: "include",
+    });
 
-      return await response;
+    return await response;
   } catch (error) {
-        console.error('Error:', error);
-        throw error;
+    console.error("Error:", error);
+    throw error;
   }
 }
 
 export async function addWallet(walletAddress, is_provider, token) {
-
   // console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
   try {
     const response = await fetch(`${API_URL}/wallet/add/`, {
-      method: 'POST',
-      headers: {    
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         address: walletAddress,
@@ -128,11 +124,10 @@ export async function addWallet(walletAddress, is_provider, token) {
     //   throw new Error('Network response was not ok');
     // }
 
-    const data = await response.json();  // This line was added to extract JSON data
-    return data;  // Return the JSON data
-
+    const data = await response.json(); // This line was added to extract JSON data
+    return data; // Return the JSON data
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     throw error;
   }
 }
@@ -140,55 +135,49 @@ export async function addWallet(walletAddress, is_provider, token) {
 export async function getWallet(token) {
   try {
     const response = await fetch(`${API_URL}/wallets/get_wallets/`, {
-      method: 'GET',
-      headers: {    
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-      
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
 
-    const data = await response.json();  // This line was added to extract JSON data
-    return data;  // Return the JSON data
-
+    const data = await response.json(); // This line was added to extract JSON data
+    return data; // Return the JSON data
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     throw error;
   }
-
 }
 
 export async function addPaymentAuth(payToken, JWTtoken) {
-
   // console.log(typeof token,token, typeof walletAddress, walletAddress, typeof is_provider)
   try {
     const response = await fetch(`${API_URL}/invoices/add_payment_auth/`, {
-      method: 'POST',
-      headers: {    
-        'Authorization': `Bearer ${JWTtoken}`,
-        'Content-Type': 'application/json',
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${JWTtoken}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        stripe_payment:payToken
+        stripe_payment: payToken,
       }),
     });
 
     if (!response.ok) {
-      alert("Payment Failed")
-      throw new Error('Network response was not ok');
-      
+      alert("Payment Failed");
+      throw new Error("Network response was not ok");
     }
 
-    const data = await response.json();  // This line was added to extract JSON data
-    alert("Payment Successful")
-    return data;  // Return the JSON data
-
+    const data = await response.json(); // This line was added to extract JSON data
+    alert("Payment Successful");
+    return data; // Return the JSON data
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     throw error;
   }
 }
@@ -196,11 +185,10 @@ export async function addPaymentAuth(payToken, JWTtoken) {
 export async function checkPaymentAuth(token) {
   try {
     const response = await fetch(`${API_URL}/invoices/check_payment_auth/`, {
-      method: 'GET',
-      headers: {    
-        'Authorization': `Bearer ${token}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      
     });
 
     if (response.status === 200) {
@@ -211,13 +199,12 @@ export async function checkPaymentAuth(token) {
       // Handle non-200 responses
       const errorData = await response.json();
       // throw new Error('Network response was not ok. Status: ' + response.status + ', Error: ' + JSON.stringify(errorData));
-      return false
+      return false;
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     throw error;
   }
-
 }
 
 export async function getVmStatus(clusterId, namespace, vmName) {
@@ -238,36 +225,24 @@ export async function getVmStatus(clusterId, namespace, vmName) {
 }
 
 export async function getUserInstances(email) {
-  return FetchRequest(
-    `${API_URL}/instances/get_instances/`,
-    "GET",
-    {
-      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
-      "Content-Type": "application/json"
-    }
-  );
+  return FetchRequest(`${API_URL}/instances/get_instances/`, "GET", {
+    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    "Content-Type": "application/json",
+  });
 }
 
 export async function getUserUsage(token) {
-  return FetchRequest(
-    `${API_URL}/instances/get_usage/`,
-    "GET",
-    {    
-      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
-      'Content-Type': 'application/json'
-    }
-  );
+  return FetchRequest(`${API_URL}/instances/get_usage/`, "GET", {
+    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    "Content-Type": "application/json",
+  });
 }
 
 export async function getInvoiceByUser() {
-  return FetchRequest(
-    `${API_URL}/invoices/get_user_invoices/`,
-    "GET",
-    {
-      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
-      "Content-Type": "application/json"
-    }
-  );
+  return FetchRequest(`${API_URL}/invoices/get_user_invoices/`, "GET", {
+    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    "Content-Type": "application/json",
+  });
 }
 
 export async function generateInvoice() {
@@ -292,13 +267,64 @@ export async function generateInvoice() {
   }
 }
 
-export async function getUserInfo() {
+export async function updateUserInfo(companyName, companyAddress, ein) {
+  const requestBody = {
+    ein: ein,
+    company: companyName,
+    address: companyAddress,
+  };
   return FetchRequest(
     `${API_URL}/users/info/`,
-    "GET",
+    "POST",
     {
-      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`,
-      "Content-Type": "application/json"
-    }
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json",
+    },
+    requestBody
+  );
+}
+
+export async function getUserInfo() {
+  return FetchRequest(`${API_URL}/users/info/`, "GET", {
+    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    "Content-Type": "application/json",
+  });
+}
+
+export async function updatePay(method) {
+  const requestBody = {
+    payment_method: method,
+  };
+  return FetchRequest(
+    `${API_URL}/users/payment_method/`,
+    "POST",
+    {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json",
+    },
+    requestBody
+  );
+}
+
+export async function getPay() {
+  return FetchRequest(`${API_URL}/users/payment_method/`, "GET", {
+    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+    "Content-Type": "application/json",
+  });
+}
+
+export async function updatePwd(oldPwd, newPwd) {
+  const requestBody = {
+    old_password: oldPwd,
+    new_password: newPwd,
+  };
+  return FetchRequest(
+    `${API_URL}/users/change_password/`,
+    "POST",
+    {
+      Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      "Content-Type": "application/json",
+    },
+    requestBody
   );
 }
