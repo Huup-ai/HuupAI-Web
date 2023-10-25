@@ -9,7 +9,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { addPaymentAuth, checkPaymentAuth } from "../api";
 import { addPaymentMethod, updateSelection } from "../reducers/authSlicer";
-import { performDeposit } from "./Deposit";
+import { performDeposit, getUserWalletBalance } from "./Deposit";
 
 const stripePromise = loadStripe(Stripe_KEY);
 
@@ -81,12 +81,29 @@ const PayinComfirmation = () => {
     </div>,
   ];
 
+  const [walletBalance, setWalletBalance] = useState(0);
+  useEffect(() => {
+    getUserWalletBalance()
+  .then((balance) => {
+    if (balance === "Error") {
+      alert("Error getting balance");
+    } else {
+      // alert(`Your balance is: ${balance} USDT`);
+      setWalletBalance(balance);
+    }
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+  }, [checkBalance]);
+
+
   const MoonPay = [
     <>
       <div className="mt-5 w-1/2 border-2 rounded-lg shadow-lg md:p-10">
         <div>
           Step #1. Fund your wallet by using{" "}
-          <a herf="" className="underline underline-offset-1 italic">
+          <a href="" className="underline underline-offset-1 italic">
             MoonPay
           </a>
         </div>
@@ -111,10 +128,12 @@ const PayinComfirmation = () => {
             />
           </span>
         </div>
+        <div>Current Wallet Balance : {walletBalance} USDT</div>
       </div>
     </>,
   ];
 
+  
   const [depositAmount, setDepositAmount] = useState(0);
   const [buttonText, setButtonText] = useState('Deposit');
 
@@ -161,6 +180,7 @@ const PayinComfirmation = () => {
             />
           </span>
         </div>
+        <div>Current Wallet Balance : {walletBalance} USDT</div>
       </div>
     </>,
   ];

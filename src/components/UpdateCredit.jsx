@@ -1,21 +1,36 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
+import { useSelector, useDispatch } from "react-redux";
 import Button from "./Button";
 import { Stripe_KEY } from "../Address";
 import { loadStripe } from "@stripe/stripe-js";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { addPaymentAuth } from "../api";
+import { addPaymentAuth, getUserInfo} from "../api";
+import { addPaymentMethod } from "../reducers/authSlicer";
 
 const stripePromise = loadStripe(Stripe_KEY);
 
 const UpdateCredit = () => {
   const { currentColor } = useStateContext();
-  const [cardNumber, setCardNumber] = useState("111 ");
+  const [cardNumber, setCardNumber] = useState("000");
+  const dispatch = useDispatch(); 
   const stripe = useStripe();
   const elements = useElements();
   const JWTtoken = localStorage.getItem("jwtToken");
+
+  useEffect(() => {
+    getUserInfo()
+    .then((res) => {
+      // console.log("user",res.credit_card)
+      setCardNumber(res.credit_card)    
+    })
+    .catch((error) => {
+      console.error("Failed to fetch user info: ", error);
+    });
+
+  }, [cardNumber]);
   const handleSubmit = async (event) => {
     // event.preventDefault();
 
@@ -38,16 +53,28 @@ const UpdateCredit = () => {
     if (error) {
       alert("err", error);
     } else {
-      console.log("Payment Token:", paymentMethod.paymentMethod.id);
+      console.log(
+        "Payment Token:",
+        paymentMethod.paymentMethod.id,
+        paymentMethod
+      );
       // Send the token to your backend for further processing
-      const response = addPaymentAuth(paymentMethod.id, JWTtoken);
-      // alert("response", response);
+      const response = addPaymentAuth(paymentMethod.paymentMethod.id, JWTtoken);
+      
+
+      response
+        .then((result) => {
+          dispatch(addPaymentMethod());
+          setCardNumber("000")
+          // setCheckCreditAuth(true);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   };
 
-  useEffect(() => {
-    // call backend to get card number
-  }, [cardNumber]);
+
   return (
     <div className="border-2 rounded-xl w-1/2">
       <h6 className="md:p-2">Update Credit Card Info(optional): </h6>
@@ -87,7 +114,7 @@ const UpdateCredit = () => {
             color="white"
             bgColor={currentColor}
             text="Authorize"
-            // onClickCallback={handleDeposit}
+            onClickCallback={handleSubmit}
             borderRadius="10px"
           />
         </div>
