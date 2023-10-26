@@ -23,7 +23,7 @@ const Inventory = () => {
   const [clusters, setClusters] = useState([]); 
   const [data, setData] = useState([]);
   const [modifiedPrices, setModifiedPrices] = useState({});
-  const itemIdToClusterIdMap = {};
+  // const itemIdToClusterIdMap = {};
   const [modifiedItemIds, setModifiedItemIds] = useState(new Set());
 
 // Fetch clusters associated with the provider
@@ -42,9 +42,12 @@ const fetchClusters = async () => {
       }
 
       const data = await response.json();
-      data.forEach(cluster => {
-        itemIdToClusterIdMap[cluster.item_id] = cluster.cluster_id;
-    });
+    //   data.forEach(cluster => {
+    //     if(!cluster.item_id) {
+    //       console.error("Cluster without item_id detected:", cluster);
+    //   }
+    //     itemIdToClusterIdMap[cluster.item_id] = cluster.cluster_id;
+    // });
       console.log("Fetched Clusters:", data);
       setData(data);
       setClusters(data);
@@ -53,15 +56,15 @@ const fetchClusters = async () => {
   }
 }
 
-const handleHourlyRateBlur = (dataItemItemId, newPrice) => {
+const handleHourlyRateBlur = (dataItemItemId , newPrice) => {
   console.log("Blur event for ID:", dataItemItemId, "with price:", newPrice);
   // Store modified prices in the state
   setModifiedPrices(prev => ({
     ...prev,
-    [dataItemItemId]: newPrice
+    [dataItemItemId ]: newPrice
   }));
-  // Add the modified cluster's itemId to the set
-  setModifiedItemIds(prev => new Set([...prev, dataItemItemId]));
+  // Add the modified cluster's clusterId to the set
+  setModifiedItemIds(prev => new Set([...prev, dataItemItemId ]));
 };
 
 useEffect(() => {
@@ -72,9 +75,9 @@ useEffect(() => {
   console.log("ClusterPrice changed:", clusterPrice);
 }, [clusterPrice]);
 
-const PriceInput = ({ initialPrice, modifiedPrice, dataItem  }) => {
-  console.log("PriceInput for dataItem:", dataItem);
-  const [inputValue, setInputValue] = useState(modifiedPrice || initialPrice || '');
+const PriceInput = ({ initialPrice, modifiedPrice, dataItem }) => {
+  const actualPrice = modifiedPrice || initialPrice; // Use modified price if available, else initialPrice
+  const [inputValue, setInputValue] = useState(actualPrice || '');
 
   return (
     <input 
@@ -83,8 +86,8 @@ const PriceInput = ({ initialPrice, modifiedPrice, dataItem  }) => {
       className="border rounded" 
       onChange={(e) => setInputValue(e.target.value)}
       onBlur={() => {
-        if (inputValue !== initialPrice) {
-          handleHourlyRateBlur(dataItem.itemId, inputValue);
+        if (inputValue !== actualPrice) {
+          handleHourlyRateBlur(dataItem.item_id, inputValue);
         }
       }}
     />
@@ -96,9 +99,12 @@ const InventoryGrid = [
     headerText: "Name",
     width: "100",
     textAlign: "Center",
+    // template: (rowData) => {
+    //   return <div>{itemIdToClusterIdMap[rowData.item_id] || rowData.item_id}</div>;
+    // },
     template: (rowData) => {
       return <div>{rowData.item_id}</div>;
-    },
+  },
   },
   { field: "Type", headerText: "GPU", width: "100", textAlign: "Center" },
 
@@ -155,6 +161,7 @@ const handleSetPrice = async () => {
       if (!itemId || !modifiedPrices[itemId]) continue;
 
       const modifiedPrice = modifiedPrices[itemId];
+      const clusterId = itemId;
       
       try {
           console.log(`About to send fetch request for cluster with id ${itemId}`);
@@ -166,6 +173,7 @@ const handleSetPrice = async () => {
               },
               body: JSON.stringify({
                   item_id: itemId,
+                  // cluster_id: clusterId,
                   price: modifiedPrice
               }),
           });
@@ -194,6 +202,7 @@ const handleSetPrice = async () => {
     alert("Failed to update some prices. Please try again.");
   }
 };
+
 
 
 return (
