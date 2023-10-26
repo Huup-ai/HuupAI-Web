@@ -1,7 +1,5 @@
 import { ethers } from "ethers";
 
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
 const contractAbi = [
   {
     inputs: [{ internalType: "address", name: "_currency", type: "address" }],
@@ -498,27 +496,43 @@ const usdtAddress = "0xFbac52229E7Ca8A90bE9403E62891185Cf3b2D47";
 
 const Deposit = {
   depositUSDT: async (depositAmount) => {
-    const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, signer);
-    const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, signer);
+      const contract = new ethers.Contract(
+        contractAddress,
+        contractAbi,
+        signer
+      );
 
-    const approveAmount = ethers.utils.parseUnits("1000", 18); // Set the amount you want to approve
-    const approveTx = await usdtContract.approve(
-      contractAddress,
-      approveAmount
-    );
-    alert("Approve successful! Please wait to deposit...");
-    await approveTx.wait();
+      const approveAmount = ethers.utils.parseUnits("1000", 18); // Set the amount you want to approve
+      const approveTx = await usdtContract.approve(
+        contractAddress,
+        approveAmount
+      );
+      alert("Approve successful! Please wait to deposit...");
+      await approveTx.wait();
 
-    // Deposit the approved USDT tokens
-    // const depositAmount_acc = ethers.utils.parseUnits("10", 18);
-    const depositAmount_acc = ethers.utils.parseUnits(depositAmount, 18); // Set the deposit amount
-    // console.log(typeof "10", typeof depositAmount, depositAmount)
-    const depositTx = await contract.deposit(depositAmount_acc);
-    await depositTx.wait();
+      // Deposit the approved USDT tokens
+      // const depositAmount_acc = ethers.utils.parseUnits("10", 18);
+      const depositAmount_acc = ethers.utils.parseUnits(depositAmount, 18); // Set the deposit amount
+      // console.log(typeof "10", typeof depositAmount, depositAmount)
+      const depositTx = await contract.deposit(depositAmount_acc);
+      await depositTx.wait();
+    } else {
+      /* MetaMask is not installed */
+      console.log("Please install MetaMask");
+    }
   },
 
   getUserWalletBalance: async () => {
+    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
     const usdtContract = new ethers.Contract(usdtAddress, usdtAbi, signer);
+
     try {
       const userAddress = await signer.getAddress();
       const balance = await usdtContract.balanceOf(userAddress);
@@ -531,6 +545,10 @@ const Deposit = {
       console.error("Error getting user balance:", error);
       return "Error";
     }
+  } else {
+    /* MetaMask is not installed */
+    console.log("Please install MetaMask");
+  }
   },
 };
 
