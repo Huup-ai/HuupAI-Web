@@ -158,17 +158,7 @@ const handleLoginClick = async (e) => {
       response = await loginUser(email, password);
     }
 
-    // console.log("11",response)
-
-    //JWT
-    //const token = response.data.token;
-    //localStorage.setItem('jwtToken', token); // storing token in localStorage
-
-    // console.log("outside");
-    // console.log("Received response: ", response.message);
-
-    // Check if the response is as expected. This is a placeholder.
-    // You need to replace this with an acter logged in succeual check based on your API's response.
+    
     if (response && response.status === 200) {
       const data = await response.json();
       const token = data.access; // Assuming the token is directly on the response object
