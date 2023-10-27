@@ -47,7 +47,7 @@ const InvoiceInfo = () => {
         <div className="flex flex-col flex-auto md:px-5 md:py-5 gap-2 w-full">
           <div className='flex justify-between items-center'>
             <label> Company Name: </label>
-            <input 
+            <input
               className='border-2 p-2 rounded w-2/3'
               type='text'
               value={company}
@@ -57,7 +57,7 @@ const InvoiceInfo = () => {
 
           <div className='flex justify-between items-center'>
             <label>Company Address:</label>
-            <input 
+            <input
               className='border-2 p-2 rounded w-2/3'
               type='text'
               value={address}
@@ -67,7 +67,7 @@ const InvoiceInfo = () => {
 
           {/* <div className='flex justify-between items-center'>
             <label>EIN:</label>
-            <input 
+            <input
               className='border-2 p-2 rounded w-2/3'
               type='text'
               value={ein}
