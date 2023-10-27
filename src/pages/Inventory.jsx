@@ -9,7 +9,7 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 
-import { GPUsData, InventoryGrid} from "../data/dummy";
+// import { GPUsData, InventoryGrid} from "../data/dummy";
 import { Header, Button, Countbox } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import API_URL from "../api/apiAddress";
@@ -23,7 +23,6 @@ const Inventory = () => {
   const [clusters, setClusters] = useState([]); 
   const [data, setData] = useState([]);
   const [modifiedPrices, setModifiedPrices] = useState({});
-  // const itemIdToClusterIdMap = {};
   const [modifiedItemIds, setModifiedItemIds] = useState(new Set());
 
 // Fetch clusters associated with the provider
@@ -42,12 +41,7 @@ const fetchClusters = async () => {
       }
 
       const data = await response.json();
-    //   data.forEach(cluster => {
-    //     if(!cluster.item_id) {
-    //       console.error("Cluster without item_id detected:", cluster);
-    //   }
-    //     itemIdToClusterIdMap[cluster.item_id] = cluster.cluster_id;
-    // });
+  
       console.log("Fetched Clusters:", data);
       setData(data);
       setClusters(data);
@@ -143,11 +137,6 @@ const InventoryGrid = [
     textAlign: "Center",
   },
 ];
-
-// const getClusterIdByItemId = (itemId) => {
-//   const cluster = clusters.find(cluster => cluster.item_id === itemId);
-//   return cluster ? cluster.cluster_id : null;
-// }
 
 const handleSetPrice = async () => {
   console.log("handleSetPrice function called");
