@@ -10,7 +10,7 @@ import {
 } from "@syncfusion/ej2-react-grids";
 
 // import { GPUsData, InventoryGrid} from "../data/dummy";
-import { Header, Button, Countbox } from "../components";
+import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import API_URL from "../api/apiAddress";
 
@@ -158,7 +158,7 @@ const handleSetPrice = async () => {
       if (!itemId || !modifiedPrices[itemId]) continue;
 
       const modifiedPrice = modifiedPrices[itemId];
-      const clusterId = itemId;
+      // const clusterId = itemId;
       
       try {
           console.log(`About to send fetch request for cluster with id ${itemId}`);
