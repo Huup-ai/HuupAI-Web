@@ -20,11 +20,9 @@ function Landing() {
           {/* <img src="https://s3-alpha-sig.figma.com/img/4d2f/e72f/ed6e6abc8a9a49656c83c0270223ccdf?Expires=1698624000&Signature=G7dPDzjfIauS567UbK3WBjf2d9ASsXrI4kgnU4RMhDdzceiJWd0Jxe6YIJgIC5gsuDOJ7NW7eSghT9Hz-nOtInIiOgmr5z1PO6TOFT9Ma~LkFoRnMFl6MAKarHp81IgiJDCQhcpNsQz-DFIJoZxBUYB2oy03Cx8bvBG3jEhPbjxxtfR4ozBMUwNDFUOdTd-PUHc9NHaqv5xH5NyVMZtqj85Y0SO90J70LpVuEKE96IbGiF4hhAgcMs3E28e70TMjUTdNqPdLHG30Gg-HDww4BPK9dx1gm08AfrKLDITmvAczd9ZPMmCovrtMIpv9pSIQRn3FMOfm4vLwhLSweXHRpw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4" alt="Description of Image" /> */}
           <div>
             <p className="enhance-GEN-AI-s">
-              Enhance GEN AI ‘s <br />
-              reliability, affordability and efficiency <br />
-              <button className="start-button-2" onClick={handleStartClick}>
-                Get Started
-              </button>
+                Meet Reliable,  <br />
+                Affordable, Efficient GEN AI <br />
+            <button className="start-button-2" onClick={handleStartClick}>Get Started</button>
             </p>
           </div>
 
