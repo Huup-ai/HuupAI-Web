@@ -18,7 +18,7 @@ const InvoiceInfo = () => {
     const body = JSON.stringify({
       company,
       address,
-      ein
+      // ein
     });
 
     try {
