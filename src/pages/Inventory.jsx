@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect} from "react";
 import {
   GridComponent,
   Inject,
@@ -8,7 +8,6 @@ import {
   Page,
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
-
 // import { GPUsData, InventoryGrid} from "../data/dummy";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -244,3 +243,5 @@ return (
 };
 
 export default Inventory;
+
+

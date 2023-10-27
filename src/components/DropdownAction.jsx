@@ -1,20 +1,22 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from "react";
 
+const DropdownAction = ({ onActionChange, status }) => {
+  console.log("Status:", status);
+  const [selectedAction, setSelectedAction] = useState(status);
 
+  const handleChange = (e) => {
+    const newAction = e.target.value;
+    setSelectedAction(newAction);
+    onActionChange(newAction);
+  };
 
-const DropdownAction = () => {
-    const [selectedAction, setSelectedAction] = useState(' ');
   return (
-    <select 
-      value={selectedAction} // ...force the select's value to match the state variable...
-      onChange={e => setSelectedAction(e.target.value)} // ... and update the state variable on any change!
-    >
+    <select value={selectedAction} onChange={handleChange}>
       <option value="start">Start</option>
       <option value="stop">Stop</option>
       <option value="terminate">Terminate</option>
     </select>
-  )
-}
+  );
+};
 
-export {DropdownAction}
+export default DropdownAction;

@@ -9,6 +9,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { addPaymentAuth, checkPaymentAuth } from "../api";
 import { addPaymentMethod, updateSelection } from "../reducers/authSlicer";
+import { performDeposit, getUserWalletBalance } from "./Deposit";
 
 const stripePromise = loadStripe(Stripe_KEY);
 
@@ -80,12 +81,29 @@ const PayinComfirmation = () => {
     </div>,
   ];
 
+  const [walletBalance, setWalletBalance] = useState(0);
+  useEffect(() => {
+    getUserWalletBalance()
+  .then((balance) => {
+    if (balance === "Error") {
+      alert("Error getting balance");
+    } else {
+      // alert(`Your balance is: ${balance} USDT`);
+      setWalletBalance(balance);
+    }
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+  }, [checkBalance]);
+
+
   const MoonPay = [
     <>
       <div className="mt-5 w-1/2 border-2 rounded-lg shadow-lg md:p-10">
         <div>
           Step #1. Fund your wallet by using{" "}
-          <a herf="" className="underline underline-offset-1 italic">
+          <a href="" className="underline underline-offset-1 italic">
             MoonPay
           </a>
         </div>
@@ -110,10 +128,32 @@ const PayinComfirmation = () => {
             />
           </span>
         </div>
+        <div>Current Wallet Balance : {walletBalance} USDT</div>
       </div>
     </>,
   ];
 
+  
+  const [depositAmount, setDepositAmount] = useState(0);
+  const [buttonText, setButtonText] = useState('Deposit');
+
+  const handleDepositAmoutnChange = (event) => {
+    setDepositAmount(event.target.value);
+  }
+
+  const handleDeposit = () => {
+    // console.log("www", depositAmount)
+    setButtonText('Depositing...'); 
+
+    performDeposit(depositAmount)
+      .then(() => {
+        setButtonText('Deposit'); 
+      })
+      .catch((err) => {
+        console.error(err);
+        setButtonText('Deposit'); 
+      });
+    }
   const MetaMask = [
     <>
       <div className="mt-5 w-1/2 border-2 rounded-lg shadow-lg md:p-10">
@@ -123,7 +163,8 @@ const PayinComfirmation = () => {
           <input
             className="border-2 mt-2"
             type="text"
-            // onChange={handleInputChange}
+            onChange={handleDepositAmoutnChange}
+            value={depositAmount}
             placeholder="Minumum Deposit" //get from backend info
           />
 
@@ -132,17 +173,18 @@ const PayinComfirmation = () => {
             <Button
               color="white"
               bgColor={currentColor}
-              text="Deposit"
+              text={buttonText}
               borderRadius="10px"
 
-              // onClickCallback={} // deposit to wallet
+              onClickCallback={handleDeposit} // deposit to wallet
             />
           </span>
         </div>
+        <div>Current Wallet Balance : {walletBalance} USDT</div>
       </div>
     </>,
   ];
-  
+
   const handleSubmit = async (event) => {
     // event.preventDefault();
 
@@ -174,14 +216,13 @@ const PayinComfirmation = () => {
       const response = addPaymentAuth(paymentMethod.paymentMethod.id, JWTtoken);
 
       response
-      .then((result) => {       
-        dispatch(addPaymentMethod());
-        setCheckCreditAuth(true);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    
+        .then((result) => {
+          dispatch(addPaymentMethod());
+          setCheckCreditAuth(true);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   };
 

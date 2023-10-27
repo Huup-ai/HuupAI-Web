@@ -1,6 +1,8 @@
 import {React, useState, useEffect} from "react";
 import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
+import API_URL from "../api/apiAddress";
+import { getWallet } from "../api";
 
 // const ProviderDetails = () => {
 //   const { currentColor } = useStateContext();
@@ -9,41 +11,67 @@ import { useStateContext } from "../contexts/ContextProvider";
 //     return storedValue ? JSON.parse(storedValue) : false;
 //   });
 const ProviderDetails = () => {
-  const { currentColor } = useStateContext();
+  const { currentColor, setUserInfo } = useStateContext();
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [billingDetails, setBillingDetails] = useState(null);
+  const token = localStorage.getItem('jwtToken');
+  const [walletAddress, setWalletAddress] = useState(localStorage.getItem('walletAddress') || '');
   const [isCrypto, setIsCrypto] = useState(() => {
-    const storedValue = localStorage.getItem("crypto");
+    const storedValue = localStorage.getItem('crypto');
     return storedValue ? JSON.parse(storedValue) : false;
   });
 
   useEffect(() => {
-    // Fetch payment details from your backend.
-    fetch("/users/payment_method/")
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+
+      try {
+        const walletData = await getWallet(token);
+        const walletAddress = walletData[0].address; // Access wallet address from the API response
+        localStorage.setItem('walletAddress', walletAddress); // Store the wallet address in local storage
+        setWalletAddress(walletAddress); // Update the walletAddress state variable
+      } catch (error) {
+        console.error('Error fetching wallet data:', error);
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/users/payment_method/`, { headers });
+        if (!response.ok) {
+          throw new Error('Error fetching payment details');
+        }
+        const data = await response.json();
         setPaymentDetails(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching payment details:", error);
-      });
-    
-    // Fetch billing details from your backend.
-    fetch("/users/info/")
-      .then((response) => response.json())
-      .then((data) => {
+      } catch (error) {
+        console.error('Error fetching payment details:', error);
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/users/info/`, { headers });
+        if (!response.ok) {
+          throw new Error('Error fetching billing details');
+        }
+        const data = await response.json();
         setBillingDetails(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching billing details:", error);
-      });
-  }, []);
+        setUserInfo(data);
+      } catch (error) {
+        console.error('Error fetching billing details:', error);
+      }
+    };
 
-   
+    fetchData();
+  }, [token, setUserInfo]);
 
-  if (!paymentDetails || !billingDetails) {
-    return <div>Loading...</div>;
-  }
+if (!paymentDetails) {
+    return <div>Echo is loading...</div>;
+}
+  
+if (!billingDetails) {
+    return <div>Michael is loading...</div>;
+}
+
 
   return (
     <div id="Payment Details">
@@ -62,7 +90,7 @@ const ProviderDetails = () => {
         // Content to display when isToggled is true
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
         <div className="px-4">
-          <h3>Payment Information</h3>
+          {/* <h3>Payment Information</h3> */}
           <div>
             <span className="inline-block w-60">PAYMENT METHOD</span>
             <span>:</span>
@@ -93,7 +121,7 @@ const ProviderDetails = () => {
         // Content to display when isToggled is false
         <div className="border-2 rounded-lg w-full shadow-lg">
           <div className="px-4">
-            <h3>Payment Information</h3>
+            {/* <h3>Payment Information</h3> */}
             <div>
               <span className="inline-block w-60">PAYMENT METHOD</span>
               <span>:</span>
@@ -116,12 +144,12 @@ const ProviderDetails = () => {
             </div>
 
             <div className="mt-2 mb-2">
-              <Button
+              {/* <Button
                 color="white"
                 bgColor={currentColor}
                 text="Add Payment Method"
                 borderRadius="10px"
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -129,11 +157,11 @@ const ProviderDetails = () => {
 
         <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
           <div className="px-4">
-            <h3>Billing Information</h3>
+            {/* <h3>Billing Information</h3> */}
             <div>
               <span className="inline-block w-40">NAME</span>
               <span>:</span>
-              <span>{billingDetails.name}</span>
+              <span>{billingDetails.company}</span>
             </div>
             <div>
               <span className="inline-block w-40">EMAIL</span>
@@ -145,11 +173,36 @@ const ProviderDetails = () => {
               <span>:</span>
               <span>{billingDetails.address}</span>
             </div>
-            <div className="mt-2 mb-2">
+            {/* <div className="mt-2 mb-2">
+            <span className="inline-block w-40">USDT to Fiat</span>
               <Button
                 color="white"
                 bgColor={currentColor}
-                text="Edit Billing Information"
+                text="Moon Pay"
+                borderRadius="10px"
+              />
+            </div> */}
+          </div>
+        </div>
+        <div className="mt-5 border-2 rounded-lg w-full shadow-lg">
+          <div className="px-4">
+            {/* <h3>Billing Information</h3> */}
+            <div>
+              <span className="inline-block w-40">PAYMENT METHOD</span>
+              <span>:</span>
+              <span>{paymentDetails.payment_method}</span>
+            </div>
+            <div>
+              <span className="inline-block w-40">Wallet Adrress</span>
+              <span>:</span>
+              <span>{walletAddress}</span>
+            </div>
+            <div className="mt-2 mb-2">
+            <span className="inline-block w-40">USDT to Fiat</span>
+              <Button
+                color="white"
+                bgColor={currentColor}
+                text="Moon Pay"
                 borderRadius="10px"
               />
             </div>

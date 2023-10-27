@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useStateContext } from "../contexts/ContextProvider";
 
 import {
   Header,
@@ -10,6 +11,7 @@ import {
 
 const Billing = () => {
   const [isSticky, setIsSticky] = useState(false);
+  const { userInfo } = useStateContext();
 
   const handleScroll = () => {
     if (window.scrollY > 400) {
@@ -40,8 +42,8 @@ const Billing = () => {
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       {/* title for provider */}
-      <providerDetails />
-      <Header category="My Cloud > Invoice" title="Invoice For Wenxuan" />
+      
+      <Header category="My Cloud > Invoice" title={`Invoice For ${userInfo?.company}`} />
 
       <p className="text-lg text-gray-400">
         Current billing period runs from {formattedDate} to {laterMonth}{" "}

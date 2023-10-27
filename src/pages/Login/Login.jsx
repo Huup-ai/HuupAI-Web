@@ -112,7 +112,7 @@ const Login = () => {
   //   }
   // };
   
-  const createWallet = async () => {
+  const createWallet = async (is_provider) => {
     try {
       const auth = new Auth({ privateKey: PRIVATE_KEY });
       
@@ -128,7 +128,7 @@ const Login = () => {
       const token = localStorage.getItem("jwtToken");
 
       // Send Wallet Address to backend
-      const walletResponse = await addWallet(walletAddress, true, token); // Since it's provider, setting is_provider to true
+      const walletResponse = await addWallet(walletAddress, is_provider, token); 
       // console.log("store", walletResponse)
 
       // Validate if the response from addWallet indicates success
@@ -158,17 +158,7 @@ const handleLoginClick = async (e) => {
       response = await loginUser(email, password);
     }
 
-    // console.log("11",response)
-
-    //JWT
-    //const token = response.data.token;
-    //localStorage.setItem('jwtToken', token); // storing token in localStorage
-
-    // console.log("outside");
-    // console.log("Received response: ", response.message);
-
-    // Check if the response is as expected. This is a placeholder.
-    // You need to replace this with an acter logged in succeual check based on your API's response.
+    
     if (response && response.status === 200) {
       const data = await response.json();
       const token = data.access; // Assuming the token is directly on the response object
@@ -187,7 +177,8 @@ const handleLoginClick = async (e) => {
       // console.log("single address", singleWallet[0].address);
       // updateWalletAddress(singleWallet[0].address);
       if (selectedType === "provider"&&singleWallet.length===0){
-        await createWallet();
+        console.log("create wallet working", createWallet)
+        await createWallet(true);
        }
       
       
@@ -526,7 +517,7 @@ function SignUp({
         const token = data.access;
         localStorage.setItem("jwtToken", token);
         if (isChecked) {
-          await createWallet(); // create wallet
+          await createWallet(false); // create wallet
         }
 
         dispatch(loginSuccess());
