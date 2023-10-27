@@ -93,20 +93,28 @@ const InventoryGrid = [
     headerText: "Name",
     width: "100",
     textAlign: "Center",
-    // template: (rowData) => {
-    //   return <div>{itemIdToClusterIdMap[rowData.item_id] || rowData.item_id}</div>;
-    // },
     template: (rowData) => {
       return <div>{rowData.item_id}</div>;
   },
   },
-  { field: "Type", headerText: "GPU", width: "100", textAlign: "Center" },
+  
+  {
+    headerText: "Type",
+    width: "100",
+    textAlign: "GPU",
+    template: (rowData) => {
+      return <div>{rowData.gpu}</div>;
+  },
+  },
 
   {
-    field: "Configuration",
+    headerText: "Configuration",
     headerText: "Configuration",
     width: "100",
     textAlign: "Center",
+    template: (rowData) => {
+      return <div>{rowData.configuration}</div>;
+  },
   },
   
   {
