@@ -51,7 +51,7 @@ function GPU() {
       width: "100",
       textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.id}</div>;
+        return <div>{rowData.item_id}</div>;
       },
     },
     {
@@ -94,7 +94,7 @@ function GPU() {
       width: "100",
       textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.is_audited}</div>;
+        return <div>{rowData.is_audited.toString()}</div>;
       },
     },
     {
@@ -111,8 +111,8 @@ function GPU() {
           const hasNonZeroCpu = false;
 
           const routePath = hasNonZeroCpu
-            ? `/clouds/confirmation CPU`
-            : `/clouds/confirmation GPU/${rowData.id}`;
+            ? `/clouds/confirmation CPU/${rowData.item_id}`
+            : `/clouds/confirmation GPU/${rowData.item_id}`;
 
           // Dispatch the action
           dispatch(setPrice(rowData.price));

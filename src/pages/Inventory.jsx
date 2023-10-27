@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import React from "react";
 import {
   GridComponent,
   Inject,
@@ -9,10 +9,10 @@ import {
   Toolbar,
 } from "@syncfusion/ej2-react-grids";
 
+
 // import { GPUsData, InventoryGrid} from "../data/dummy";
-import { Header, Button, Countbox } from "../components";
+import { Header, Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
-import API_URL from "../api/apiAddress";
 
 const Inventory = () => {
   const toolbarOptions = ["Search"];
@@ -244,3 +244,5 @@ return (
 };
 
 export default Inventory;
+
+
