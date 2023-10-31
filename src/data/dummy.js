@@ -432,7 +432,12 @@ export const InvoicesGrid = [
     // template: gridEmployeeProfile,
     textAlign: "Center",
   },
-  { field: "des", headerText: "INSTANCES DES", width: "200", textAlign: "Center" },
+
+  { field: "des", 
+    headerText: "INSTANCES DES", 
+    width: "200", 
+    textAlign: "Center" },
+ 
   {
     headerText: "INVOICE",
     width: "100",
@@ -440,7 +445,11 @@ export const InvoicesGrid = [
     textAlign: "Center",
   },
 
-  { field: "status", headerText: "STATUS", width: "100", textAlign: "Center" },
+  { field: "status", 
+    headerText: "STATUS", 
+    width: "100", 
+    textAlign: "Center" 
+  },
 
 ];
 

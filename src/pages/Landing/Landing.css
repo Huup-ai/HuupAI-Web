@@ -20,10 +20,11 @@
     position: absolute;
     width: 1440px;
     height: 1009px;
-    top: 100px;
+    top: 95px;
     left: -20px;
-    background-image: url(https://s3-alpha-sig.figma.com/img/4d2f/e72f/ed6e6abc8a9a49656c83c0270223ccdf?Expires=1698624000&Signature=G7dPDzjfIauS567UbK3WBjf2d9ASsXrI4kgnU4RMhDdzceiJWd0Jxe6YIJgIC5gsuDOJ7NW7eSghT9Hz-nOtInIiOgmr5z1PO6TOFT9Ma~LkFoRnMFl6MAKarHp81IgiJDCQhcpNsQz-DFIJoZxBUYB2oy03Cx8bvBG3jEhPbjxxtfR4ozBMUwNDFUOdTd-PUHc9NHaqv5xH5NyVMZtqj85Y0SO90J70LpVuEKE96IbGiF4hhAgcMs3E28e70TMjUTdNqPdLHG30Gg-HDww4BPK9dx1gm08AfrKLDITmvAczd9ZPMmCovrtMIpv9pSIQRn3FMOfm4vLwhLSweXHRpw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4);
-    background-size: 220% 300%;
+    background-image: url('../../../public/images/LooperGroup.png');
+    /* background-image: url(https://s3-alpha-sig.figma.com/img/4d2f/e72f/ed6e6abc8a9a49656c83c0270223ccdf?Expires=1698624000&Signature=G7dPDzjfIauS567UbK3WBjf2d9ASsXrI4kgnU4RMhDdzceiJWd0Jxe6YIJgIC5gsuDOJ7NW7eSghT9Hz-nOtInIiOgmr5z1PO6TOFT9Ma~LkFoRnMFl6MAKarHp81IgiJDCQhcpNsQz-DFIJoZxBUYB2oy03Cx8bvBG3jEhPbjxxtfR4ozBMUwNDFUOdTd-PUHc9NHaqv5xH5NyVMZtqj85Y0SO90J70LpVuEKE96IbGiF4hhAgcMs3E28e70TMjUTdNqPdLHG30Gg-HDww4BPK9dx1gm08AfrKLDITmvAczd9ZPMmCovrtMIpv9pSIQRn3FMOfm4vLwhLSweXHRpw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4); */
+    background-size: 205% 280%;
     background-position: 51% center;
 }
 
