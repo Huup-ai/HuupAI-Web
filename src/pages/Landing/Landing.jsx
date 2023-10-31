@@ -96,19 +96,19 @@ function Landing() {
           </div>
           <img
             className="element"
-            src="https://s3-alpha-sig.figma.com/img/401b/bdb9/ac435736f85456293a9976161e808092?Expires=1698624000&Signature=L~xfv4n~valL5gD4QGjYfGQEoFFHBXLrNU6JCJmuB9YlTnsO39ZhRMg-Ne1c2XIagiPjM8igjJiKaP8WsQh9lmbyMU4P5lOp9Z6BekNjeo6InLcUgDYCHRwQHb~vVpymyPVfgXCJXMg29OldtDHd4MutaJiQurnQteE7xb5C6oCAcGrBpT-z5Dg4Qb3mQtKeLwUWP81~XoN6GiVoSzSyZl7~lOavNGSLxZzNJ2a~ciTaHjjLwdXGh3AszVTny1Nb8WNa-Cl~9pzU-u4cADOtQouyErf5xvHU~3Cna9rDfxWBw4LRwvYDeLDc0jQVgO5pLpp1iGjm-7PYW0QbxNKsJQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
+            src="images/aw.png"
           />
           <img
             className="img"
-            src="https://s3-alpha-sig.figma.com/img/f9cf/b393/c563945d468e5c507182177c964b9bd1?Expires=1698624000&Signature=kRs-6VOjaZ7h2yk0Atp9vpoEJOo4C77qcXgz0IOa02eHRgSz4OwX2H~KG4epYALHbnHtJ5WUXyE3xl5wj~~5lHEz6Eq8CtSZxJJUzuj55u2r5IlAVZ6fnMVG67glq9bJO~TFc5zNalKdpz~vqMabdCz0~4kS~Nhmv04awTzxA7J06lrrOZiN3YxogJDbKSLwed7bZEdmcGLljczz~UwdYLnYUofqO1Viy2f-AIBWsv9IU4O92rrLERC1psjlXSGVSiF-jBzFK~pzWUv34u8AGgcVwisOwZjnSFrkabSrcuQT~wSxLUbcO3O1UNn3s1mmgOP1tSHdVldwOQWUqkwISA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
+            src="images/Te.png"
           />
           <img
             className="element-2"
-            src="https://s3-alpha-sig.figma.com/img/4db3/54ab/b2db6d50dbb734e0b40444cf4d41f2cb?Expires=1698624000&Signature=LYs9IsUQ90A~JBgoNE1gPhyM6JCId~ndsg1d90LVi81AN-h~SDk-FFsyIKKwpwZdlUS7Me9buek0RjQDCB6JfuGmrRzM0INUAYk~rRoYgwDQNfOBz2oRDkCSDBpiYTaPVrfdIbMveuD4F1CloJWr16WeJhC1ymVPovyRjqTH73MyjQoHnWjwAs2BETOJswIGvdKblx8U58ASuMhVy1a1uWLyeCmdMbyafeLPyZHXxFr1XHM6aqKrvcpA9yZMuRnnZxkZccHYDE7CcpbOwVuvso820T6IT8v2wZmlza3xW7A5gcB7qr75w~T7xjj59uqZYQatfoVOquipl~AM4poXbQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
+            src="images/AM.png"
           />
           <img
             className="element-3"
-            src="https://s3-alpha-sig.figma.com/img/8591/8562/4863a611ac36c84426a6a0d0a9868910?Expires=1698624000&Signature=JCK6KNL63JoN2GMEHfnZyTjBet5BtTZETh3FdO4J2CDkB2pk1NJ-xQ6o9GsLkWoBdtJtMjJ6YM9gSC7thKEzsZYHUzu1Gxs-x5-L~nPEaWQQ9q08RlZv~91XRghh-OMcD1Dqe~iLoeju~Q1qVGCAUZUlhGKoFJuzPrBBrtZQPwuqnglYCP2RoQN~1vAVpX2nwrcciMbVu1JBofu2oG8vqJRT3oNBTvgqj423jxXMnPPrSpYRsJOuM831crAXuU2rGB~iB8U3GcFlVT4WlADka-NI9Vk86QS4aQSkPee7Ro6z1TSvPyt0vbz4zbo06UHm9-N1Jnox7jrvUS09yyaqIA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"
+            src="images/bi.png"
           />
           <img className="XMLID" src="images/XMLID_1_.png" />
           <img

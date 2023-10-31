@@ -108,10 +108,10 @@ const Invoices = () => {
                 {...item}
               />
             ))}
-            <ColumnDirective
+            {/* <ColumnDirective
               headerText="Actions"
               template={record => record.status === "Unpaid" ? <button>Action</button> : null}
-            />
+            /> */}
           </ColumnsDirective>
           <Inject services={[Search, Page, Toolbar]} />
         </GridComponent>
