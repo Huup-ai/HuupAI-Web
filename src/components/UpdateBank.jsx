@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useStateContext } from "../contexts/ContextProvider";
 import Button from "./Button";
 import API_URL from "../api/apiAddress";
+import { Stripe_KEY } from '../Address';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(Stripe_KEY);
 
 const UpdateBank = () => {
     const { currentColor } = useStateContext();
@@ -9,27 +13,46 @@ const UpdateBank = () => {
     const [accountNumber, setAccountNumber] = useState('');
 
     const handleUpdate = async () => {
-        const token = localStorage.getItem("jwtToken");
+        const stripe = await stripePromise;
+        // Tokenize the bank account details with Stripe
+        const { token, error } = await stripe.createToken('bank_account', {
+            country: 'US',
+            currency: 'usd',
+            routing_number: routingNumber,
+            account_number: accountNumber,
+            account_holder_name: 'Account Holder', // This should be dynamic based on user input
+            account_holder_type: 'individual', // or 'company'
+        });
+
+        if (error) {
+            // Handle errors here
+            console.error("Stripe Error:", error);
+            alert(error.message);
+            return;
+        }
+
+        const tokenBody = JSON.stringify({
+            stripe_payment: token.id, // Token provided by Stripe
+        });
+
         const headers = {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`
         };
-        const body = JSON.stringify({
-            bank_routing: routingNumber,
-            bank_account: accountNumber
-        });
 
         try {
             const response = await fetch(`${API_URL}/invoices/add_payment_auth/`, {
                 method: 'POST',
                 headers: headers,
-                body: body,
+                body: tokenBody,
             });
 
             if (!response.ok) {
                 throw new Error("Error updating bank information");
             }
 
+            const responseData = await response.json();
+            console.log(responseData);
             alert("Bank information updated successfully!");
         } catch (error) {
             console.error("Error updating bank information:", error);
