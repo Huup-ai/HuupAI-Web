@@ -3,6 +3,10 @@ import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import API_URL from "../api/apiAddress";
 import { getWallet } from "../api";
+import { getUserInfo, addPaymentAuth } from "../api";
+import { useDispatch } from 'react-redux';
+
+
 
 // const ProviderDetails = () => {
 //   const { currentColor } = useStateContext();
@@ -20,7 +24,45 @@ const ProviderDetails = () => {
     const storedValue = localStorage.getItem('crypto');
     return storedValue ? JSON.parse(storedValue) : false;
   });
+  const dispatch = useDispatch();
+  const [userDetails, setUserDetails] = useState({
+    bankRouting: '',
+    // bankAccount: '',
+    bankAccountLastFour: '',
+    
+  });
+  const [error, setError] = useState('');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userInfoResponse = await dispatch(getUserInfo());
+        setUserDetails({
+          bankRouting: userInfoResponse.data.routing_number,
+          // bankAccount: userInfoResponse.data.account_number,
+        });
 
+        
+      } catch (error) {
+        console.error('Failed to fetch user info:', error);
+        setError('Failed to load user details.');
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
+
+  // Handle updating the payment authorization, adjust this accordingly to your use case
+  const handlePaymentUpdate = async (payToken) => {
+    try {
+      const paymentAuthResponse = await dispatch(addPaymentAuth(payToken));
+      // Handle the response from addPaymentAuth, e.g., update state or show a message
+    } catch (error) {
+      console.error('Failed to update payment authorization:', error);
+      setError('Failed to update payment information.');
+    }
+  };
+
+//New
   useEffect(() => {
     const fetchData = async () => {
       const headers = {
@@ -135,12 +177,12 @@ if (!billingDetails) {
             <div>
               <span className="inline-block w-60">Bank Routing</span>
               <span>:</span>
-              <span>{paymentDetails.bank_routing}</span>
+              <span>{userDetails.bankRouting}</span>
             </div>
             <div>
               <span className="inline-block w-60">Bank Account</span>
               <span>:</span>
-              <span>{paymentDetails.bank_account}</span>
+              <span>{userDetails.bankAccount}</span>
             </div>
 
             <div className="mt-2 mb-2">
