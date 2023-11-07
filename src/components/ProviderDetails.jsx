@@ -178,11 +178,13 @@ return (
                 <span>{routingInfo.routing_number}</span> 
               </div>
             )}
-            <div>
-              <span className="inline-block w-60">Bank Account</span>
-              <span>:</span>
-              <span>{setRoutingInfo.bankAccount}</span>
-            </div>
+            {routingInfo && (
+              <div>
+                <span className="inline-block w-60">Bank Account</span>
+                <span>:</span>
+                <span>{"XXXX-XXXX-" + routingInfo.account_number.slice(-4)}</span> 
+              </div>
+            )}
 
             <div className="mt-2 mb-2">
               {/* <Button
