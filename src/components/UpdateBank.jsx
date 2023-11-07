@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import { useStateContext } from "../contexts/ContextProvider";
 import Button from "./Button";
 import API_URL from "../api/apiAddress";
-import { Stripe_KEY } from '../Address';
-import { loadStripe } from '@stripe/stripe-js';
-
-const stripePromise = loadStripe(Stripe_KEY);
 
 const UpdateBank = () => {
     const { currentColor } = useStateContext();
@@ -17,40 +13,18 @@ const UpdateBank = () => {
 
     const handleUpdate = async () => {
         setError('');
-        setSuccessMessage('');
         setIsSubmitting(true);
-        const stripe = await stripePromise;
-        
-        let token;
-        try {
-            const response = await stripe.createToken('bank_account', {
-                country: 'US',
-                currency: 'usd',
-                routing_number: routingNumber,
-                account_number: accountNumber,
-                account_holder_name: 'Account Holder',
-                account_holder_type: 'individual',
-            });
-
-            if (response.error) {
-                throw response.error;
-            }
-            token = response.token;
-        } catch (error) {
-            setError(`Stripe Error: ${error.message}`);
-            setIsSubmitting(false);
-            return;
-        }
 
         try {
-            const response = await fetch(`${API_URL}/invoices/add_payment_auth/`, {
-                method: 'POST',
+            const response = await fetch(`${API_URL}/users/info/`, {
+                method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`
                 },
                 body: JSON.stringify({
-                    stripe_payment: token.id,
+                    routing_number: routingNumber,
+                    account_number: accountNumber,
                 }),
             });
 
@@ -59,14 +33,18 @@ const UpdateBank = () => {
                 throw new Error(`Server Error: ${errorBody}`);
             }
 
-            const responseData = await response.json();
-            setSuccessMessage("Bank information updated successfully!");
+            alert("Bank information updated successfully!");
+
+            setRoutingNumber('');
+            setAccountNumber('');
+
         } catch (error) {
             setError(`Error updating bank information: ${error.message}`);
         } finally {
             setIsSubmitting(false);
         }
-    }
+    };
+    
 
     return (
         <div className="border-2 rounded-xl w-1/2">
@@ -118,5 +96,3 @@ const UpdateBank = () => {
 }
 
 export default UpdateBank
-
-// use this page to see how to modify the rounting number and account number
