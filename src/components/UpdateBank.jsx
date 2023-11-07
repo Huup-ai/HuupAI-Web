@@ -7,35 +7,44 @@ const UpdateBank = () => {
     const { currentColor } = useStateContext();
     const [routingNumber, setRoutingNumber] = useState('');
     const [accountNumber, setAccountNumber] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     const handleUpdate = async () => {
-        const token = localStorage.getItem("jwtToken");
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        };
-        const body = JSON.stringify({
-            bank_routing: routingNumber,
-            bank_account: accountNumber
-        });
+        setError('');
+        setIsSubmitting(true);
 
         try {
-            const response = await fetch(`${API_URL}/invoices/add_payment_auth/`, {
-                method: 'POST',
-                headers: headers,
-                body: body,
+            const response = await fetch(`${API_URL}/users/info/`, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`
+                },
+                body: JSON.stringify({
+                    routing_number: routingNumber,
+                    account_number: accountNumber,
+                }),
             });
 
             if (!response.ok) {
-                throw new Error("Error updating bank information");
+                const errorBody = await response.text();
+                throw new Error(`Server Error: ${errorBody}`);
             }
 
             alert("Bank information updated successfully!");
+
+            setRoutingNumber('');
+            setAccountNumber('');
+
         } catch (error) {
-            console.error("Error updating bank information:", error);
-            alert("Error updating bank information");
+            setError(`Error updating bank information: ${error.message}`);
+        } finally {
+            setIsSubmitting(false);
         }
     };
+    
 
     return (
         <div className="border-2 rounded-xl w-1/2">
@@ -65,18 +74,21 @@ const UpdateBank = () => {
                             value={accountNumber}
                             onChange={(e) => setAccountNumber(e.target.value)}
                         />
-
                     </div>
+
+                    {error && <p className="text-red-500">{error}</p>}
+                    {successMessage && <p className="text-green-500">{successMessage}</p>}
 
                 </div>
                 <div className="md:mb-5 ">
-                    <Button
-                        color="white"
-                        bgColor={currentColor}
-                        text="Submit"
-                        onClickCallback={handleUpdate}
-                        borderRadius="10px"
-                    />
+                <Button
+                    color="white"
+                    bgColor={currentColor}
+                    text={isSubmitting ? "Processing..." : "Submit"}
+                    onClickCallback={handleUpdate}
+                    borderRadius="10px"
+                    disabled={isSubmitting}
+            />
                 </div>
             </div>
         </div>

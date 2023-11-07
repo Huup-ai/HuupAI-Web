@@ -3,24 +3,49 @@ import { Button } from "../components";
 import { useStateContext } from "../contexts/ContextProvider";
 import API_URL from "../api/apiAddress";
 import { getWallet } from "../api";
+import { getUserInfo, addPaymentAuth } from "../api";
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux'
 
-// const ProviderDetails = () => {
-//   const { currentColor } = useStateContext();
-//   const [isCrypto, setIsCrypto] = useState(() => {
-//     const storedValue = localStorage.getItem("crypto");
-//     return storedValue ? JSON.parse(storedValue) : false;
-//   });
 const ProviderDetails = () => {
   const { currentColor, setUserInfo } = useStateContext();
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [billingDetails, setBillingDetails] = useState(null);
-  const token = localStorage.getItem('jwtToken');
   const [walletAddress, setWalletAddress] = useState(localStorage.getItem('walletAddress') || '');
   const [isCrypto, setIsCrypto] = useState(() => {
     const storedValue = localStorage.getItem('crypto');
     return storedValue ? JSON.parse(storedValue) : false;
   });
+  const token = localStorage.getItem('jwtToken');
+  const [error, setError] = useState('');
+  const [routingInfo, setRoutingInfo] = useState(null);
 
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      };
+  
+      try {
+        const response = await fetch(`${API_URL}/users/info/`, { headers });
+        if (!response.ok) {
+          const errorBody = await response.text();
+          throw new Error('Error fetching user details');
+        }
+        const data = await response.json();
+        console.log('User Info Data:', data);
+        setRoutingInfo(data); 
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+        setError(`Failed to load user details: ${error.message}`);
+      }
+    };
+  
+    fetchUserInfo();
+  }, [token]); 
+
+//New
   useEffect(() => {
     const fetchData = async () => {
       const headers = {
@@ -73,7 +98,21 @@ if (!billingDetails) {
 }
 
 
-  return (
+// Error handling
+if (error) {
+  return <div>Error: {error}</div>;
+}
+
+// Check if user details are available
+// if (!userDetails) {
+//   return <div>Loading user details...</div>;
+// }
+
+// Assuming 'userDetails' is an object that contains a 'bankRouting' key
+// const { bankRouting } = userDetails;
+
+
+return (
     <div id="Payment Details">
       <div className=" mb-5 mt-10">
         <p className="text-2xl font-extrabold tracking-tight text-slate-900">
@@ -132,16 +171,20 @@ if (!billingDetails) {
               <span>:</span>
               <span>{paymentDetails.account_payable_window}</span>
             </div>
-            <div>
-              <span className="inline-block w-60">Bank Routing</span>
-              <span>:</span>
-              <span>{paymentDetails.bank_routing}</span>
-            </div>
-            <div>
-              <span className="inline-block w-60">Bank Account</span>
-              <span>:</span>
-              <span>{paymentDetails.bank_account}</span>
-            </div>
+            {routingInfo && (
+              <div>
+                <span className="inline-block w-60">Bank Routing</span>
+                <span>:</span>
+                <span>{routingInfo.routing_number}</span> 
+              </div>
+            )}
+            {routingInfo && (
+              <div>
+                <span className="inline-block w-60">Bank Account</span>
+                <span>:</span>
+                <span>{"XXXX-XXXX-" + routingInfo.account_number.slice(-4)}</span> 
+              </div>
+            )}
 
             <div className="mt-2 mb-2">
               {/* <Button
