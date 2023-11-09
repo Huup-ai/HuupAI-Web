@@ -46,7 +46,6 @@ function GPU() {
 
   const columns = [
     {
-      field: "id",
       headerText: "ID",
       width: "100",
       textAlign: "Center",
@@ -65,7 +64,6 @@ function GPU() {
       },
     },
     {
-      field: "gpu",
       headerText: "GPU",
       width: "100",
       textAlign: "Center",
