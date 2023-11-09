@@ -54,6 +54,16 @@ function GPU() {
         return <div>{rowData.item_id}</div>;
       },
     },
+
+    {
+    
+      headerText: "Provider",
+      width: "100",
+      textAlign: "Center",
+      template: (rowData) => {
+        return <div>{rowData.provider}</div>;
+      },
+    },
     {
       field: "gpu",
       headerText: "GPU",
@@ -148,7 +158,7 @@ function GPU() {
         width="auto"
         allowPaging
         allowSorting
-        pageSettings={{ pageCount: 5 }}
+        pageSettings={{ pageCount: 5, pageSize: 8 }}
         editSettings={editing}
         toolbar={toolbarOptions}
         allowTextWrap={true}

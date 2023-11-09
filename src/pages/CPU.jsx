@@ -40,6 +40,7 @@ function CPU() {
       .then((responseData) => {
   
         setData(responseData); // Set the "data" key of the response to state
+        console.log("data",data)
         setLoading(false);
       })
       .catch((error) => {
@@ -50,7 +51,7 @@ function CPU() {
 
   const columns = [
     {
-      field: "id",
+      
       headerText: "ID",
       width: "100",
       textAlign: "Center",
@@ -59,7 +60,16 @@ function CPU() {
       },
     },
     {
-      field: "configuration",
+    
+      headerText: "Provider",
+      width: "100",
+      textAlign: "Center",
+      template: (rowData) => {
+        return <div>{rowData.provider}</div>;
+      },
+    },
+    {
+     
       headerText: "Configuration",
       width: "100",
       textAlign: "Center",
@@ -68,7 +78,6 @@ function CPU() {
       },
     },
     {
-      field: "region",
       headerText: "Region",
       width: "100",
       textAlign: "Center",
@@ -107,7 +116,7 @@ function CPU() {
 
           const routePath = hasNonZeroCpu
             ? `/clouds/confirmation CPU/${rowData.item_id}`
-            : `/clouds/confirmation GPU/${rowData.iitem_d}`;
+            : `/clouds/confirmation GPU/${rowData.item_id}`;
 
           // Dispatch the action
           dispatch(setPrice(rowData.price));
@@ -143,7 +152,7 @@ function CPU() {
         width="auto"
         allowPaging
         allowSorting
-        pageSettings={{ pageCount: 5 }}
+        pageSettings={{ pageCount: 5, pageSize: 8 }}
         editSettings={editing}
         toolbar={toolbarOptions}
         allowTextWrap={true}
