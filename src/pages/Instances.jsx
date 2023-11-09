@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   GridComponent,
   Inject,
@@ -92,119 +92,117 @@ const Instances = () => {
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header category="My Cloud > Instances" title="Welcome" />
-      <GridComponent
-        rowHeight={70}      
-        dataSource={data}
-        
-        allowPaging={true}
-        allowSorting={true}
+      <div >
+        <GridComponent
+          rowHeight={70}
+          dataSource={data}
+          
+          allowPaging={true}
+          allowSorting={true}
+          pageSettings={{ pageCount: 5, pageSize: 8 }}
+          editSettings={editing}
+          toolbar={toolbarOptions}
+          allowTextWrap={true}
+          textWrapSettings={settings}
+        >
+          <ColumnsDirective>
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="vm_name"
+              headerText="Inventory Name"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="cluster_gpu"
+              headerText="GPU"
+              width="100"
+              textAlign="Center"
+            />
 
-        pageSettings={{ pageCount: 5, pageSize: 8}}
-        editSettings={editing}
-        toolbar={toolbarOptions}
-        allowTextWrap={true}
-        textWrapSettings={settings}
-  
-      >
-        <ColumnsDirective>
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="vm_name"
-            headerText="Inventory Name"
-            width="100"
-            textAlign="Center"
-            
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="cluster_gpu"
-            headerText="GPU"
-            width="100"
-            textAlign="Center"
-          />
-
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="cluster_provider"
-            headerText="Provider"
-            width="100"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="cluster_configuration"
-            headerText="Configuration"
-            width="200"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="Due"
-            headerText="Payment Due"
-            width="100"
-            textAlign="Center"
-            template={Due}
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="Privacy"
-            headerText="Privacy"
-            width="100"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="dns"
-            headerText="Hostname"
-            width="150"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="IP"
-            headerText="IP"
-            width="100"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="SSHCert"
-            headerText="SSH Cert"
-            width="60"
-            textAlign="Center"
-            template={(props) => <SSHCert clusterid={props.cluster_id} />}
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="status"
-            headerText="STATUS"
-            width="100"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="Action"
-            headerText="Action"
-            width="150"
-            textAlign="Center"
-            
-            template={(props) => (
-              <DropdownAction
-                onActionChange={(action) =>
-                  handleActionChange(
-                    action,
-                    props.namespace,
-                    props.vm_name,
-                    props.cluster_id
-                  )
-                }
-                status={props.status}
-              />
-            )}
-          />
-        </ColumnsDirective>
-        <Inject services={[Search, Page, Toolbar, Freeze]} />
-      </GridComponent>
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="cluster_provider"
+              headerText="Provider"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="cluster_configuration"
+              headerText="Configuration"
+              width="200"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="Due"
+              headerText="Payment Due"
+              width="100"
+              textAlign="Center"
+              template={Due}
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="Privacy"
+              headerText="Privacy"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="dns"
+              headerText="Hostname"
+              width="150"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="IP"
+              headerText="IP"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="SSHCert"
+              headerText="SSH Cert"
+              width="60"
+              textAlign="Center"
+              template={(props) => <SSHCert clusterid={props.cluster_id} />}
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="status"
+              headerText="STATUS"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="Action"
+              headerText="Action"
+              width="150"
+              textAlign="Center"
+              template={(props) => (
+                <DropdownAction
+                  onActionChange={(action) =>
+                    handleActionChange(
+                      action,
+                      props.namespace,
+                      props.vm_name,
+                      props.cluster_id
+                    )
+                  }
+                  status={props.status}
+                />
+              )}
+            />
+          </ColumnsDirective>
+          <Inject services={[Search, Page, Toolbar, Freeze]} />
+        </GridComponent>
+      </div>
     </div>
   );
 };
