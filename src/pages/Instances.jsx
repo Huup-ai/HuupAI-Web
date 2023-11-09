@@ -112,6 +112,9 @@ const Instances = () => {
               headerText="Inventory Name"
               width="100"
               textAlign="Center"
+              // isFrozen={true}
+              // freeze="Left"
+            
             />
             <ColumnDirective
               clipMode="EllipsisWithTooltip"
@@ -123,7 +126,7 @@ const Instances = () => {
 
             <ColumnDirective
               clipMode="EllipsisWithTooltip"
-              field="cluster_provider"
+              field="service"
               headerText="Provider"
               width="100"
               textAlign="Center"

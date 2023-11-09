@@ -83,6 +83,7 @@ const PayinComfirmation = () => {
 
   const [walletBalance, setWalletBalance] = useState(0);
   useEffect(() => {
+    if ((payment === "crypto") || (payment === "eitherWay" && isCrypto === true )) {
     getUserWalletBalance()
   .then((balance) => {
     if (balance === "Error") {
@@ -95,6 +96,7 @@ const PayinComfirmation = () => {
   .catch((error) => {
     console.error("Error:", error);
   });
+    }
   }, [checkBalance]);
 
 

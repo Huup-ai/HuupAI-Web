@@ -7,6 +7,7 @@ import {
   Search,
   Page,
   Toolbar,
+  row,
 } from "@syncfusion/ej2-react-grids";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ import API_URL from "../api/apiAddress";
 import { GrLocation } from "react-icons/gr";
 
 import { useDispatch } from "react-redux";
-import { setPrice } from "../reducers/priceSlicer";
+import { setPrice, setProvider } from "../reducers/priceSlicer";
 
 function CPU() {
   const [data, setData] = useState([]);
@@ -40,7 +41,7 @@ function CPU() {
       .then((responseData) => {
   
         setData(responseData); // Set the "data" key of the response to state
-        console.log("data",data)
+        console.log("data",responseData)
         setLoading(false);
       })
       .catch((error) => {
@@ -63,9 +64,10 @@ function CPU() {
     
       headerText: "Provider",
       width: "100",
+
       textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.provider}</div>;
+        return <div>{rowData.service}</div>;
       },
     },
     {
@@ -120,6 +122,7 @@ function CPU() {
 
           // Dispatch the action
           dispatch(setPrice(rowData.price));
+          dispatch(setProvider(rowData.service));
 
           // Navigate to the desired route
           navigate(routePath);

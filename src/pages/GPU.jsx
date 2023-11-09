@@ -18,7 +18,7 @@ import API_URL from "../api/apiAddress";
 import { GrLocation } from "react-icons/gr";
 
 import { useDispatch } from "react-redux";
-import { setPrice } from "../reducers/priceSlicer";
+import { setPrice, setProvider } from "../reducers/priceSlicer";
 
 function GPU() {
   const [data, setData] = useState([]);
@@ -60,7 +60,7 @@ function GPU() {
       width: "100",
       textAlign: "Center",
       template: (rowData) => {
-        return <div>{rowData.provider}</div>;
+        return <div>{rowData.service}</div>;
       },
     },
     {
@@ -124,6 +124,7 @@ function GPU() {
 
           // Dispatch the action
           dispatch(setPrice(rowData.price));
+          dispatch(setProvider(rowData.service));
 
           // Navigate to the desired route
           navigate(routePath);
