@@ -19,9 +19,6 @@ import { API_KEY, sponsorAddress } from "../../Address";
 import { faucetContract } from "../../ethereum/faucet";
 import { contractAddress, customerToken } from "../../Address";
 import { ethers } from "ethers";
-// import { someFunction } from '@fun-xyz/core';
-// import { ethers } from "ethers";
-// import {faucetContract} from "../../ethereum/faucet";
 
  
 
@@ -73,44 +70,6 @@ const Login = () => {
 
   // Configure the environment with the specified options
   configureEnvironment(options);
-
-  // const createWallet = async (event) => {
-  //   // event.preventDefault();
-  //   const auth = new Auth({ privateKey: PRIVATE_KEY });
-
-  //   try {
-  //     // Create a FunWallet instance for the user
-  //     const funWallet = new FunWallet({
-  //       users: [{ userId: await auth.getAddress() }],
-  //       uniqueId: await auth.getWalletUniqueId(),
-  //     });
-  //     console.log("ID", auth.getWalletUniqueId());
-
-  //     // Create a user operation
-  //     const userOp = await funWallet.create(auth, await auth.getAddress());
-  //     // console.log("OP", userOp)
-
-  //     // deploy wallet
-  //     // await funWallet.executeOperation(auth, userOp);
-
-  //     // Extract the wallet address from userOp
-  //     const walletAddress = userOp.walletAddr;
-
-  //     // Store the wallet address in a cookie
-  //     updateWalletAddress(walletAddress);
-
-  //     // Send Wallet Address to backend
-  //     const token = localStorage.getItem("jwtToken");
-
-  //     const walletres = addWallet(walletAddress, false, token);
-
-  //     console.log("wwres2", walletres);
-
-  //     console.log("Wallet Address:", walletAddress);
-  //   } catch (error) {
-  //     console.error("Error creating wallet:", error);
-  //   }
-  // };
   
   const createWallet = async (is_provider) => {
     try {
@@ -234,15 +193,10 @@ const handleLoginClick = async (e) => {
       } else {
         response = await loginUser(email, password);
       }
-      //JWT
-      //const token = response.data.token;
-      //localStorage.setItem('jwtToken', token); // storing token in localStorage
 
       console.log("outside");
       console.log("Received response: ", response);
 
-      // Check if the response is as expected. This is a placeholder.
-      // You need to replace this with an acter logged in succeual check based on your API's response.
       if (response && response.status === 200) {
         const data = await response.json();
         const token = data.access; // Assuming the token is directly on the response object
@@ -313,8 +267,7 @@ const handleLoginClick = async (e) => {
           />
         )}
       </div>
-      {/* <LogIn />
-      <SignUp /> */}
+      
     </div>
   );
 };
@@ -450,8 +403,6 @@ function SignUp({
   setIsChecked,
   SignUpLogin,
 }) {
-  // receive navigate function as props
-  // const [selectedAction, setSelectedAction] = useState(" ");
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -598,18 +549,6 @@ function SignUp({
             onChange={handleChange}
           />
         </div>
-
-        {/* <div className="checkbox-container">
-          <input
-            type="checkbox"
-            name="is_provider"
-            checked={formData.is_provider}
-            onChange={(e) =>
-              setFormData({ ...formData, is_provider: e.target.checked })
-            }
-          />
-          <label htmlFor="is_provider">Register as a Provider</label>
-        </div> */}
 
         <div>
           <p className="text-xs">
