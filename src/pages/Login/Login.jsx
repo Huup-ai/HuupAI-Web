@@ -1,6 +1,6 @@
 import React from "react";
 import "./Login.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import {
   loginUser,
@@ -8,6 +8,7 @@ import {
   loginProvider,
   addWallet,
   getWallet,
+  googleSignIn,
 } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -20,7 +21,6 @@ import { faucetContract } from "../../ethereum/faucet";
 import { contractAddress, customerToken } from "../../Address";
 import { ethers } from "ethers";
 
- 
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -225,6 +225,31 @@ const handleLoginClick = async (e) => {
     setShowPassword(!showPassword);
   };
 
+  useEffect(() => {
+    window.gapi.signin2.render('googleSignInButton', {
+      'scope': 'profile email',
+      'width': 240,
+      'height': 50,
+      'longtitle': true,
+      'theme': 'dark',
+      'onsuccess': onSignIn,
+    });
+  }, []);
+
+  async function onSignIn(googleUser) {
+    const id_token = googleUser.getAuthResponse().id_token;
+    
+    try {
+      const data = await googleSignIn(id_token);
+      dispatch(loginSuccess(data.jwt_token)); // Dispatch action with the token received
+      localStorage.setItem('jwtToken', data.jwt_token); // Optionally save the token in local storage
+      navigate('/dashboard'); // Navigate to the dashboard or another route as needed
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle the error by dispatching another action or showing a message
+    }
+  }
+
   return (
     <div className="Alert">
       <div className="a-left">
@@ -364,6 +389,8 @@ function LogIn({
             </span>
           </p>
         </div>
+
+        <div className="g-signin2" id="googleSignInButton"></div>
 
         <div className="px-4">
           <p className="text-xs">
