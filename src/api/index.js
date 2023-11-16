@@ -13,14 +13,14 @@ export const FetchRequest = async (url, method, header = {}, data = {}) => {
   return response.json();
 };
 
-export const googleSignIn = async (id_token) => {
+export const googleSignIn = async (token_id) => {
   try {
     const response = await fetch(`${API_URL}/users/google_login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ token: id_token })
+      body: JSON.stringify({ token: token_id })
     });
 
     if (!response.ok) {

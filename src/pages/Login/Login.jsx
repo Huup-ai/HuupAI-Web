@@ -20,7 +20,9 @@ import { API_KEY, sponsorAddress } from "../../Address";
 import { faucetContract } from "../../ethereum/faucet";
 import { contractAddress, customerToken } from "../../Address";
 import { ethers } from "ethers";
+// import { GoogleLogin } from 'react-google-login';
 
+const clientId = "857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,7 +35,7 @@ const Login = () => {
   const [fcContract, setFcContract] = useState();
   const [isChecked, setIsChecked] = useState(true);
   
-
+  
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const externalWallet = useSelector((state) => state.auth.externalWallet);
@@ -225,30 +227,49 @@ const handleLoginClick = async (e) => {
     setShowPassword(!showPassword);
   };
 
-  useEffect(() => {
-    window.gapi.signin2.render('googleSignInButton', {
-      'scope': 'profile email',
-      'width': 240,
-      'height': 50,
-      'longtitle': true,
-      'theme': 'dark',
-      'onsuccess': onSignIn,
-    });
-  }, []);
 
-  async function onSignIn(googleUser) {
-    const id_token = googleUser.getAuthResponse().id_token;
+
+  // useEffect(() => {
+  //   function initializeGoogleSignIn() {
+  //     window.gapi.load('auth2', function() {
+  //       window.gapi.auth2.init({
+  //         client_id: '857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com',
+  //       }).then(() => {
+  //         window.gapi.signin2.render('googleSignInButton', {
+  //           'scope': 'profile email',
+  //           'width': 240,
+  //           'height': 50,
+  //           'longtitle': true,
+  //           'theme': 'dark',
+  //           'onsuccess': onSignIn,
+  //         });
+  //       });
+  //     });
+  //   }
+
+  //   if (window.gapi) {
+  //     initializeGoogleSignIn();
+  //   } else {
+  //     const script = document.createElement('script');
+  //     script.src = 'https://apis.google.com/js/platform.js';
+  //     script.onload = initializeGoogleSignIn;
+  //     document.body.appendChild(script);
+  //   }
+  // }, []);
+
+  // async function onSignIn(googleUser) {
+  //   const id_token = googleUser.getAuthResponse().id_token;
     
-    try {
-      const data = await googleSignIn(id_token);
-      dispatch(loginSuccess(data.jwt_token)); // Dispatch action with the token received
-      localStorage.setItem('jwtToken', data.jwt_token); // Optionally save the token in local storage
-      navigate('/dashboard'); // Navigate to the dashboard or another route as needed
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle the error by dispatching another action or showing a message
-    }
-  }
+  //   try {
+  //     const data = await googleSignIn(id_token);
+  //     dispatch(loginSuccess(data.jwt_token)); // Dispatch action with the token received
+  //     localStorage.setItem('jwtToken', data.jwt_token); // Optionally save the token in local storage
+  //     navigate('/login'); 
+  //   } catch (error) {
+  //     console.error('Error:', error);
+      
+  //   }
+  // }
 
   return (
     <div className="Alert">
@@ -292,7 +313,6 @@ const handleLoginClick = async (e) => {
           />
         )}
       </div>
-      
     </div>
   );
 };
@@ -311,16 +331,75 @@ function LogIn({
   setSelectedType,
   connectWallet,
 }) {
-  // const [selectedType, setSelectedType] = useState(" ");
-  // const [selectedWay, setSelectedWay] = useState(" ");
   const [cookies, setCookie] = useCookies(["selectedType"]);
-  // const [type, setType] = useState("customer");
+  
   const handleSelectChange = (e) => {
     e.preventDefault();
     const newValue = e.target.value;
     // setType(newValue);
     setSelectedType(newValue);
     setCookie("selectedType", newValue, { path: "/" });
+  };
+
+
+                                    // Here //
+  // const [isApiLoaded, setApiLoaded] = useState(false);
+
+  // useEffect(() => {
+  //   // Dynamically load the Google API script
+  //   const script = document.createElement('script');
+  //   script.src = 'https://apis.google.com/js/platform.js';
+  //   script.onload = () => setApiLoaded(true);
+  //   document.body.appendChild(script);
+  // }, []);
+
+  // const dispatch = useDispatch();
+  // const onSuccess = async (res) => {
+  //   console.log('Login Success: currentUser:', res.profileObj);
+  //   // Send token to backend for verification
+  //   try {
+  //     const data = await googleSignIn(res.tokenId);
+  //     // Assuming your googleSignIn function returns the token directly
+  //     dispatch(loginSuccess(data.jwt_token)); // Dispatch the login success action
+  //     // Other post-login logic here, like redirecting to another page
+  //   } catch (error) {
+  //     console.error('Login with Google failed:', error);
+  //     // Handle error, for example by showing an error message
+  //   }
+  // };
+  // const onFailure = (res) => {
+  //   console.log('Login failed: res:', res);
+  //   // Handle login failure, for example by showing an error message
+  // };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const responseGoogle = async (response) => {
+    try {
+      // Send the Google ID token to the backend
+      const backendResponse = await googleSignIn(response.tokenId);
+      if (backendResponse && backendResponse.jwt_token) {
+        // Assuming the JWT token is returned from the backend as jwt_token
+        localStorage.setItem('jwtToken', backendResponse.jwt_token);
+        dispatch(loginSuccess()); // Pass any required payload to the loginSuccess action
+        navigate('/clouds'); // Redirect the user to the dashboard page
+      } else {
+        // Handle any errors, such as no jwt_token in the backendResponse
+        console.error('Google sign-in error: No JWT token received from backend');
+      }
+    } catch (error) {
+      // Handle errors, such as network issues or JSON parsing errors
+      console.error('Google sign-in error:', error);
+    }
+  };
+
+  const onFailure = (error) => {
+    if (error.error === 'popup_closed_by_user') {
+      console.log('The user closed the Google Sign-In popup.');
+      
+    } else {
+      console.error('Google Login Failure:', error);
+      
+    }
   };
 
   return (
@@ -390,7 +469,16 @@ function LogIn({
           </p>
         </div>
 
-        <div className="g-signin2" id="googleSignInButton"></div>
+        {/* <div id="googleSignInButton" className="g-signin2"></div> */}
+        {/* <div className="g-signin2" id="googleSignInButton"></div> */}
+        {/* <GoogleLogin
+        clientId={clientId}
+        buttonText="Login with Google"
+        onSuccess={responseGoogle}
+        onFailure={onFailure}
+        cookiePolicy={'single_host_origin'}
+        // isSignedIn={true} // Uncomment if you want to keep the user signed in
+      /> */}
 
         <div className="px-4">
           <p className="text-xs">
