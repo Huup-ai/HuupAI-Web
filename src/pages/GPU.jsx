@@ -18,7 +18,7 @@ import API_URL from "../api/apiAddress";
 import { GrLocation } from "react-icons/gr";
 
 import { useDispatch } from "react-redux";
-import { setPrice } from "../reducers/priceSlicer";
+import { setPrice, setProvider } from "../reducers/priceSlicer";
 
 function GPU() {
   const [data, setData] = useState([]);
@@ -46,7 +46,6 @@ function GPU() {
 
   const columns = [
     {
-      field: "id",
       headerText: "ID",
       width: "100",
       textAlign: "Center",
@@ -54,8 +53,17 @@ function GPU() {
         return <div>{rowData.item_id}</div>;
       },
     },
+
     {
-      field: "gpu",
+    
+      headerText: "Provider",
+      width: "100",
+      textAlign: "Center",
+      template: (rowData) => {
+        return <div>{rowData.service}</div>;
+      },
+    },
+    {
       headerText: "GPU",
       width: "100",
       textAlign: "Center",
@@ -116,6 +124,7 @@ function GPU() {
 
           // Dispatch the action
           dispatch(setPrice(rowData.price));
+          dispatch(setProvider(rowData.service));
 
           // Navigate to the desired route
           navigate(routePath);
@@ -148,7 +157,7 @@ function GPU() {
         width="auto"
         allowPaging
         allowSorting
-        pageSettings={{ pageCount: 5 }}
+        pageSettings={{ pageCount: 5, pageSize: 8 }}
         editSettings={editing}
         toolbar={toolbarOptions}
         allowTextWrap={true}

@@ -20,6 +20,7 @@ const Confirmation_CPU = () => {
   const [InstName, setInstName] = useState("win2019-dv-01");
   // console.log("Is Authenticated:", isAuthenticated); // Log the value
   let hasPaymentMethod = useSelector((state) => state.auth.hasPaymentMethod); // check if user has a payment method
+  let provider = useSelector(state => state.price.provider); 
 
   const navigate = useNavigate();
 
@@ -210,6 +211,7 @@ const Confirmation_CPU = () => {
       <Header
         category="Market Cloud > CPU > Order Confirmation"
         title="CPU Rental Order Form"
+        des = {`Provider: ${provider}`}
       />
 
       <PayinComfirmation />

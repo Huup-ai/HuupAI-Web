@@ -7,6 +7,7 @@ import {
   Search,
   Page,
   Toolbar,
+  row,
 } from "@syncfusion/ej2-react-grids";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ import API_URL from "../api/apiAddress";
 import { GrLocation } from "react-icons/gr";
 
 import { useDispatch } from "react-redux";
-import { setPrice } from "../reducers/priceSlicer";
+import { setPrice, setProvider } from "../reducers/priceSlicer";
 
 function CPU() {
   const [data, setData] = useState([]);
@@ -40,6 +41,7 @@ function CPU() {
       .then((responseData) => {
   
         setData(responseData); // Set the "data" key of the response to state
+        console.log("data",responseData)
         setLoading(false);
       })
       .catch((error) => {
@@ -50,7 +52,7 @@ function CPU() {
 
   const columns = [
     {
-      field: "id",
+      
       headerText: "ID",
       width: "100",
       textAlign: "Center",
@@ -59,7 +61,17 @@ function CPU() {
       },
     },
     {
-      field: "configuration",
+    
+      headerText: "Provider",
+      width: "100",
+
+      textAlign: "Center",
+      template: (rowData) => {
+        return <div>{rowData.service}</div>;
+      },
+    },
+    {
+     
       headerText: "Configuration",
       width: "100",
       textAlign: "Center",
@@ -68,7 +80,6 @@ function CPU() {
       },
     },
     {
-      field: "region",
       headerText: "Region",
       width: "100",
       textAlign: "Center",
@@ -107,10 +118,11 @@ function CPU() {
 
           const routePath = hasNonZeroCpu
             ? `/clouds/confirmation CPU/${rowData.item_id}`
-            : `/clouds/confirmation GPU/${rowData.iitem_d}`;
+            : `/clouds/confirmation GPU/${rowData.item_id}`;
 
           // Dispatch the action
           dispatch(setPrice(rowData.price));
+          dispatch(setProvider(rowData.service));
 
           // Navigate to the desired route
           navigate(routePath);
@@ -143,7 +155,7 @@ function CPU() {
         width="auto"
         allowPaging
         allowSorting
-        pageSettings={{ pageCount: 5 }}
+        pageSettings={{ pageCount: 5, pageSize: 8 }}
         editSettings={editing}
         toolbar={toolbarOptions}
         allowTextWrap={true}

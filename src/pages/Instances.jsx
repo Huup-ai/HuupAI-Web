@@ -7,9 +7,9 @@ import {
   Search,
   Page,
   Toolbar,
+  Freeze,
 } from "@syncfusion/ej2-react-grids";
 
-import { InstancesData, InstancesGrid } from "../data/dummy";
 import { Header } from "../components";
 import { BsCloudDownload } from "react-icons/bs";
 import { getUserInstances } from "../api";
@@ -23,6 +23,7 @@ const Instances = () => {
   const [data, setData] = useState([]);
   // const [actionStatus, setActionStatus] = useState({});
   const toolbarOptions = ["Search"];
+  // const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
   const editing = { allowDeleting: true, allowEditing: true };
   const settings = { wrapMode: "Content" };
@@ -32,7 +33,7 @@ const Instances = () => {
       .then((responseData) => {
         const flattenedData = responseData.map((item) => flattenObject(item));
         setData(flattenedData);
-        console.log(flattenedData);
+        console.log("flattened", flattenedData);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -91,108 +92,120 @@ const Instances = () => {
   return (
     <div className="m-2 md:m-20 mt-24 p-2 md:pb-20 md:pt-10 md:px-20 bg-white rounded-3xl">
       <Header category="My Cloud > Instances" title="Welcome" />
+      <div >
+        <GridComponent
+          rowHeight={70}
+          dataSource={data}
+          
+          allowPaging={true}
+          allowSorting={true}
+          pageSettings={{ pageCount: 5, pageSize: 8 }}
+          editSettings={editing}
+          toolbar={toolbarOptions}
+          allowTextWrap={true}
+          textWrapSettings={settings}
+        >
+          <ColumnsDirective>
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="vm_name"
+              headerText="Inventory Name"
+              width="100"
+              textAlign="Center"
+              // isFrozen={true}
+              // freeze="Left"
+            
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="cluster_gpu"
+              headerText="GPU"
+              width="100"
+              textAlign="Center"
+            />
 
-      <GridComponent
-        rowHeight={70}
-        dataSource={data}
-        width="auto"
-        allowPaging
-        allowSorting
-        pageSettings={{ pageCount: 5 }}
-        editSettings={editing}
-        toolbar={toolbarOptions}
-        allowTextWrap={true}
-        textWrapSettings={settings}
-      >
-        <ColumnsDirective>
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="vm_name"
-            headerText="Inventory Name"
-            width="120"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="cluster_gpu"
-            headerText="GPU"
-            width="120"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="cluster_configuration"
-            headerText="Configuration"
-            width="220"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="Due"
-            headerText="Payment Due"
-            width="100"
-            textAlign="Center"
-            template={Due}
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="Privacy"
-            headerText="Privacy"
-            width="120"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="dns"
-            headerText="Hostname"
-            width="180"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="IP"
-            headerText="IP"
-            width="120"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="SSHCert"
-            headerText="SSH Cert"
-            width="100"
-            textAlign="Center"
-            template={(props) => <SSHCert clusterid={props.cluster_id} />}
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="status"
-            headerText="STATUS"
-            width="100"
-            textAlign="Center"
-          />
-          <ColumnDirective
-            clipMode="EllipsisWithTooltip"
-            field="Action"
-            headerText="Action"
-            width="100"
-            textAlign="Center"
-            template={(props) => (
-              <DropdownAction
-                onActionChange={(action) =>
-                  handleActionChange(
-                    action,
-                    props.namespace,
-                    props.vm_name,
-                    props.cluster_id
-                  )
-                }
-                status={props.status}
-              />
-            )}
-          />
-        </ColumnsDirective>
-        <Inject services={[Search, Page, Toolbar]} />
-      </GridComponent>
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="service"
+              headerText="Provider"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="cluster_configuration"
+              headerText="Configuration"
+              width="200"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="Due"
+              headerText="Payment Due"
+              width="100"
+              textAlign="Center"
+              template={Due}
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="Privacy"
+              headerText="Privacy"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="dns"
+              headerText="Hostname"
+              width="150"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="IP"
+              headerText="IP"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="SSHCert"
+              headerText="SSH Cert"
+              width="60"
+              textAlign="Center"
+              template={(props) => <SSHCert clusterid={props.cluster_id} />}
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="status"
+              headerText="STATUS"
+              width="100"
+              textAlign="Center"
+            />
+            <ColumnDirective
+              clipMode="EllipsisWithTooltip"
+              field="Action"
+              headerText="Action"
+              width="150"
+              textAlign="Center"
+              template={(props) => (
+                <DropdownAction
+                  onActionChange={(action) =>
+                    handleActionChange(
+                      action,
+                      props.namespace,
+                      props.vm_name,
+                      props.cluster_id
+                    )
+                  }
+                  status={props.status}
+                />
+              )}
+            />
+          </ColumnsDirective>
+          <Inject services={[Search, Page, Toolbar, Freeze]} />
+        </GridComponent>
+      </div>
     </div>
   );
 };

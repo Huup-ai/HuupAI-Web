@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-free": "^6.4.2",
@@ -19,7 +20,7 @@
     "@syncfusion/ej2-react-calendars": "^19.4.48",
     "@syncfusion/ej2-react-charts": "^19.4.50",
     "@syncfusion/ej2-react-dropdowns": "^19.4.52",
-    "@syncfusion/ej2-react-grids": "^19.4.50",
+    "@syncfusion/ej2-react-grids": "^19.4.56",
     "@syncfusion/ej2-react-inputs": "^19.4.52",
     "@syncfusion/ej2-react-kanban": "^19.4.48",
     "@syncfusion/ej2-react-popups": "^19.4.52",
