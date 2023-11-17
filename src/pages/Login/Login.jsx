@@ -20,9 +20,7 @@ import { API_KEY, sponsorAddress } from "../../Address";
 import { faucetContract } from "../../ethereum/faucet";
 import { contractAddress, customerToken } from "../../Address";
 import { ethers } from "ethers";
-// import { GoogleLogin } from 'react-google-login';
 
-const clientId = "857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -158,118 +156,122 @@ const handleLoginClick = async (e) => {
   }
 };
 
+  // const connectWallet = async () => {
+  //   if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+  //     try {
+  //       /* get provider */
+  //       const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //       /* get accounts */
+  //       const accounts = await provider.send("eth_requestAccounts", []);
+  //       /* set active wallet address */
+  //       setMetaAddress(accounts[0]);
+  //       /* get signer */
+  //       updateWalletAddress(metaAddress);
+  //       // updateWalletAddress(accounts[0]);
+  //       setSigner(provider.getSigner());
+  //       /* local contract instance */
+  //       setFcContract(faucetContract(provider));
+  //       console.log("connected", accounts[0]);
+  //     } catch (err) {
+  //       console.log("err", err.messgae);
+  //       alert(err.message);
+  //     }
+  //     navigate('/clouds');
+  //   } else {
+  //     /* MetaMask is not installed */
+  //     console.log("Please install MetaMask");
+  //     alert("Please install MetaMask");
+  //   }
+  // };
   const connectWallet = async () => {
-    if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+    if (window.ethereum) { // Check if MetaMask is installed
       try {
-        /* get provider */
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        /* get accounts */
-        const accounts = await provider.send("eth_requestAccounts", []);
-        /* set active wallet address */
-        setMetaAddress(accounts[0]);
-        /* get signer */
-        updateWalletAddress(metaAddress);
-        // updateWalletAddress(accounts[0]);
-        setSigner(provider.getSigner());
-        /* local contract instance */
-        setFcContract(faucetContract(provider));
-        console.log("connected", accounts[0]);
-      } catch (err) {
-        console.log("err", err.messgae);
-        alert(err.message);
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request account access
+        if (accounts.length > 0) {
+          setMetaAddress(accounts[0]); // Set the first account as the metaAddress
+          // Additional logic after successful connection
+        }
+      } catch (error) {
+        console.error("Error connecting to MetaMask:", error);
       }
     } else {
-      /* MetaMask is not installed */
-      console.log("Please install MetaMask");
-      alert("Please install MetaMask");
-    }
-  };
-
-  const handleWalletLogin = async (e) => {
-    e.preventDefault();
-    try {
-      let response;
-
-      if (selectedType === "provider") {
-        response = await loginProvider(email, password);
-      } else {
-        response = await loginUser(email, password);
-      }
-
-      console.log("outside");
-      console.log("Received response: ", response);
-
-      if (response && response.status === 200) {
-        const data = await response.json();
-        const token = data.access; // Assuming the token is directly on the response object
-        console.log(token);
-        localStorage.setItem("jwtToken", token); // storing token in localStorage
-        await connectWallet();
-        console.log("Login successful", response);
-        setEmail("");
-        setPassword("");
-        dispatch(loginSuccess());
-
-        dispatch(hasExternalWallet());
-        navigate("/clouds");
-      } else {
-        // Handle login failure, perhaps pop up an error message
-        console.error("Login failed: ", response.message);
-        alert("Login failed. Please check your credentials.");
-      }
-    } catch (error) {
-      console.error("Login error", error);
-      alert("Login failed. Please check your credentials.");
+      alert("Please install MetaMask to use this feature.");
     }
   };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+  
+  const handleSelectChange = (e) => {
+    e.preventDefault();
+    const newValue = e.target.value;
+    // setType(newValue);
+    setSelectedType(newValue);
+    setCookie("selectedType", newValue, { path: "/" });
+  };
 
+  // Function to handle what happens after Google sign-in
+  async function onSignIn(response) {
+    const token_id = response.credential;
+    try {
+      const data = await googleSignIn(token_id);
+      dispatch(loginSuccess(data.jwt_token));
+      localStorage.setItem('jwtToken', data.jwt_token);
+      return true;
+      // navigate('/clouds');
+    } catch (error) {
+      console.error('Error:', error);
+      return false;
+    }
+  }
 
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      window.google.accounts.id.initialize({
+        client_id: '857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com', 
+        callback: onSignIn,
+      });
+      window.google.accounts.id.renderButton(
+        document.getElementById('googleSignInButton'),
+        { theme: 'outline', size: 'large' }
+      );
+      window.google.accounts.id.prompt();
+    };
+    document.body.appendChild(script);
 
-  // useEffect(() => {
-  //   function initializeGoogleSignIn() {
-  //     window.gapi.load('auth2', function() {
-  //       window.gapi.auth2.init({
-  //         client_id: '857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com',
-  //       }).then(() => {
-  //         window.gapi.signin2.render('googleSignInButton', {
-  //           'scope': 'profile email',
-  //           'width': 240,
-  //           'height': 50,
-  //           'longtitle': true,
-  //           'theme': 'dark',
-  //           'onsuccess': onSignIn,
-  //         });
-  //       });
-  //     });
-  //   }
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
-  //   if (window.gapi) {
-  //     initializeGoogleSignIn();
-  //   } else {
-  //     const script = document.createElement('script');
-  //     script.src = 'https://apis.google.com/js/platform.js';
-  //     script.onload = initializeGoogleSignIn;
-  //     document.body.appendChild(script);
-  //   }
-  // }, []);
+  
 
-  // async function onSignIn(googleUser) {
-  //   const id_token = googleUser.getAuthResponse().id_token;
-    
-  //   try {
-  //     const data = await googleSignIn(id_token);
-  //     dispatch(loginSuccess(data.jwt_token)); // Dispatch action with the token received
-  //     localStorage.setItem('jwtToken', data.jwt_token); // Optionally save the token in local storage
-  //     navigate('/login'); 
-  //   } catch (error) {
-  //     console.error('Error:', error);
-      
-  //   }
-  // }
+  const handleWalletLogin = async (e) => {
+    e.preventDefault();
+    try {
+      // Initiate Google Sign-In
+      window.google.accounts.id.prompt(async (response) => {
+        if (response.isNotDisplayed() || response.isSkippedMoment()) {
+          console.log('Google prompt not displayed or was skipped');
+        } else {
+          // If Google Sign-In was successful, proceed to connect the wallet
+          const signInSuccess = await onSignIn(response);
+          if (signInSuccess) {
+            await connectWallet();
+            navigate('/clouds'); // Or your desired dashboard path
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Login error", error);
+      alert("Login failed. Please try again.");
+    }
+  };
 
   return (
     <div className="Alert">
@@ -286,125 +288,6 @@ const handleLoginClick = async (e) => {
         </div>
       </div>
       <div>
-        {/* <h2>{isLogin ? "Login" : "Signup"}</h2> */}
-        {isLogin ? (
-          <LogIn
-            onSignupClick={() => setIsLogin(false)}
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            onLoginClick={handleLoginClick}
-            showPassword={showPassword}
-            toggleShowPassword={toggleShowPassword}
-            selectedType={selectedType}
-            setSelectedType={setSelectedType}
-            connectWallet={handleWalletLogin}
-            // onLogin={handleLogin}
-          />
-        ) : (
-          <SignUp
-            onLoginClick={() => setIsLogin(true)}
-            createWallet={createWallet}
-            navigate={navigate} // pass navigate function to SignUp component
-            isChecked={isChecked}
-            setIsChecked={setIsChecked}
-            //{/*             SignUpLogin={handleLoginClick} */}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
-
-function LogIn({
-  onSignupClick,
-  // onLogin,
-  email,
-  setEmail,
-  password,
-  setPassword,
-  onLoginClick,
-  showPassword,
-  toggleShowPassword,
-  selectedType,
-  setSelectedType,
-  connectWallet,
-}) {
-  const [cookies, setCookie] = useCookies(["selectedType"]);
-  
-  const handleSelectChange = (e) => {
-    e.preventDefault();
-    const newValue = e.target.value;
-    // setType(newValue);
-    setSelectedType(newValue);
-    setCookie("selectedType", newValue, { path: "/" });
-  };
-
-
-                                    // Here //
-  // const [isApiLoaded, setApiLoaded] = useState(false);
-
-  // useEffect(() => {
-  //   // Dynamically load the Google API script
-  //   const script = document.createElement('script');
-  //   script.src = 'https://apis.google.com/js/platform.js';
-  //   script.onload = () => setApiLoaded(true);
-  //   document.body.appendChild(script);
-  // }, []);
-
-  // const dispatch = useDispatch();
-  // const onSuccess = async (res) => {
-  //   console.log('Login Success: currentUser:', res.profileObj);
-  //   // Send token to backend for verification
-  //   try {
-  //     const data = await googleSignIn(res.tokenId);
-  //     // Assuming your googleSignIn function returns the token directly
-  //     dispatch(loginSuccess(data.jwt_token)); // Dispatch the login success action
-  //     // Other post-login logic here, like redirecting to another page
-  //   } catch (error) {
-  //     console.error('Login with Google failed:', error);
-  //     // Handle error, for example by showing an error message
-  //   }
-  // };
-  // const onFailure = (res) => {
-  //   console.log('Login failed: res:', res);
-  //   // Handle login failure, for example by showing an error message
-  // };
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const responseGoogle = async (response) => {
-    try {
-      // Send the Google ID token to the backend
-      const backendResponse = await googleSignIn(response.tokenId);
-      if (backendResponse && backendResponse.jwt_token) {
-        // Assuming the JWT token is returned from the backend as jwt_token
-        localStorage.setItem('jwtToken', backendResponse.jwt_token);
-        dispatch(loginSuccess()); // Pass any required payload to the loginSuccess action
-        navigate('/clouds'); // Redirect the user to the dashboard page
-      } else {
-        // Handle any errors, such as no jwt_token in the backendResponse
-        console.error('Google sign-in error: No JWT token received from backend');
-      }
-    } catch (error) {
-      // Handle errors, such as network issues or JSON parsing errors
-      console.error('Google sign-in error:', error);
-    }
-  };
-
-  const onFailure = (error) => {
-    if (error.error === 'popup_closed_by_user') {
-      console.log('The user closed the Google Sign-In popup.');
-      
-    } else {
-      console.error('Google Login Failure:', error);
-      
-    }
-  };
-
-  return (
-    <div>
-      
       <form className="infoForm authForm">
         <div className="typeSelect rounded-t-xl " >
           <button
@@ -427,7 +310,7 @@ function LogIn({
           <h3>Log In </h3>
         </div>
 
-        <div className="px-4">
+        {/* <div className="px-4">
           <input
             type="email"
             placeholder="Email"
@@ -436,9 +319,9 @@ function LogIn({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </div>
+        </div> */}
 
-        <div className="px-4">
+        {/* <div className="px-4">
           <input
             type={showPassword ? "text" : "password"}
             className="infoInput"
@@ -447,7 +330,7 @@ function LogIn({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {/* button for toggling password visibility */}
+          
           <button
             type="button"
             onClick={toggleShowPassword}
@@ -455,9 +338,9 @@ function LogIn({
           >
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </button>
-        </div>
+        </div> */}
 
-        <div className="px-4">
+        {/* <div className="px-4">
           <p className="text-xs">
             Don't have an account?{" "}
             <span
@@ -467,19 +350,18 @@ function LogIn({
               Signup
             </span>
           </p>
-        </div>
+        </div> */}
 
-        {/* <div id="googleSignInButton" className="g-signin2"></div> */}
-        {/* <div className="g-signin2" id="googleSignInButton"></div> */}
-        {/* <GoogleLogin
-        clientId={clientId}
-        buttonText="Login with Google"
-        onSuccess={responseGoogle}
-        onFailure={onFailure}
-        cookiePolicy={'single_host_origin'}
-        // isSignedIn={true} // Uncomment if you want to keep the user signed in
-      /> */}
+        <div>
+        <div id="googleSignInButton" className="google-button"></div>
 
+        <button
+          type="button"
+          onClick={handleWalletLogin}
+          className="button infoButton font-normal w-72">
+            Login with Gmail & Crypto Wallet
+          </button>
+          </div>
         <div className="px-4">
           <p className="text-xs">
             {" "}
@@ -488,13 +370,19 @@ function LogIn({
           </p>
         </div>
         <div className="px-4">
-          <button
+          {/* <button
             className="button infoButton font-normal w-36"
-            onClick={onLoginClick}
+            // onClick={onLoginClick}
           >
             Login with Email
           </button>
-          {selectedType === "customer" && (
+          <button
+          type="button"
+          onClick={handleWalletLogin}
+          className="button infoButton font-normal w-72">
+            Login with Gmail & Crypto Wallet
+          </button> */}
+          {/* {selectedType === "customer" && (
             <button
               // onClick={""}
               onClick={connectWallet}
@@ -502,190 +390,14 @@ function LogIn({
             >
               Login with Email & Crypto Wallet
             </button>
-          )}
+          )} */}
         </div>
       </form>
     </div>
-  );
-}
-
-
-function SignUp({
-  onLoginClick,
-  navigate,
-  createWallet,
-  isChecked,
-  setIsChecked,
-  SignUpLogin,
-}) {
-  const dispatch = useDispatch();
-
-  const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    confirmpass: "",
-    // walletAddress: "",
-    is_provider: false,
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const handleCheckboxChange = (event) => {
-    setIsChecked(event.target.checked);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmpass) {
-      alert("Passwords do not match!");
-      return;
-    }
-    // console.log(formData);
-
-    const dataToSend = {
-      firstname: formData.firstname,
-      lastname: formData.lastname,
-      email: formData.email,
-      password: formData.password,
-      is_provider: formData.is_provider,
-      company: formData.company,
-      // walletAddress: formData.walletAddress,
-      payment_method: formData.payment_method,
-      card_number: formData.card_number,
-      card_exp: formData.card_exp,
-      card_name: formData.card_name,
-      tax: formData.tax,
-      role: formData.role,
-    };
-
-    const response = await registerUser(
-      formData.email,
-      formData.password,
-      dataToSend
-    );
-    console.log(response);
-
-    if (response.message === "User registered successfully") {
-      alert(response.message);
-
-      const loginResponse = await loginUser(formData.email, formData.password);
-
-      if (loginResponse && loginResponse.status === 200) {
-        // Handle successful login, e.g., store token, dispatch actions, etc.
-        const data = await loginResponse.json();
-        const token = data.access;
-        localStorage.setItem("jwtToken", token);
-        if (isChecked) {
-          await createWallet(false); // create wallet
-        }
-
-        dispatch(loginSuccess());
-        navigate("/clouds");
-      } else {
-        // Handle login failure after registration
-        console.error("Auto-login failed after registration.");
-      }
-
-      alert(response.message);
-    } else {
-      alert("Registration failed!");
-    }
-  };
-
-  return (
-    <div>
-      <form className="infoForm authForm md:p-4" onSubmit={handleSubmit}>
-        <div>
-          <h3 className="mt-4">Sign Up</h3>
-
-          <div className="mb-4">
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={handleCheckboxChange}
-            />
-            <span>Create a built-in wallet</span>
-          </div>
-        </div>
-
-        <div>
-          <input
-            type="text"
-            placeholder="First Name"
-            className="infoInput"
-            name="firstname"
-            value={formData.firstname}
-            onChange={handleChange}
-          />
-
-          <input
-            type="text"
-            placeholder="Last Name"
-            className="infoInput"
-            name="lastname"
-            value={formData.lastname}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <input
-            type="email"
-            className="infoInput"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <input
-            type="password"
-            className="infoInput"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          <input
-            type="password"
-            className="infoInput"
-            name="confirmpass"
-            placeholder="Confirm Password"
-            value={formData.confirmpass}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <p className="text-xs">
-            Already have an account?{" "}
-            <span
-              onClick={onLoginClick}
-              style={{ cursor: "pointer", color: "blue" }}
-            >
-              Login
-            </span>
-          </p>
-        </div>
-        <button
-          onClick={SignUpLogin}
-          className="button infoButton w-24"
-          type="submit"
-        >
-          Signup
-        </button>
-      </form>
+      
     </div>
   );
-}
+};
+
 
 export default Login;
