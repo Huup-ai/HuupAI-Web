@@ -22,6 +22,7 @@ import { contractAddress, customerToken } from "../../Address";
 import { ethers } from "ethers";
 
 
+// '857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com', 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ const Login = () => {
   const [signer, setSigner] = useState();
   const [fcContract, setFcContract] = useState();
   const [isChecked, setIsChecked] = useState(true);
-  
+  const [loginType, setLoginType] = useState(null);
   
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -47,6 +48,8 @@ const Login = () => {
   const updateWalletAddress = (address) => {
     setCookie("walletAddress", address, { path: "/" });
   };
+  const [isWalletConnecting, setIsWalletConnecting] = useState(false);
+  const [showWalletConnectButton, setShowWalletConnectButton] = useState(false);
 
   const {
     FunWallet,
@@ -66,6 +69,42 @@ const Login = () => {
       sponsorAddress: sponsorAddress,
     },
     apiKey: API_KEY,
+  };
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      window.google.accounts.id.initialize({
+        client_id: '857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com', 
+        callback: handleGoogleSignIn,
+      });
+      window.google.accounts.id.renderButton(
+        document.getElementById('googleSignInButton'),
+        { theme: 'outline', size: 'large' }
+      );
+    
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  // const handleSelectChange = (e) => {
+  //   e.preventDefault();
+  //   const newValue = e.target.value;
+  //   // setType(newValue);
+  //   setSelectedType(newValue);
+  //   setCookie("selectedType", newValue, { path: "/" });
+  // };
+  const handleSelectChange = (e) => {
+    e.preventDefault();
+    setSelectedType(e.target.value);
+    setCookie("selectedType", e.target.value, { path: "/" });
   };
 
   // Configure the environment with the specified options
@@ -102,176 +141,172 @@ const Login = () => {
       throw error;  // Propagate the error to be handled in the calling function
     }
 };
+const connectWallet = async () => {
+  console.log("Attempting to connect wallet...");
 
+  if (isWalletConnecting) {
+    console.log("Wallet connection already in progress.");
+    return false;
+  }
 
-// const [externalWallet, setExternalWallet] = useState(true);
+  setIsWalletConnecting(true);
 
-const handleLoginClick = async (e) => {
-  e.preventDefault();
-  try {
-    let response;
-
-    if (selectedType === "provider") {
-      response = await loginProvider(email, password);
-    } else {
-      response = await loginUser(email, password);
+  if (window.ethereum) {
+    console.log("Ethereum object found.");
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      console.log("Requesting account access...");
+      const accounts = await provider.send("eth_requestAccounts", []);
+      console.log("Accounts received:", accounts);
+      setMetaAddress(accounts[0]);
+      setCookie("walletAddress", accounts[0], { path: "/" });
+      console.log("Wallet connected:", accounts[0]);
+      setIsWalletConnecting(false);
+      return true;
+    } catch (error) {
+      console.error("Error connecting to MetaMask:", error);
+      setIsWalletConnecting(false);
+      return false;
     }
-
-    
-    if (response && response.status === 200) {
-      const data = await response.json();
-      const token = data.access; // Assuming the token is directly on the response object
-      console.log("t", token);
-      localStorage.setItem("jwtToken", token); // storing token in localStorage
-      console.log("Login successful", response);
-
-      // get stored wallet address(created when signup) from backend and store in cookie
-      const singleWallet = await getWallet(token);
-      console.log("singlewallet", singleWallet);
-      if (singleWallet && singleWallet.length > 0 && singleWallet[0].address) {
-        updateWalletAddress(singleWallet[0].address);
-       } else {
-        console.error("No wallet data found for the user.");
-       }
-      // console.log("single address", singleWallet[0].address);
-      // updateWalletAddress(singleWallet[0].address);
-      if (selectedType === "provider"&&singleWallet.length===0){
-        console.log("create wallet working", createWallet)
-        await createWallet(true);
-       }
-      
-      
-      setEmail("");
-      setPassword("");
-      dispatch(loginSuccess());
-      // navigate("/clouds");
-    } else {
-      // Handle login failure, perhaps pop up an error message
-      console.error("Login failed: ", response.message);
-      alert("Login failed. Please check your credentials.");
-    }
-  } catch (error) {
-    console.error("Login error", error);
-    alert("Login failed. Please check your credentials.");
+  } else {
+    console.log("MetaMask is not installed.");
+    setIsWalletConnecting(false);
+    return false;
   }
 };
 
-  // const connectWallet = async () => {
-  //   if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
-  //     try {
-  //       /* get provider */
-  //       const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //       /* get accounts */
-  //       const accounts = await provider.send("eth_requestAccounts", []);
-  //       /* set active wallet address */
-  //       setMetaAddress(accounts[0]);
-  //       /* get signer */
-  //       updateWalletAddress(metaAddress);
-  //       // updateWalletAddress(accounts[0]);
-  //       setSigner(provider.getSigner());
-  //       /* local contract instance */
-  //       setFcContract(faucetContract(provider));
-  //       console.log("connected", accounts[0]);
-  //     } catch (err) {
-  //       console.log("err", err.messgae);
-  //       alert(err.message);
+  // const toggleShowPassword = () => {
+  //   setShowPassword(!showPassword);
+  // };
+
+  // const initiateGoogleSignIn = async () => {
+  //   return new Promise((resolve) => {
+  //     window.google.accounts.id.prompt(async (response) => {
+  //       if (!response.isNotDisplayed() && !response.isSkippedMoment()) {
+  //         const googleSignInSuccess = await handleGoogleSignIn(response);
+  //         resolve(googleSignInSuccess);
+  //       } else {
+  //         resolve(false);
+  //       }
+  //     });
+  //   });
+  // };
+
+  // const handleLoginClick = async (e) => {
+  //   e.preventDefault();
+    
+  //   const googleSignInSuccess = await initiateGoogleSignIn();
+  //   if (googleSignInSuccess) {
+  //     const walletConnected = await connectWallet();
+  //     if (walletConnected) {
+  //       dispatch(hasExternalWallet());
+  //       navigate("/clouds");
   //     }
-  //     navigate('/clouds');
-  //   } else {
-  //     /* MetaMask is not installed */
-  //     console.log("Please install MetaMask");
-  //     alert("Please install MetaMask");
   //   }
   // };
-  const connectWallet = async () => {
-    if (window.ethereum) { // Check if MetaMask is installed
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request account access
-        if (accounts.length > 0) {
-          setMetaAddress(accounts[0]); // Set the first account as the metaAddress
-          // Additional logic after successful connection
-        }
-      } catch (error) {
-        console.error("Error connecting to MetaMask:", error);
-      }
-    } else {
-      alert("Please install MetaMask to use this feature.");
-    }
-  };
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-  
-  const handleSelectChange = (e) => {
-    e.preventDefault();
-    const newValue = e.target.value;
-    // setType(newValue);
-    setSelectedType(newValue);
-    setCookie("selectedType", newValue, { path: "/" });
-  };
 
-  // Function to handle what happens after Google sign-in
-  async function onSignIn(response) {
-    const token_id = response.credential;
+  // Regular Gmail sign-in
+  // const handleGoogleSignIn = async (googleResponse) => {
+  //   try {
+  //     console.log("Processing Google Sign-In response...");
+  //     const data = await googleSignIn(googleResponse.credential);
+  //     dispatch(loginSuccess(data.jwt_token));
+  //     localStorage.setItem('jwtToken', data.jwt_token);
+  //     console.log("Google Sign-In processed successfully.");
+  //     return true;
+  //   } catch (error) {
+  //     console.error('Error during Google Sign-In:', error);
+  //     return false;
+  //   }
+  // };
+  const handleGoogleSignIn = async (googleCredential) => {
     try {
-      const data = await googleSignIn(token_id);
-      dispatch(loginSuccess(data.jwt_token));
-      localStorage.setItem('jwtToken', data.jwt_token);
-      return true;
-      // navigate('/clouds');
+      console.log("Processing Google Sign-In response...");
+      // Call your googleSignIn function with the Google credential token
+      const data = await googleSignIn(googleCredential.credential);
+  
+      // Check for successful response
+      if (data && data.jwt_token) {
+        dispatch(loginSuccess(data.jwt_token));
+        localStorage.setItem('jwtToken', data.jwt_token);
+        console.log("Google Sign-In processed successfully.");
+  
+        // After Google Sign-In, try to connect the wallet
+        const walletConnected = await connectWallet();
+        if (walletConnected) {
+          dispatch(hasExternalWallet());
+          navigate("/clouds");
+        } else {
+          console.error("Failed to connect to the wallet.");
+        }
+        return true;
+      } else {
+        console.error('Google Sign-In failed:', data ? data.message : 'No response');
+        return false;
+      }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error during Google Sign-In:', error);
       return false;
     }
-  }
+  };
 
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      window.google.accounts.id.initialize({
-        client_id: '857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com', 
-        callback: onSignIn,
-      });
-      window.google.accounts.id.renderButton(
-        document.getElementById('googleSignInButton'),
-        { theme: 'outline', size: 'large' }
-      );
-      window.google.accounts.id.prompt();
-    };
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  
+  const handleWalletConnection = async () => {
+    const walletConnected = await connectWallet();
+    if (walletConnected) {
+      dispatch(hasExternalWallet());
+      navigate("/clouds");
+    }
+  };
 
   const handleWalletLogin = async (e) => {
     e.preventDefault();
-    try {
-      // Initiate Google Sign-In
-      window.google.accounts.id.prompt(async (response) => {
-        if (response.isNotDisplayed() || response.isSkippedMoment()) {
-          console.log('Google prompt not displayed or was skipped');
-        } else {
-          // If Google Sign-In was successful, proceed to connect the wallet
-          const signInSuccess = await onSignIn(response);
-          if (signInSuccess) {
-            await connectWallet();
-            navigate('/clouds'); // Or your desired dashboard path
+  
+    window.google.accounts.id.prompt(async (googleResponse) => {
+      if (googleResponse && googleResponse.credential) {
+        // Process Google Sign-In
+        const googleSignInSuccess = await handleGoogleSignIn(googleResponse);
+        if (googleSignInSuccess) {
+          // After successful Google Sign-In, initiate wallet connection
+          const walletConnected = await connectWallet();
+          if (walletConnected) {
+            // If wallet connection is successful, navigate to /clouds
+            dispatch(hasExternalWallet());
+            navigate("/clouds");
+          } else {
+            console.error("Failed to connect to the wallet.");
           }
+        } else {
+          console.error("Google Sign-In failed.");
         }
-      });
-    } catch (error) {
-      console.error("Login error", error);
-      alert("Login failed. Please try again.");
-    }
+      } else {
+        console.log("Google Sign-In was cancelled or failed.");
+      }
+    });
   };
+
+  // const handleWalletLogin = async (googleResponse) => {
+  //   try {
+  //     console.log("Processing Google Sign-In response...");
+  //     const response = await googleSignIn(googleResponse.credential);
+  //     if (response.status === 200) {
+  //       // Process successful Google Sign-In
+  //       dispatch(loginSuccess());
+  //       localStorage.setItem('jwtToken', response.data.jwt_token);
+  //       console.log("Google Sign-In processed successfully.");
+
+  //       // Immediately attempt to connect wallet
+  //       await handleWalletConnection();
+  //     } else {
+  //       // Handle Google Sign-In failure
+  //       console.error('Google Sign-In failed:', response.message);
+  //       alert("Google Sign-In failed. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during Google Sign-In:', error);
+  //     alert("Google Sign-In failed. Please try again.");
+  //   }
+  // };
 
   return (
     <div className="Alert">
@@ -352,16 +387,17 @@ const handleLoginClick = async (e) => {
           </p>
         </div> */}
 
-        <div>
+      <div>
         <div id="googleSignInButton" className="google-button"></div>
 
-        <button
-          type="button"
-          onClick={handleWalletLogin}
-          className="button infoButton font-normal w-72">
-            Login with Gmail & Crypto Wallet
-          </button>
-          </div>
+        <button 
+        onClick={() => window.google.accounts.id.prompt()}
+        className="button infoButton font-normal w-72"
+        disabled={isWalletConnecting}
+        >
+        Login with Gmail & Crypto Wallet
+        </button>
+      </div>
         <div className="px-4">
           <p className="text-xs">
             {" "}
@@ -370,27 +406,7 @@ const handleLoginClick = async (e) => {
           </p>
         </div>
         <div className="px-4">
-          {/* <button
-            className="button infoButton font-normal w-36"
-            // onClick={onLoginClick}
-          >
-            Login with Email
-          </button>
-          <button
-          type="button"
-          onClick={handleWalletLogin}
-          className="button infoButton font-normal w-72">
-            Login with Gmail & Crypto Wallet
-          </button> */}
-          {/* {selectedType === "customer" && (
-            <button
-              // onClick={""}
-              onClick={connectWallet}
-              className="button infoButton font-normal w-72"
-            >
-              Login with Email & Crypto Wallet
-            </button>
-          )} */}
+        
         </div>
       </form>
     </div>

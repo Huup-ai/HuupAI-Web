@@ -196,7 +196,6 @@ const handleLoginClick = async (e) => {
 
       console.log("outside");
       console.log("Received response: ", response);
-
       if (response && response.status === 200) {
         const data = await response.json();
         const token = data.access; // Assuming the token is directly on the response object
