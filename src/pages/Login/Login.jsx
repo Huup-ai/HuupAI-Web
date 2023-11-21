@@ -22,7 +22,6 @@ import { contractAddress, customerToken } from "../../Address";
 import { ethers } from "ethers";
 
 
-// '857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com', 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -79,7 +78,8 @@ const Login = () => {
     script.onload = () => {
       window.google.accounts.id.initialize({
         client_id: '857153619993-12tmpju7pdq3oqoqvhvkg2iv7dr2i5qs.apps.googleusercontent.com', 
-        callback: handleGoogleSignIn,
+        // callback: handleGoogleSignIn,
+        callback: (googleCredential) => handleGoogleSignIn(googleCredential, true),
       });
       window.google.accounts.id.renderButton(
         document.getElementById('googleSignInButton'),
@@ -94,13 +94,6 @@ const Login = () => {
     };
   }, []);
 
-  // const handleSelectChange = (e) => {
-  //   e.preventDefault();
-  //   const newValue = e.target.value;
-  //   // setType(newValue);
-  //   setSelectedType(newValue);
-  //   setCookie("selectedType", newValue, { path: "/" });
-  // };
   const handleSelectChange = (e) => {
     e.preventDefault();
     setSelectedType(e.target.value);
@@ -110,37 +103,7 @@ const Login = () => {
   // Configure the environment with the specified options
   configureEnvironment(options);
   
-  const createWallet = async (is_provider) => {
-    try {
-      const auth = new Auth({ privateKey: PRIVATE_KEY });
-      
-      const funWallet = new FunWallet({
-        users: [{ userId: await auth.getAddress() }],
-        uniqueId: await auth.getWalletUniqueId(),
-      });
-      
-      const userOp = await funWallet.create(auth, await auth.getAddress());
-      const walletAddress = userOp.walletAddr;
-      updateWalletAddress(walletAddress);
-      
-      const token = localStorage.getItem("jwtToken");
-
-      // Send Wallet Address to backend
-      const walletResponse = await addWallet(walletAddress, is_provider, token); 
-      // console.log("store", walletResponse)
-
-      // Validate if the response from addWallet indicates success
-      if (!walletResponse || walletResponse.error) {
-          throw new Error('Failed to save the wallet address to the backend.');
-      }
-
-      console.log("Wallet Address saved:", walletAddress);
-      return walletAddress; // Returning the new wallet address
-    } catch (error) {
-      console.error("Error creating wallet:", error);
-      throw error;  // Propagate the error to be handled in the calling function
-    }
-};
+ 
 const connectWallet = async () => {
   console.log("Attempting to connect wallet...");
 
@@ -175,64 +138,16 @@ const connectWallet = async () => {
   }
 };
 
-  // const toggleShowPassword = () => {
-  //   setShowPassword(!showPassword);
-  // };
 
-  // const initiateGoogleSignIn = async () => {
-  //   return new Promise((resolve) => {
-  //     window.google.accounts.id.prompt(async (response) => {
-  //       if (!response.isNotDisplayed() && !response.isSkippedMoment()) {
-  //         const googleSignInSuccess = await handleGoogleSignIn(response);
-  //         resolve(googleSignInSuccess);
-  //       } else {
-  //         resolve(false);
-  //       }
-  //     });
-  //   });
-  // };
+const handleGoogleSignIn = async (googleCredential, connectWalletAfterSignIn = false) => {
+  try {
+    const data = await googleSignIn(googleCredential.credential);
+    if (data && data.jwt_token) {
+      dispatch(loginSuccess(data.jwt_token));
+      localStorage.setItem('jwtToken', data.jwt_token);
+      console.log("Google Sign-In processed successfully.");
 
-  // const handleLoginClick = async (e) => {
-  //   e.preventDefault();
-    
-  //   const googleSignInSuccess = await initiateGoogleSignIn();
-  //   if (googleSignInSuccess) {
-  //     const walletConnected = await connectWallet();
-  //     if (walletConnected) {
-  //       dispatch(hasExternalWallet());
-  //       navigate("/clouds");
-  //     }
-  //   }
-  // };
-
-
-  // Regular Gmail sign-in
-  // const handleGoogleSignIn = async (googleResponse) => {
-  //   try {
-  //     console.log("Processing Google Sign-In response...");
-  //     const data = await googleSignIn(googleResponse.credential);
-  //     dispatch(loginSuccess(data.jwt_token));
-  //     localStorage.setItem('jwtToken', data.jwt_token);
-  //     console.log("Google Sign-In processed successfully.");
-  //     return true;
-  //   } catch (error) {
-  //     console.error('Error during Google Sign-In:', error);
-  //     return false;
-  //   }
-  // };
-  const handleGoogleSignIn = async (googleCredential) => {
-    try {
-      console.log("Processing Google Sign-In response...");
-      // Call your googleSignIn function with the Google credential token
-      const data = await googleSignIn(googleCredential.credential);
-  
-      // Check for successful response
-      if (data && data.jwt_token) {
-        dispatch(loginSuccess(data.jwt_token));
-        localStorage.setItem('jwtToken', data.jwt_token);
-        console.log("Google Sign-In processed successfully.");
-  
-        // After Google Sign-In, try to connect the wallet
+      if (connectWalletAfterSignIn) {
         const walletConnected = await connectWallet();
         if (walletConnected) {
           dispatch(hasExternalWallet());
@@ -240,73 +155,43 @@ const connectWallet = async () => {
         } else {
           console.error("Failed to connect to the wallet.");
         }
-        return true;
       } else {
-        console.error('Google Sign-In failed:', data ? data.message : 'No response');
-        return false;
+        navigate("/clouds");
       }
-    } catch (error) {
-      console.error('Error during Google Sign-In:', error);
-      return false;
+    } else {
+      console.error('Google Sign-In failed:', data ? data.message : 'No response');
     }
-  };
+  } catch (error) {
+    console.error('Error during Google Sign-In:', error);
+  }
+};
 
-  const handleWalletConnection = async () => {
-    const walletConnected = await connectWallet();
-    if (walletConnected) {
-      dispatch(hasExternalWallet());
-      navigate("/clouds");
-    }
-  };
+const initiateGoogleSignIn = (connectWalletAfterSignIn = false) => {
+  window.google.accounts.id.prompt(); // This triggers the Google Sign-In prompt
+  // The response will be handled by the callback set in the useEffect
+};
 
-  const handleWalletLogin = async (e) => {
-    e.preventDefault();
-  
-    window.google.accounts.id.prompt(async (googleResponse) => {
-      if (googleResponse && googleResponse.credential) {
-        // Process Google Sign-In
-        const googleSignInSuccess = await handleGoogleSignIn(googleResponse);
-        if (googleSignInSuccess) {
-          // After successful Google Sign-In, initiate wallet connection
-          const walletConnected = await connectWallet();
-          if (walletConnected) {
-            // If wallet connection is successful, navigate to /clouds
-            dispatch(hasExternalWallet());
-            navigate("/clouds");
-          } else {
-            console.error("Failed to connect to the wallet.");
-          }
+const handleGoogleAndWalletSignIn = async (event) => {
+  event.preventDefault();
+  window.google.accounts.id.prompt(async (notification) => {
+    if (notification.isDisplayMoment()) {
+      const signInSuccess = await handleGoogleSignIn(notification.getCredential());
+      if (signInSuccess) {
+        console.log("Google Sign-In successful. Now connecting wallet...");
+        const walletConnected = await connectWallet();
+        if (walletConnected) {
+          dispatch(hasExternalWallet());
+          navigate("/clouds");
         } else {
-          console.error("Google Sign-In failed.");
+          console.error("Failed to connect to the wallet.");
         }
       } else {
-        console.log("Google Sign-In was cancelled or failed.");
+        console.error("Google Sign-In failed.");
       }
-    });
-  };
+    }
+  });
+};
 
-  // const handleWalletLogin = async (googleResponse) => {
-  //   try {
-  //     console.log("Processing Google Sign-In response...");
-  //     const response = await googleSignIn(googleResponse.credential);
-  //     if (response.status === 200) {
-  //       // Process successful Google Sign-In
-  //       dispatch(loginSuccess());
-  //       localStorage.setItem('jwtToken', response.data.jwt_token);
-  //       console.log("Google Sign-In processed successfully.");
-
-  //       // Immediately attempt to connect wallet
-  //       await handleWalletConnection();
-  //     } else {
-  //       // Handle Google Sign-In failure
-  //       console.error('Google Sign-In failed:', response.message);
-  //       alert("Google Sign-In failed. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error('Error during Google Sign-In:', error);
-  //     alert("Google Sign-In failed. Please try again.");
-  //   }
-  // };
 
   return (
     <div className="Alert">
@@ -319,7 +204,7 @@ const connectWallet = async () => {
             Green AI - Infrastructure for AI Democratization, Efficiency and
             Privacy{" "}
           </p>
-          {/* console.log({FunWallet}) */}
+          
         </div>
       </div>
       <div>
@@ -345,57 +230,16 @@ const connectWallet = async () => {
           <h3>Log In </h3>
         </div>
 
-        {/* <div className="px-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="infoInput"
-            name="username"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div> */}
-
-        {/* <div className="px-4">
-          <input
-            type={showPassword ? "text" : "password"}
-            className="infoInput"
-            placeholder="Password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          
-          <button
-            type="button"
-            onClick={toggleShowPassword}
-            className="password-toggle-button"
-          >
-            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-          </button>
-        </div> */}
-
-        {/* <div className="px-4">
-          <p className="text-xs">
-            Don't have an account?{" "}
-            <span
-              onClick={onSignupClick}
-              style={{ cursor: "pointer", color: "blue" }}
-            >
-              Signup
-            </span>
-          </p>
-        </div> */}
-
       <div>
         <div id="googleSignInButton" className="google-button"></div>
 
         <button 
-        onClick={() => window.google.accounts.id.prompt()}
-        className="button infoButton font-normal w-72"
-        disabled={isWalletConnecting}
+          onClick={() => initiateGoogleSignIn(true)}
+          type="button"
+          className="button infoButton font-normal w-72"
+          disabled={isWalletConnecting}
         >
-        Login with Gmail & Crypto Wallet
+          Login with Gmail & Crypto Wallet
         </button>
       </div>
         <div className="px-4">
