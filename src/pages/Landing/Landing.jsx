@@ -22,7 +22,7 @@ function Landing() {
             <p className="enhance-GEN-AI-s">
                 Meet Reliable,  <br />
                 Affordable, Efficient GEN AI <br />
-            <button className="start-button-2" onClick={handleStartClick}>Get Started</button>
+            <button className="start-button-2" onClick={handleLoginClick}>Log In</button>
             </p>
           </div>
 
@@ -67,9 +67,9 @@ function Landing() {
               <div className="text-wrapper-5">Huup AI</div>
             </div>
             <button className="button-container">
-              <div className="login-button" onClick={handleLoginClick}>
+              {/* <div className="login-button" onClick={handleLoginClick}>
                 Log in
-              </div>
+              </div> */}
               <div className="start-button" onClick={handleStartClick}>
                 Get Started
               </div>

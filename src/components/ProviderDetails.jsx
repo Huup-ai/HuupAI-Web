@@ -171,20 +171,22 @@ return (
               <span>:</span>
               <span>{paymentDetails.account_payable_window}</span>
             </div>
-            {routingInfo && (
-              <div>
-                <span className="inline-block w-60">Bank Routing</span>
-                <span>:</span>
-                <span>{routingInfo.routing_number}</span> 
-              </div>
-            )}
-            {routingInfo && (
-              <div>
-                <span className="inline-block w-60">Bank Account</span>
-                <span>:</span>
-                <span>{"XXXX-XXXX-" + routingInfo.account_number.slice(-4)}</span> 
-              </div>
-            )}
+            
+            <div>
+              <span className="inline-block w-60">Bank Routing</span>
+              <span>:</span>
+              <span>{routingInfo && routingInfo.routing_number ? routingInfo.routing_number : " null"}</span> 
+            </div>
+            
+            <div>
+              <span className="inline-block w-60">Bank Account</span>
+              <span>:</span>
+              <span>
+                {routingInfo && routingInfo.account_number
+                  ? "XXXX-XXXX-" + routingInfo.account_number.slice(-4)
+                  : " null"} 
+              </span> 
+            </div>
 
             <div className="mt-2 mb-2">
               {/* <Button

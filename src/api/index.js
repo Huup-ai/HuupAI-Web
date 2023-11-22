@@ -13,6 +13,28 @@ export const FetchRequest = async (url, method, header = {}, data = {}) => {
   return response.json();
 };
 
+export const googleSignIn = async (token_id) => {
+  try {
+    const response = await fetch(`${API_URL}/users/google_login/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ token: token_id })
+    });
+
+    if (!response.ok) {
+      throw new Error('Google sign-in failed');
+    }
+
+    const data = await response.json();
+    return data; // Return the data for the calling component to handle
+  } catch (error) {
+    console.error('Error:', error);
+    throw error; // Rethrow the error for the calling component to handle
+  }
+};
+
 export async function registerUser(
   email,
   password,
