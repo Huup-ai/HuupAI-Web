@@ -215,15 +215,15 @@ const handleGoogleAndWalletSignIn = async (event) => {
             value="customer"
             className={`px-6 py-3 mt-2 ${selectedType === "customer" ? "bg-white rounded-t-xl py-4" : "bg-gray-200 rounded-t-lg" }`}
           >
-            Customer
+            Customer Log In
           </button>
-          <button
+          {/* <button
             onClick={handleSelectChange}
             value="provider"
             className={`px-6 py-3 mt-2 ${selectedType === "provider" ? "bg-white rounded-t-xl py-4" : "bg-gray-200 rounded-t-lg "}`}
           >
             Provider
-          </button>
+          </button> */}
         </div>
 
         <div className="flex align-middle">
@@ -233,14 +233,14 @@ const handleGoogleAndWalletSignIn = async (event) => {
       <div>
         <div id="googleSignInButton" className="google-button"></div>
 
-        <button 
+        {/* <button 
           onClick={() => initiateGoogleSignIn(true)}
           type="button"
           className="button infoButton font-normal w-72"
           disabled={isWalletConnecting}
         >
           Login with Gmail & Crypto Wallet
-        </button>
+        </button> */}
       </div>
         <div className="px-4">
           <p className="text-xs">

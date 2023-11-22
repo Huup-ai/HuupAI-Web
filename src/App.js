@@ -16,7 +16,7 @@ import Inventory from "./pages/Inventory";
 // import CPU from "./pages/CPU";
 import Landing from "./pages/Landing/Landing";
 import SignUp from "./pages/Login/Signup";
-import GoogleLogin from "./pages/Login/Googlelogin";
+
 
 
 
@@ -33,12 +33,6 @@ function App() {
       <Routes>
       <Route path="/" element={<Landing />} /> 
       <Route path="/signup" element={ <SignUp />} />
-      
-      <Route
-        path="/googlelogin"
-        element={isAuthenticated ? <Navigate to="/clouds" /> : <GoogleLogin />}
-      />
-
       <Route
         path="/login"
         element={isAuthenticated ? <Navigate to="/clouds" /> : <Login />}
